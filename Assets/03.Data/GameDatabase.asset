@@ -1,0 +1,488 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8514863979263622965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
+  m_Name: CharacterData_50003
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  id: 50003
+  displayName: "\uC2EC\uC5F0\uC758 \uC2E0\uBD09\uC790"
+  characterClass: 3
+  maxHealth: 70
+  startingDeckIds: []
+  cardPoolIds: []
+  resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
+  portrait: {fileID: 0}
+--- !u!114 &-8385031774917651647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 10001
+  displayName: "\uBCA0\uAE30"
+  owner: 1
+  cardType: 0
+  rarity: 0
+  cost: 1
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 6\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-7970982872749633943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10003
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 10003
+  displayName: "\uC804\uD22C \uD568\uC131"
+  owner: 1
+  cardType: 1
+  rarity: 1
+  cost: 1
+  description: "\uD798\uC744 2 \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 2
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-5075467660772364304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20002
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 20002
+  displayName: "\uBD88\uAF43 \uC7A5\uB9C9"
+  owner: 2
+  cardType: 1
+  rarity: 0
+  cost: 1
+  description: "\uBC29\uC5B4\uB3C4\uB97C 5 \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 1
+    target: 0
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-3999565904336768377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30003
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 30003
+  displayName: "\uAE08\uB2E8\uC758 \uACC4\uC2DC"
+  owner: 3
+  cardType: 1
+  rarity: 1
+  cost: 2
+  description: "\uB300\uC0C1\uC758 \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744 2\uBC30\uB85C
+    \uB9CC\uB4ED\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 10
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-2492616395047702063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
+  m_Name: CharacterData_50001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  id: 50001
+  displayName: "\uC120\uBD09\uB300"
+  characterClass: 1
+  maxHealth: 80
+  startingDeckIds: []
+  cardPoolIds: []
+  resourceName: "\uBD84\uB178"
+  portrait: {fileID: 0}
+--- !u!114 &-1346068093110551103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 30001
+  displayName: "\uC2EC\uC5F0\uC758 \uC190\uAE38"
+  owner: 3
+  cardType: 0
+  rarity: 0
+  cost: 1
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 4\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uC815\uC2E0\uBD84\uC5F4 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 9
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-994544598908716761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 40001
+  displayName: "\uC804\uC220\uC801 \uD1B5\uCC30"
+  owner: 0
+  cardType: 1
+  rarity: 1
+  cost: 1
+  description: "\uCE74\uB4DC\uB97C 2\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 12
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-250834770364104226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 20001
+  displayName: "\uD654\uC5FC\uAD6C"
+  owner: 2
+  cardType: 0
+  rarity: 0
+  cost: 1
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 5\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uD654\uC0C1 2\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  - type: 5
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5799541af03c704a9d2b9a0266e64f3, type: 3}
+  m_Name: GameDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.GameDatabase
+  cardsCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=0&single=true&output=csv
+  charactersCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=101001&single=true&output=csv
+  enemiesCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=101002&single=true&output=csv
+  relicsCsvUrl: 
+  sheetUploadUrl: https://script.google.com/macros/s/AKfycbyhI-KLavy7xaRnSMQsum1YxXvRiMK8-x-u0upr2rIqa8f0hzbwQzl6uQNrK83em4Oa/exec
+  cardsSheetName: Total Card
+  charactersSheetName: Character
+  enemiesSheetName: Enemy
+  relicsSheetName: Relic
+  cards:
+  - {fileID: -8385031774917651647}
+  - {fileID: 4515266384392357887}
+  - {fileID: -7970982872749633943}
+  - {fileID: -250834770364104226}
+  - {fileID: -5075467660772364304}
+  - {fileID: 3842370845592729608}
+  - {fileID: -1346068093110551103}
+  - {fileID: 2030391596520818530}
+  - {fileID: -3999565904336768377}
+  - {fileID: -994544598908716761}
+  characters:
+  - {fileID: -2492616395047702063}
+  - {fileID: 3173909786112960893}
+  - {fileID: -8514863979263622965}
+  enemies:
+  - {fileID: 4446367307655610435}
+  - {fileID: 7315375402410494101}
+  relics: []
+--- !u!114 &2030391596520818530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30002
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 30002
+  displayName: "\uC2EC\uC5F0\uC758 \uC18D\uC0AD\uC784"
+  owner: 3
+  cardType: 1
+  rarity: 0
+  cost: 1
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 6\uC744
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 9
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &3173909786112960893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
+  m_Name: CharacterData_50002
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  id: 50002
+  displayName: "\uC7BF\uBD88\uC220\uC0AC"
+  characterClass: 2
+  maxHealth: 66
+  startingDeckIds: []
+  cardPoolIds: []
+  resourceName: "\uACFC\uC5F4"
+  portrait: {fileID: 0}
+--- !u!114 &3842370845592729608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20003
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 20003
+  displayName: "\uBD88\uC528 \uD655\uC0B0"
+  owner: 2
+  cardType: 1
+  rarity: 1
+  cost: 1
+  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 5
+    target: 2
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &4446367307655610435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0fa548599c8124c9e0a79f278436cc, type: 3}
+  m_Name: EnemyData_60001
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.EnemyData
+  id: 60001
+  displayName: "\uADE0\uC5F4 \uB291\uB300"
+  tier: 0
+  minHealth: 28
+  maxHealth: 34
+  minGold: 12
+  maxGold: 18
+  actions:
+  - intent: 0
+    weight: 0.7
+    effects:
+    - type: 0
+      target: 1
+      amount: 7
+      secondaryAmount: 0
+      duration: 0
+  - intent: 1
+    weight: 0.3
+    effects:
+    - type: 1
+      target: 0
+      amount: 5
+      secondaryAmount: 0
+      duration: 0
+  artwork: {fileID: 0}
+--- !u!114 &4515266384392357887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10002
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  id: 10002
+  displayName: "\uCCA0\uBCBD"
+  owner: 1
+  cardType: 1
+  rarity: 0
+  cost: 1
+  description: "\uBC29\uC5B4\uB3C4\uB97C 5 \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 1
+    target: 0
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects: []
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &7315375402410494101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0fa548599c8124c9e0a79f278436cc, type: 3}
+  m_Name: EnemyData_60002
+  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.EnemyData
+  id: 60002
+  displayName: "\uC2EC\uC5F0\uC758 \uC218\uBB38\uC7A5"
+  tier: 2
+  minHealth: 160
+  maxHealth: 180
+  minGold: 80
+  maxGold: 100
+  actions:
+  - intent: 0
+    weight: 0.6
+    effects:
+    - type: 0
+      target: 1
+      amount: 12
+      secondaryAmount: 0
+      duration: 0
+  - intent: 2
+    weight: 0.2
+    effects:
+    - type: 2
+      target: 0
+      amount: 2
+      secondaryAmount: 0
+      duration: 0
+  - intent: 3
+    weight: 0.2
+    effects:
+    - type: 17
+      target: 1
+      amount: 1
+      secondaryAmount: 0
+      duration: 2
+  artwork: {fileID: 0}
