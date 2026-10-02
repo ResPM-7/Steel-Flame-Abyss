@@ -15,26 +15,32 @@ namespace SteelFlameAbyss.Data
 
     public enum EffectType
     {
-        Damage,
-        Block,
-        Strength,
-        Rage,
-        RageFinisher,
-        Burn,
-        Ignite,
-        RetaliateBurn,
-        Overheat,
-        MindFracture,
-        AmplifyMindFracture,
-        NextMindFractureBonus,
-        Draw,
-        GainEnergy,
-        Exhaust,
-        CreateStatusCard,
-        Weak,
-        Vulnerable,
-        AttackDamageBonus,
-        GoldMultiplier
+        Damage = 0,
+        Block = 1,
+        Strength = 2,       //힘증가
+
+        //전사 능력
+        Rage = 11,           //분노증가
+        RageFinisher = 12,   //분노사용 결정타
+
+        //불마법사 능력
+        Burn = 21,           //화상
+        Ignite = 22,         //화상즉시 대미지
+        Overheat = 23,       //과열부여
+
+        //흑마법사 능력
+        MindFracture = 31,          //정신분열부여
+        AmplifyMindFracture = 32,   //현재정신분열 배수
+        NextMindFractureBonus = 33, //다음카드 정신분열 추가
+
+        Draw = 101,
+        GainEnergy = 102,
+        Exhaust = 103,            //소멸
+        Weak = 104,               //약화(공격감소)
+        Vulnerable = 105,         //취약(들어가는 데미지 증가)
+        AttackDamageBonus = 106,  //공격카드 피해 증가
+
+        GoldMultiplier = 199      //골드배율
     }
 
     [Serializable]

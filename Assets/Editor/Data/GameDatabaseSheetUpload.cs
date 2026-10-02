@@ -171,7 +171,6 @@ namespace SteelFlameAbyss.Editor.Data
             EffectType.Burn => "ApplyBurn",
             EffectType.MindFracture => "ApplyMentalSplit",
             EffectType.AmplifyMindFracture => "MultiplyMentalSplit",
-            EffectType.CreateStatusCard => "ApplyHallucination",
             _ => type.ToString()
         };
 

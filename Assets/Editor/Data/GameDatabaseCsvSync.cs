@@ -300,8 +300,7 @@ namespace SteelFlameAbyss.Editor.Data
                 ["Ignite"] = EffectType.Ignite,
                 ["GainOverheat"] = EffectType.Overheat,
                 ["ApplyMentalSplit"] = EffectType.MindFracture,
-                ["MultiplyMentalSplit"] = EffectType.AmplifyMindFracture,
-                ["ApplyHallucination"] = EffectType.CreateStatusCard
+                ["MultiplyMentalSplit"] = EffectType.AmplifyMindFracture
             };
             return aliases.TryGetValue(raw.Trim(), out type);
         }
@@ -395,10 +394,13 @@ namespace SteelFlameAbyss.Editor.Data
             database = RecreateDatabaseIfMissingScripts(database);
 
             // 기존 ID와 같은 서브에셋은 재사용하므로 Sprite 등 시트 밖에서 지정한 참조가 유지됩니다.
-            var existing = AssetDatabase.LoadAllAssetsAtPath(DatabasePath)
+            var allExisting = AssetDatabase.LoadAllAssetsAtPath(DatabasePath)
                 .OfType<GameDataEntry>()
+                .ToList();
+            var existing = allExisting
                 .Where(entry => entry.Id > 0)
-                .ToDictionary(entry => entry.Id);
+                .GroupBy(entry => entry.Id)
+                .ToDictionary(group => group.Key, group => group.First());
             var retained = new HashSet<GameDataEntry>();
             var cards = input.Cards.Select(row =>
             {
@@ -438,8 +440,8 @@ namespace SteelFlameAbyss.Editor.Data
                 return asset;
             }).ToList();
 
-            // 시트에서 제거된 행의 서브에셋도 제거해 데이터베이스와 원격 시트를 정확히 일치시킵니다.
-            foreach (var orphan in existing.Values.Where(entry => !retained.Contains(entry)).ToArray())
+            // 시트에서 제거된 행, ID가 0으로 깨진 항목, 중복 ID 서브에셋까지 모두 정리합니다.
+            foreach (var orphan in allExisting.Where(entry => !retained.Contains(entry)).ToArray())
                 UnityEngine.Object.DestroyImmediate(orphan, true);
 
             database.EditorSetEntries(cards, characters, enemies, relics);
