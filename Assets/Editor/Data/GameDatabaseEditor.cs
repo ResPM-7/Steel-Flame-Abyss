@@ -110,9 +110,6 @@ namespace SteelFlameAbyss.Editor.Data
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Google 시트 업로드", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox(
-                "현재 데이터베이스의 카드·캐릭터·적 전체 목록을 ID 기준으로 시트에 갱신합니다. " +
-                "Unity에서 수정한 값을 저장한 뒤 업로드하세요.", MessageType.Warning);
 
             using (new EditorGUI.DisabledGroupScope(isUploading))
             {
@@ -128,8 +125,6 @@ namespace SteelFlameAbyss.Editor.Data
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("원격 CSV 다운로드", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("CSV 주소는 GameDatabase 에셋이 아니라 이 PC의 로컬 EditorPrefs에 저장됩니다.",
-                MessageType.Info);
 
             if (GUILayout.Button("시트 연결 설정 열기", GUILayout.Height(28f)))
                 SheetConnectionSettingsWindow.Open();
