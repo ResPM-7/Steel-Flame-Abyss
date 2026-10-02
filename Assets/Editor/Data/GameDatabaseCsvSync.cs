@@ -135,7 +135,7 @@ namespace SteelFlameAbyss.Editor.Data
                     : ReadRelics(CsvTable.Parse("유물 시트", relicsCsv))
             };
 
-            var allIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var allIds = new HashSet<int>();
             foreach (var id in input.Cards.Select(x => x.Id)
                          .Concat(input.Characters.Select(x => x.Id))
                          .Concat(input.Enemies.Select(x => x.Id))
@@ -145,7 +145,7 @@ namespace SteelFlameAbyss.Editor.Data
                     throw new InvalidDataException($"모든 시트를 통틀어 ID '{id}'가 중복됩니다.");
             }
 
-            var cardIds = input.Cards.Select(x => x.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var cardIds = input.Cards.Select(x => x.Id).ToHashSet();
             foreach (var character in input.Characters)
             {
                 foreach (var cardId in character.StartingDeck.Concat(character.CardPool))
@@ -216,7 +216,7 @@ namespace SteelFlameAbyss.Editor.Data
             var result = new List<CardRow>();
             for (var row = 0; row < table.RowCount; row++)
             {
-                var id = Required(table, row, "Id");
+                var id = PositiveInt(table, row, "Id");
                 result.Add(new CardRow
                 {
                     Id = id,
@@ -255,7 +255,7 @@ namespace SteelFlameAbyss.Editor.Data
 
                 result.Add(new CardRow
                 {
-                    Id = Required(table, row, "cardId"),
+                    Id = PositiveInt(table, row, "cardId"),
                     Name = Required(table, row, "cardName"),
                     Owner = ParseProjectOwner(Required(table, row, "owner"), table, row),
                     Type = EnumValue<CardType>(table, row, "cardType"),
@@ -326,12 +326,12 @@ namespace SteelFlameAbyss.Editor.Data
             {
                 result.Add(new CharacterRow
                 {
-                    Id = Required(table, row, "Id"),
+                    Id = PositiveInt(table, row, "Id"),
                     Name = Required(table, row, "Name"),
                     Class = EnumValue<CharacterClass>(table, row, "Class"),
                     MaxHealth = PositiveInt(table, row, "MaxHealth"),
-                    StartingDeck = List(table.Get(row, "StartingDeck")),
-                    CardPool = List(table.Get(row, "CardPool")),
+                    StartingDeck = IdList(table, row, "StartingDeck"),
+                    CardPool = IdList(table, row, "CardPool"),
                     ResourceName = table.Get(row, "ResourceName")
                 });
             }
@@ -354,7 +354,7 @@ namespace SteelFlameAbyss.Editor.Data
 
                 result.Add(new EnemyRow
                 {
-                    Id = Required(table, row, "Id"),
+                    Id = PositiveInt(table, row, "Id"),
                     Name = Required(table, row, "Name"),
                     Tier = EnumValue<EnemyTier>(table, row, "Tier"),
                     MinHealth = minHealth,
@@ -376,7 +376,7 @@ namespace SteelFlameAbyss.Editor.Data
             {
                 result.Add(new RelicRow
                 {
-                    Id = Required(table, row, "Id"),
+                    Id = PositiveInt(table, row, "Id"),
                     Name = Required(table, row, "Name"),
                     Rarity = EnumValue<DataRarity>(table, row, "Rarity"),
                     Description = table.Get(row, "Description"),
@@ -397,8 +397,8 @@ namespace SteelFlameAbyss.Editor.Data
             // 기존 ID와 같은 서브에셋은 재사용하므로 Sprite 등 시트 밖에서 지정한 참조가 유지됩니다.
             var existing = AssetDatabase.LoadAllAssetsAtPath(DatabasePath)
                 .OfType<GameDataEntry>()
-                .Where(entry => !string.IsNullOrWhiteSpace(entry.Id))
-                .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+                .Where(entry => entry.Id > 0)
+                .ToDictionary(entry => entry.Id);
             var retained = new HashSet<GameDataEntry>();
             var cards = input.Cards.Select(row =>
             {
@@ -475,8 +475,8 @@ namespace SteelFlameAbyss.Editor.Data
             return database;
         }
 
-        private static T GetOrCreate<T>(GameDatabase database, IReadOnlyDictionary<string, GameDataEntry> existing,
-            string id) where T : GameDataEntry
+        private static T GetOrCreate<T>(GameDatabase database, IReadOnlyDictionary<int, GameDataEntry> existing,
+            int id) where T : GameDataEntry
         {
             if (existing.TryGetValue(id, out var current))
             {
@@ -584,9 +584,26 @@ namespace SteelFlameAbyss.Editor.Data
             ? new List<string>()
             : raw.Split('|').Select(value => value.Trim()).Where(value => value.Length > 0).ToList();
 
-        private static void EnsureUnique(IEnumerable<string> ids, string source)
+        private static List<int> IdList(CsvTable table, int row, string column)
         {
-            var unique = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var raw = table.Get(row, column);
+            if (string.IsNullOrWhiteSpace(raw))
+                return new List<int>();
+
+            var result = new List<int>();
+            foreach (var value in raw.Split('|').Select(value => value.Trim()).Where(value => value.Length > 0))
+            {
+                var id = ParseInt(value, table, row, column);
+                if (id <= 0)
+                    throw Error(table, row, $"{column}의 카드 ID '{value}'는 0보다 커야 합니다.");
+                result.Add(id);
+            }
+            return result;
+        }
+
+        private static void EnsureUnique(IEnumerable<int> ids, string source)
+        {
+            var unique = new HashSet<int>();
             foreach (var id in ids)
             {
                 if (!unique.Add(id))
@@ -618,7 +635,8 @@ namespace SteelFlameAbyss.Editor.Data
 
         private sealed class CardRow
         {
-            public string Id, Name, Description, UpgradedDescription;
+            public int Id;
+            public string Name, Description, UpgradedDescription;
             public CharacterClass Owner;
             public CardType Type;
             public DataRarity Rarity;
@@ -629,15 +647,17 @@ namespace SteelFlameAbyss.Editor.Data
 
         private sealed class CharacterRow
         {
-            public string Id, Name, ResourceName;
+            public int Id;
+            public string Name, ResourceName;
             public CharacterClass Class;
             public int MaxHealth;
-            public List<string> StartingDeck, CardPool;
+            public List<int> StartingDeck, CardPool;
         }
 
         private sealed class EnemyRow
         {
-            public string Id, Name;
+            public int Id;
+            public string Name;
             public EnemyTier Tier;
             public int MinHealth, MaxHealth, MinGold, MaxGold;
             public List<EnemyActionSpec> Actions;
@@ -645,7 +665,8 @@ namespace SteelFlameAbyss.Editor.Data
 
         private sealed class RelicRow
         {
-            public string Id, Name, Description;
+            public int Id;
+            public string Name, Description;
             public DataRarity Rarity;
             public RelicTrigger Trigger;
             public List<EffectSpec> Effects;

@@ -83,7 +83,7 @@ namespace SteelFlameAbyss.Editor.Data
         private static UploadRow CardRow(CardData card)
         {
             var row = NewRow(card);
-            Add(row, "cardId", card.Id);
+            Add(row, "cardId", card.Id.ToString(CultureInfo.InvariantCulture));
             Add(row, "cardName", card.DisplayName);
             Add(row, "owner", LegacyOwner(card.Owner));
             Add(row, "cardType", card.CardType.ToString());
@@ -144,7 +144,7 @@ namespace SteelFlameAbyss.Editor.Data
         private static UploadRow NewRow(GameDataEntry entry)
         {
             var row = new UploadRow { id = entry.Id };
-            Add(row, "Id", entry.Id);
+            Add(row, "Id", entry.Id.ToString(CultureInfo.InvariantCulture));
             Add(row, "Name", entry.DisplayName);
             return row;
         }
@@ -192,7 +192,7 @@ namespace SteelFlameAbyss.Editor.Data
         [Serializable]
         private sealed class UploadRow
         {
-            public string id;
+            public int id;
             public List<UploadField> fields = new();
         }
 

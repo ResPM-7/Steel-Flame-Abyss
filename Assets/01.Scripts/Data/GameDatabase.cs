@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,10 +16,10 @@ namespace SteelFlameAbyss.Data
         [SerializeField] private List<EnemyData> enemies = new();
         [SerializeField] private List<RelicData> relics = new();
 
-        private Dictionary<string, CardData> cardById;
-        private Dictionary<string, CharacterData> characterById;
-        private Dictionary<string, EnemyData> enemyById;
-        private Dictionary<string, RelicData> relicById;
+        private Dictionary<int, CardData> cardById;
+        private Dictionary<int, CharacterData> characterById;
+        private Dictionary<int, EnemyData> enemyById;
+        private Dictionary<int, RelicData> relicById;
 
         public IReadOnlyList<CardData> Cards => cards;
         public IReadOnlyList<CharacterData> Characters => characters;
@@ -28,25 +27,25 @@ namespace SteelFlameAbyss.Data
         public IReadOnlyList<RelicData> Relics => relics;
         private void OnEnable() => RebuildLookup();
 
-        public bool TryGetCard(string id, out CardData value)
+        public bool TryGetCard(int id, out CardData value)
         {
             EnsureLookup();
             return cardById.TryGetValue(id, out value);
         }
 
-        public bool TryGetCharacter(string id, out CharacterData value)
+        public bool TryGetCharacter(int id, out CharacterData value)
         {
             EnsureLookup();
             return characterById.TryGetValue(id, out value);
         }
 
-        public bool TryGetEnemy(string id, out EnemyData value)
+        public bool TryGetEnemy(int id, out EnemyData value)
         {
             EnsureLookup();
             return enemyById.TryGetValue(id, out value);
         }
 
-        public bool TryGetRelic(string id, out RelicData value)
+        public bool TryGetRelic(int id, out RelicData value)
         {
             EnsureLookup();
             return relicById.TryGetValue(id, out value);
@@ -60,19 +59,19 @@ namespace SteelFlameAbyss.Data
 
         private void RebuildLookup()
         {
-            // 런타임에서는 문자열 ID로 빠르게 데이터를 찾을 수 있도록 사전을 구성합니다.
+            // 런타임에서는 정수 ID로 빠르게 데이터를 찾을 수 있도록 사전을 구성합니다.
             cardById = BuildLookup(cards);
             characterById = BuildLookup(characters);
             enemyById = BuildLookup(enemies);
             relicById = BuildLookup(relics);
         }
 
-        private static Dictionary<string, T> BuildLookup<T>(IEnumerable<T> entries) where T : GameDataEntry
+        private static Dictionary<int, T> BuildLookup<T>(IEnumerable<T> entries) where T : GameDataEntry
         {
-            var result = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<int, T>();
             foreach (var entry in entries)
             {
-                if (entry != null && !string.IsNullOrWhiteSpace(entry.Id))
+                if (entry != null && entry.Id > 0)
                     result[entry.Id] = entry;
             }
             return result;

@@ -55,7 +55,7 @@ namespace SteelFlameAbyss.Editor.Data
                 .Where(MatchesCategory)
                 .Where(MatchesSearch)
                 .OrderBy(CategoryOrder)
-                .ThenBy(entry => entry.Id, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(entry => entry.Id)
                 .ToList();
 
             var listHeight = Mathf.Clamp(entries.Count * 23f + 4f, 72f, 360f);
@@ -185,7 +185,7 @@ namespace SteelFlameAbyss.Editor.Data
             if (string.IsNullOrWhiteSpace(searchText))
                 return true;
             var query = searchText.Trim();
-            return entry.Id.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
+            return entry.Id.ToString().IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
                    entry.DisplayName.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 

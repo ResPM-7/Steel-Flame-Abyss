@@ -8,22 +8,22 @@ namespace SteelFlameAbyss.Data
     {
         [SerializeField] private CharacterClass characterClass;
         [Min(1)] [SerializeField] private int maxHealth = 1;
-        [SerializeField] private List<string> startingDeckIds = new();
-        [SerializeField] private List<string> cardPoolIds = new();
+        [SerializeField] private List<int> startingDeckIds = new();
+        [SerializeField] private List<int> cardPoolIds = new();
         [SerializeField] private string resourceName;
         [SerializeField] private Sprite portrait;
 
         public CharacterClass Class => characterClass;
         public int MaxHealth => maxHealth;
-        public IReadOnlyList<string> StartingDeckIds => startingDeckIds;
-        public IReadOnlyList<string> CardPoolIds => cardPoolIds;
+        public IReadOnlyList<int> StartingDeckIds => startingDeckIds;
+        public IReadOnlyList<int> CardPoolIds => cardPoolIds;
         public string ResourceName => resourceName;
         public Sprite Portrait => portrait;
 
 #if UNITY_EDITOR
         /// <summary>검증이 끝난 캐릭터 시트 한 행을 이 서브에셋에 반영합니다.</summary>
-        public void EditorApply(CharacterClass newClass, int newMaxHealth, List<string> newStartingDeckIds,
-            List<string> newCardPoolIds, string newResourceName)
+        public void EditorApply(CharacterClass newClass, int newMaxHealth, List<int> newStartingDeckIds,
+            List<int> newCardPoolIds, string newResourceName)
         {
             characterClass = newClass;
             maxHealth = newMaxHealth;
