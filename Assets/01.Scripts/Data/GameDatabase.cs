@@ -11,21 +11,6 @@ namespace SteelFlameAbyss.Data
     [CreateAssetMenu(fileName = "GameDatabase", menuName = "강철과 불꽃과 심연/게임 데이터베이스")]
     public sealed class GameDatabase : ScriptableObject
     {
-        private const string SpreadsheetId = "1z6twBTcf1Y_HKrEMNkVUokgKD0W2Fwu4a7d54ise_Ls";
-        private const string CardsDefaultUrl = "https://docs.google.com/spreadsheets/d/" + SpreadsheetId + "/export?format=csv&gid=0";
-        private const string CharactersDefaultUrl = "https://docs.google.com/spreadsheets/d/" + SpreadsheetId + "/export?format=csv&gid=101001";
-        private const string EnemiesDefaultUrl = "https://docs.google.com/spreadsheets/d/" + SpreadsheetId + "/export?format=csv&gid=101002";
-
-        [Header("원격 CSV 주소")]
-        [Tooltip("카드 시트의 CSV 공개/내보내기 주소")]
-        [SerializeField] private string cardsCsvUrl = CardsDefaultUrl;
-        [Tooltip("캐릭터 시트의 CSV 공개/내보내기 주소")]
-        [SerializeField] private string charactersCsvUrl = CharactersDefaultUrl;
-        [Tooltip("적 시트의 CSV 공개/내보내기 주소")]
-        [SerializeField] private string enemiesCsvUrl = EnemiesDefaultUrl;
-        [Tooltip("선택 사항입니다. 유물 시트가 없으면 비워 두세요.")]
-        [SerializeField] private string relicsCsvUrl;
-
         [Header("Google 시트 업로드")]
         [Tooltip("Google Apps Script를 웹앱으로 배포한 실행 URL입니다.")]
         [SerializeField] private string sheetUploadUrl;
@@ -49,11 +34,6 @@ namespace SteelFlameAbyss.Data
         public IReadOnlyList<CharacterData> Characters => characters;
         public IReadOnlyList<EnemyData> Enemies => enemies;
         public IReadOnlyList<RelicData> Relics => relics;
-        // 기존 에셋에 새 URL 필드가 아직 직렬화되지 않았어도 프로젝트 기본 시트로 동작합니다.
-        public string CardsCsvUrl => string.IsNullOrWhiteSpace(cardsCsvUrl) ? CardsDefaultUrl : cardsCsvUrl;
-        public string CharactersCsvUrl => string.IsNullOrWhiteSpace(charactersCsvUrl) ? CharactersDefaultUrl : charactersCsvUrl;
-        public string EnemiesCsvUrl => string.IsNullOrWhiteSpace(enemiesCsvUrl) ? EnemiesDefaultUrl : enemiesCsvUrl;
-        public string RelicsCsvUrl => relicsCsvUrl;
         public string SheetUploadUrl => sheetUploadUrl;
         public string CardsSheetName => cardsSheetName;
         public string CharactersSheetName => charactersSheetName;
@@ -113,16 +93,6 @@ namespace SteelFlameAbyss.Data
         }
 
 #if UNITY_EDITOR
-        /// <summary>에디터 동기화 도구가 검증·정규화한 공개 CSV 주소를 저장합니다.</summary>
-        public void EditorSetCsvUrls(string newCardsUrl, string newCharactersUrl,
-            string newEnemiesUrl, string newRelicsUrl)
-        {
-            cardsCsvUrl = newCardsUrl;
-            charactersCsvUrl = newCharactersUrl;
-            enemiesCsvUrl = newEnemiesUrl;
-            relicsCsvUrl = newRelicsUrl;
-        }
-
         public void EditorSetEntries(List<CardData> newCards, List<CharacterData> newCharacters,
             List<EnemyData> newEnemies, List<RelicData> newRelics)
         {

@@ -20,7 +20,6 @@ namespace SteelFlameAbyss.Editor.Data
         private Vector2 listScroll;
         private GameDataEntry selectedEntry;
         private UnityEditor.Editor selectedEntryEditor;
-        private bool showDownloadSettings;
         private bool showUploadSettings;
         private bool isUploading;
         private GUIStyle selectedButtonStyle;
@@ -158,16 +157,12 @@ namespace SteelFlameAbyss.Editor.Data
         private void DrawDownloadSection()
         {
             EditorGUILayout.Space();
-            showDownloadSettings = EditorGUILayout.Foldout(showDownloadSettings, "원격 CSV 다운로드 설정", true);
-            if (showDownloadSettings)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("cardsCsvUrl"), new GUIContent("카드 시트"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("charactersCsvUrl"), new GUIContent("캐릭터 시트"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("enemiesCsvUrl"), new GUIContent("적 시트"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("relicsCsvUrl"), new GUIContent("유물 시트 (선택)"));
-                EditorGUI.indentLevel--;
-            }
+            EditorGUILayout.LabelField("원격 CSV 다운로드", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("CSV 주소는 GameDatabase 에셋이 아니라 이 PC의 로컬 EditorPrefs에 저장됩니다.",
+                MessageType.Info);
+
+            if (GUILayout.Button("시트 연결 설정 열기", GUILayout.Height(28f)))
+                SheetConnectionSettingsWindow.Open();
 
             if (GUILayout.Button("원격 시트에서 다시 동기화", GUILayout.Height(28f)))
             {

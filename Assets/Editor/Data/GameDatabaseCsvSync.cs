@@ -22,10 +22,10 @@ namespace SteelFlameAbyss.Editor.Data
         private static bool isSyncing;
 
         /// <summary>에디터 시작 시 자동 실행하지 않고 메뉴 또는 단축키로만 동기화합니다.</summary>
-        [MenuItem("Tools/데이터/원격 시트 동기화")]
+        [MenuItem("Tools/데이터/원격 시트 동기화", false, 100)]
         public static async void SyncFromMenu() => await SyncRemoteAsync(showDialogOnFailure: true);
 
-        [MenuItem("Tools/데이터/서브에셋 Script 연결 복구")]
+        [MenuItem("Tools/데이터/서브에셋 Script 연결 복구", false, 210)]
         private static async void RepairScriptLinksFromMenu() =>
             await SyncRemoteAsync(showDialogOnFailure: true);
 
@@ -33,15 +33,14 @@ namespace SteelFlameAbyss.Editor.Data
         public static void RepairScriptLinksFromBatch()
         {
             var database = GetOrCreateDatabase();
-            NormalizeCsvUrls(database);
-            ValidateUrls(database);
+            var urls = SheetConnectionSettings.GetDatabaseUrls();
 
-            var cardsCsv = DownloadCsvBlocking("카드", database.CardsCsvUrl);
-            var charactersCsv = DownloadCsvBlocking("캐릭터", database.CharactersCsvUrl);
-            var enemiesCsv = DownloadCsvBlocking("적", database.EnemiesCsvUrl);
-            var relicsCsv = string.IsNullOrWhiteSpace(database.RelicsCsvUrl)
+            var cardsCsv = DownloadCsvBlocking("카드", urls.Cards);
+            var charactersCsv = DownloadCsvBlocking("캐릭터", urls.Characters);
+            var enemiesCsv = DownloadCsvBlocking("적", urls.Enemies);
+            var relicsCsv = string.IsNullOrWhiteSpace(urls.Relics)
                 ? null
-                : DownloadCsvBlocking("유물", database.RelicsCsvUrl);
+                : DownloadCsvBlocking("유물", urls.Relics);
 
             var input = ReadAndValidateAllSheets(cardsCsv, charactersCsv, enemiesCsv, relicsCsv);
             Apply(database, input);
@@ -49,7 +48,7 @@ namespace SteelFlameAbyss.Editor.Data
                       $"캐릭터 {input.Characters.Count}, 적 {input.Enemies.Count}, 유물 {input.Relics.Count}");
         }
 
-        [MenuItem("Tools/데이터/게임 데이터베이스 선택")]
+        [MenuItem("Tools/데이터/게임 데이터베이스 선택", false, 200)]
         private static void SelectDatabase()
         {
             var database = GetOrCreateDatabase();
@@ -77,21 +76,20 @@ namespace SteelFlameAbyss.Editor.Data
             try
             {
                 var database = GetOrCreateDatabase();
-                NormalizeCsvUrls(database);
-                ValidateUrls(database);
+                var urls = SheetConnectionSettings.GetDatabaseUrls();
 
                 EditorUtility.DisplayProgressBar("원격 시트 동기화", "CSV 주소에서 데이터를 받는 중...", 0.25f);
 
                 // 다운로드는 동시에 시작하되, 에셋 수정은 모든 응답이 성공한 뒤에만 수행합니다.
                 var downloadTasks = new List<Task<string>>
                 {
-                    DownloadCsvAsync("카드", database.CardsCsvUrl),
-                    DownloadCsvAsync("캐릭터", database.CharactersCsvUrl),
-                    DownloadCsvAsync("적", database.EnemiesCsvUrl)
+                    DownloadCsvAsync("카드", urls.Cards),
+                    DownloadCsvAsync("캐릭터", urls.Characters),
+                    DownloadCsvAsync("적", urls.Enemies)
                 };
-                var hasRelicSheet = !string.IsNullOrWhiteSpace(database.RelicsCsvUrl);
+                var hasRelicSheet = !string.IsNullOrWhiteSpace(urls.Relics);
                 if (hasRelicSheet)
-                    downloadTasks.Add(DownloadCsvAsync("유물", database.RelicsCsvUrl));
+                    downloadTasks.Add(DownloadCsvAsync("유물", urls.Relics));
 
                 var downloads = await Task.WhenAll(downloadTasks);
 
@@ -205,48 +203,6 @@ namespace SteelFlameAbyss.Editor.Data
                 trimmed.StartsWith("<html", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException($"{sheetName} 주소가 CSV 대신 HTML을 반환했습니다. 공개 CSV 주소와 공유 권한을 확인해 주세요.");
             return text;
-        }
-
-        /// <summary>Google Sheets의 pubhtml 주소도 실제 CSV 응답 주소로 자동 변환합니다.</summary>
-        private static void NormalizeCsvUrls(GameDatabase database)
-        {
-            database.EditorSetCsvUrls(
-                NormalizeCsvUrl(database.CardsCsvUrl),
-                NormalizeCsvUrl(database.CharactersCsvUrl),
-                NormalizeCsvUrl(database.EnemiesCsvUrl),
-                NormalizeCsvUrl(database.RelicsCsvUrl));
-            EditorUtility.SetDirty(database);
-        }
-
-        private static string NormalizeCsvUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return string.Empty;
-
-            var normalized = url.Trim().Replace("/pubhtml?", "/pub?", StringComparison.OrdinalIgnoreCase);
-            if (!normalized.Contains("output=csv", StringComparison.OrdinalIgnoreCase) &&
-                !normalized.Contains("format=csv", StringComparison.OrdinalIgnoreCase))
-                normalized += normalized.Contains('?') ? "&output=csv" : "?output=csv";
-            return normalized;
-        }
-
-        private static void ValidateUrls(GameDatabase database)
-        {
-            ValidateUrl("카드", database.CardsCsvUrl);
-            ValidateUrl("캐릭터", database.CharactersCsvUrl);
-            ValidateUrl("적", database.EnemiesCsvUrl);
-            if (!string.IsNullOrWhiteSpace(database.RelicsCsvUrl))
-                ValidateUrl("유물", database.RelicsCsvUrl);
-        }
-
-        private static void ValidateUrl(string sheetName, string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                throw new InvalidDataException($"{sheetName} CSV 주소가 비어 있습니다.");
-
-            if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uri) ||
-                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
-                throw new InvalidDataException($"{sheetName} CSV 주소는 http 또는 https 주소여야 합니다.");
         }
 
         private static List<CardRow> ReadCards(CsvTable table)
@@ -498,15 +454,9 @@ namespace SteelFlameAbyss.Editor.Data
                 !File.ReadAllText(DatabasePath).Contains("m_Script: {fileID: 0}"))
                 return database;
 
-            var cardsUrl = database.CardsCsvUrl;
-            var charactersUrl = database.CharactersCsvUrl;
-            var enemiesUrl = database.EnemiesCsvUrl;
-            var relicsUrl = database.RelicsCsvUrl;
-
             // 끊긴 객체는 Unity API에서 실제 null이므로 에셋 전체를 재생성해야 제거할 수 있습니다.
             AssetDatabase.DeleteAsset(DatabasePath);
             database = ScriptableObject.CreateInstance<GameDatabase>();
-            database.EditorSetCsvUrls(cardsUrl, charactersUrl, enemiesUrl, relicsUrl);
             AssetDatabase.CreateAsset(database, DatabasePath);
             Debug.Log("[게임 데이터] Script 연결이 끊긴 기존 데이터베이스를 원격 시트 기준으로 재생성합니다.");
             return database;

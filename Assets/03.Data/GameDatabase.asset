@@ -268,10 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5799541af03c704a9d2b9a0266e64f3, type: 3}
   m_Name: GameDatabase
   m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.GameDatabase
-  cardsCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=0&single=true&output=csv
-  charactersCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=101001&single=true&output=csv
-  enemiesCsvUrl: https://docs.google.com/spreadsheets/d/e/2PACX-1vTsm8FtmAnBxhVoNCzrM3HfRG5mvdTMXkNxm6ryOwonwTjbWnOyr0w24hIRqkthTMoIxBxpdxtphgQI/pub?gid=101002&single=true&output=csv
-  relicsCsvUrl: 
   sheetUploadUrl: https://script.google.com/macros/s/AKfycbyhI-KLavy7xaRnSMQsum1YxXvRiMK8-x-u0upr2rIqa8f0hzbwQzl6uQNrK83em4Oa/exec
   cardsSheetName: Total Card
   charactersSheetName: Character
