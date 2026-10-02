@@ -110,6 +110,14 @@ namespace SteelFlameAbyss.Editor.Data
         private static UploadRow CharacterRow(CharacterData character)
         {
             var row = NewRow(character);
+            Add(row, "characterId", character.Id.ToString(CultureInfo.InvariantCulture));
+            Add(row, "characterName", character.DisplayName);
+            Add(row, "owner", LegacyOwner(character.Class));
+            Add(row, "maxHealth", character.MaxHealth.ToString(CultureInfo.InvariantCulture));
+            Add(row, "resourceName", character.ResourceName);
+            Add(row, "startingEnergy", character.StartingEnergy.ToString(CultureInfo.InvariantCulture));
+            Add(row, "enabled", "TRUE");
+
             Add(row, "Class", character.Class.ToString());
             Add(row, "MaxHealth", character.MaxHealth.ToString(CultureInfo.InvariantCulture));
             Add(row, "StartingDeck", string.Join("|", character.StartingDeckIds));
@@ -121,6 +129,18 @@ namespace SteelFlameAbyss.Editor.Data
         private static UploadRow EnemyRow(EnemyData enemy)
         {
             var row = NewRow(enemy);
+            Add(row, "enemyId", enemy.Id.ToString(CultureInfo.InvariantCulture));
+            Add(row, "enemyName", enemy.DisplayName);
+            Add(row, "tier", enemy.Tier.ToString());
+            Add(row, "minHealth", enemy.MinHealth.ToString(CultureInfo.InvariantCulture));
+            Add(row, "maxHealth", enemy.MaxHealth.ToString(CultureInfo.InvariantCulture));
+            Add(row, "minGold", enemy.MinGold.ToString(CultureInfo.InvariantCulture));
+            Add(row, "maxGold", enemy.MaxGold.ToString(CultureInfo.InvariantCulture));
+            for (var index = 0; index < 3; index++)
+                AddEnemyAction(row, index + 1, index < enemy.Actions.Count ? enemy.Actions[index] : default,
+                    index < enemy.Actions.Count);
+            Add(row, "enabled", "TRUE");
+
             Add(row, "Tier", enemy.Tier.ToString());
             Add(row, "MinHealth", enemy.MinHealth.ToString(CultureInfo.InvariantCulture));
             Add(row, "MaxHealth", enemy.MaxHealth.ToString(CultureInfo.InvariantCulture));
@@ -134,12 +154,70 @@ namespace SteelFlameAbyss.Editor.Data
         private static UploadRow RelicRow(RelicData relic)
         {
             var row = NewRow(relic);
+            Add(row, "relicId", relic.Id.ToString(CultureInfo.InvariantCulture));
+            Add(row, "relicName", relic.DisplayName);
+            Add(row, "rarity", relic.Rarity.ToString());
+            Add(row, "description", relic.Description);
+            Add(row, "trigger", ProjectRelicTrigger(relic.Trigger));
+            AddRelicEffect(row, 1, relic.Effects.Count > 0 ? relic.Effects[0] : default,
+                relic.Effects.Count > 0);
+            AddRelicEffect(row, 2, relic.Effects.Count > 1 ? relic.Effects[1] : default,
+                relic.Effects.Count > 1);
+            Add(row, "enabled", "TRUE");
+
             Add(row, "Rarity", relic.Rarity.ToString());
             Add(row, "Description", relic.Description);
             Add(row, "Trigger", relic.Trigger.ToString());
             Add(row, "Effects", Effects(relic.Effects));
             return row;
         }
+
+        private static void AddEnemyAction(UploadRow row, int slot, EnemyActionSpec action, bool hasAction)
+        {
+            var prefix = $"action{slot}";
+            var hasEffect = hasAction && action.Effects.Count > 0;
+            Add(row, prefix + "Name", hasAction ? action.ActionName : string.Empty);
+            Add(row, prefix + "Weight", hasAction
+                ? action.Weight.ToString(CultureInfo.InvariantCulture)
+                : string.Empty);
+            Add(row, prefix + "Effect", hasEffect ? action.Effects[0].Type.ToString() : string.Empty);
+            Add(row, prefix + "Target", hasEffect ? action.Effects[0].Target.ToString() : string.Empty);
+            Add(row, prefix + "Value1", hasEffect
+                ? action.Effects[0].Amount.ToString(CultureInfo.InvariantCulture)
+                : string.Empty);
+            Add(row, prefix + "Value2", hasEffect
+                ? action.Effects[0].SecondaryAmount.ToString(CultureInfo.InvariantCulture)
+                : string.Empty);
+            Add(row, prefix + "Value3", hasEffect
+                ? action.Effects[0].Duration.ToString(CultureInfo.InvariantCulture)
+                : string.Empty);
+        }
+
+        private static void AddRelicEffect(UploadRow row, int slot, EffectSpec effect, bool hasEffect)
+        {
+            Add(row, $"effect{slot}", hasEffect ? ProjectRelicEffect(effect.Type) : "None");
+            Add(row, $"target{slot}", hasEffect ? effect.Target.ToString() : "None");
+            Add(row, $"value{slot}", hasEffect
+                ? effect.Amount.ToString(CultureInfo.InvariantCulture)
+                : "0");
+        }
+
+        private static string ProjectRelicTrigger(RelicTrigger trigger) => trigger switch
+        {
+            RelicTrigger.OnCardPlayed => "OnCardPlayed",
+            _ => trigger.ToString()
+        };
+
+        private static string ProjectRelicEffect(EffectType type) => type switch
+        {
+            EffectType.Strength => "GainStrength",
+            EffectType.Rage => "GainRage",
+            EffectType.Overheat => "GainOverheat",
+            EffectType.MindFracture => "ApplyMentalSplit",
+            EffectType.AmplifyMindFracture => "MultiplyMentalSplit",
+            EffectType.NextMindFractureBonus => "ApplyHallucination",
+            _ => type.ToString()
+        };
 
         private static UploadRow NewRow(GameDataEntry entry)
         {

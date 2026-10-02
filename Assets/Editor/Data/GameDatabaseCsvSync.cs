@@ -148,6 +148,18 @@ namespace SteelFlameAbyss.Editor.Data
             var cardIds = input.Cards.Select(x => x.Id).ToHashSet();
             foreach (var character in input.Characters)
             {
+                if (character.DeriveCardLists)
+                {
+                    character.StartingDeck = input.Cards
+                        .Where(card => card.Owner == character.Class && card.Rarity == DataRarity.Starter)
+                        .Select(card => card.Id)
+                        .ToList();
+                    character.CardPool = input.Cards
+                        .Where(card => card.Owner == character.Class || card.Owner == CharacterClass.Common)
+                        .Select(card => card.Id)
+                        .ToList();
+                }
+
                 foreach (var cardId in character.StartingDeck.Concat(character.CardPool))
                 {
                     if (!cardIds.Contains(cardId))
@@ -242,7 +254,7 @@ namespace SteelFlameAbyss.Editor.Data
             for (var row = 0; row < table.RowCount; row++)
             {
                 // Total Card의 두 번째 행은 string/int/enum 같은 자료형 설명 행입니다.
-                if (table.IsTypeDeclarationRow(row))
+                if (!ShouldImportRow(table, row, "cardId"))
                     continue;
 
                 var targetText = Required(table, row, "target");
@@ -300,9 +312,10 @@ namespace SteelFlameAbyss.Editor.Data
                 ["Ignite"] = EffectType.Ignite,
                 ["GainOverheat"] = EffectType.Overheat,
                 ["ApplyMentalSplit"] = EffectType.MindFracture,
-                ["MultiplyMentalSplit"] = EffectType.AmplifyMindFracture
+                ["MultiplyMentalSplit"] = EffectType.AmplifyMindFracture,
+                ["ApplyHallucination"] = EffectType.NextMindFractureBonus
             };
-            return aliases.TryGetValue(raw.Trim(), out type);
+            return Enum.TryParse(raw.Trim(), true, out type) || aliases.TryGetValue(raw.Trim(), out type);
         }
 
         private static CharacterClass ParseProjectOwner(string raw, CsvTable table, int row)
@@ -319,16 +332,23 @@ namespace SteelFlameAbyss.Editor.Data
 
         private static List<CharacterRow> ReadCharacters(CsvTable table)
         {
+            if ((table.Has("Id") || table.Has("characterId")) &&
+                table.Has("characterName", "owner", "maxHealth", "resourceName", "startingEnergy", "enabled"))
+                return ReadProjectCharacters(table);
+
             table.Require("Id", "Name", "Class", "MaxHealth", "StartingDeck", "CardPool", "ResourceName");
             var result = new List<CharacterRow>();
             for (var row = 0; row < table.RowCount; row++)
             {
+                if (!ShouldImportRow(table, row, "Id"))
+                    continue;
                 result.Add(new CharacterRow
                 {
                     Id = PositiveInt(table, row, "Id"),
                     Name = Required(table, row, "Name"),
                     Class = EnumValue<CharacterClass>(table, row, "Class"),
                     MaxHealth = PositiveInt(table, row, "MaxHealth"),
+                    StartingEnergy = 3,
                     StartingDeck = IdList(table, row, "StartingDeck"),
                     CardPool = IdList(table, row, "CardPool"),
                     ResourceName = table.Get(row, "ResourceName")
@@ -338,12 +358,47 @@ namespace SteelFlameAbyss.Editor.Data
             return result;
         }
 
+        private static List<CharacterRow> ReadProjectCharacters(CsvTable table)
+        {
+            var idHeader = ProjectIdHeader(table, "characterId");
+            var result = new List<CharacterRow>();
+            for (var row = 0; row < table.RowCount; row++)
+            {
+                if (!ShouldImportRow(table, row, idHeader))
+                    continue;
+
+                result.Add(new CharacterRow
+                {
+                    Id = PositiveInt(table, row, idHeader),
+                    Name = Required(table, row, "characterName"),
+                    Class = ParseProjectOwner(Required(table, row, "owner"), table, row),
+                    MaxHealth = PositiveInt(table, row, "maxHealth"),
+                    StartingEnergy = NonNegativeInt(table, row, "startingEnergy"),
+                    StartingDeck = new List<int>(),
+                    CardPool = new List<int>(),
+                    ResourceName = table.Get(row, "resourceName"),
+                    DeriveCardLists = true
+                });
+            }
+            EnsureUnique(result.Select(x => x.Id), "캐릭터 시트");
+            return result;
+        }
+
         private static List<EnemyRow> ReadEnemies(CsvTable table)
         {
+            var projectFormat = (table.Has("Id") || table.Has("enemyId")) &&
+                table.Has("enemyName", "tier", "minHealth", "maxHealth", "minGold", "maxGold",
+                    "action1Name", "action1Weight", "action1Effect", "action1Target", "action1Value1",
+                    "action1Value2", "action1Value3", "enabled");
+            if (projectFormat)
+                return ReadProjectEnemies(table);
+
             table.Require("Id", "Name", "Tier", "MinHealth", "MaxHealth", "MinGold", "MaxGold", "Actions");
             var result = new List<EnemyRow>();
             for (var row = 0; row < table.RowCount; row++)
             {
+                if (!ShouldImportRow(table, row, "Id"))
+                    continue;
                 var minHealth = PositiveInt(table, row, "MinHealth");
                 var maxHealth = PositiveInt(table, row, "MaxHealth");
                 var minGold = NonNegativeInt(table, row, "MinGold");
@@ -367,12 +422,51 @@ namespace SteelFlameAbyss.Editor.Data
             return result;
         }
 
+        private static List<EnemyRow> ReadProjectEnemies(CsvTable table)
+        {
+            var idHeader = ProjectIdHeader(table, "enemyId");
+            var result = new List<EnemyRow>();
+            for (var row = 0; row < table.RowCount; row++)
+            {
+                if (!ShouldImportRow(table, row, idHeader))
+                    continue;
+
+                var minHealth = PositiveInt(table, row, "minHealth");
+                var maxHealth = PositiveInt(table, row, "maxHealth");
+                var minGold = NonNegativeInt(table, row, "minGold");
+                var maxGold = NonNegativeInt(table, row, "maxGold");
+                if (maxHealth < minHealth || maxGold < minGold)
+                    throw Error(table, row, "최댓값은 최솟값보다 크거나 같아야 합니다.");
+
+                result.Add(new EnemyRow
+                {
+                    Id = PositiveInt(table, row, idHeader),
+                    Name = Required(table, row, "enemyName"),
+                    Tier = EnumValue<EnemyTier>(table, row, "tier"),
+                    MinHealth = minHealth,
+                    MaxHealth = maxHealth,
+                    MinGold = minGold,
+                    MaxGold = maxGold,
+                    Actions = ProjectEnemyActions(table, row)
+                });
+            }
+            EnsureUnique(result.Select(x => x.Id), "적 시트");
+            return result;
+        }
+
         private static List<RelicRow> ReadRelics(CsvTable table)
         {
+            if ((table.Has("Id") || table.Has("relicId")) &&
+                table.Has("relicName", "rarity", "description", "trigger", "effect1", "target1",
+                    "value1", "effect2", "target2", "value2", "enabled"))
+                return ReadProjectRelics(table);
+
             table.Require("Id", "Name", "Rarity", "Description", "Trigger", "Effects");
             var result = new List<RelicRow>();
             for (var row = 0; row < table.RowCount; row++)
             {
+                if (!ShouldImportRow(table, row, "Id"))
+                    continue;
                 result.Add(new RelicRow
                 {
                     Id = PositiveInt(table, row, "Id"),
@@ -386,6 +480,35 @@ namespace SteelFlameAbyss.Editor.Data
             EnsureUnique(result.Select(x => x.Id), "유물 시트");
             return result;
         }
+
+        private static List<RelicRow> ReadProjectRelics(CsvTable table)
+        {
+            var idHeader = ProjectIdHeader(table, "relicId");
+            var result = new List<RelicRow>();
+            for (var row = 0; row < table.RowCount; row++)
+            {
+                if (!ShouldImportRow(table, row, idHeader))
+                    continue;
+
+                var effects = new List<EffectSpec>();
+                AddProjectEffect(effects, table, row, "effect1", "target1", "value1");
+                AddProjectEffect(effects, table, row, "effect2", "target2", "value2");
+                result.Add(new RelicRow
+                {
+                    Id = PositiveInt(table, row, idHeader),
+                    Name = Required(table, row, "relicName"),
+                    Rarity = EnumValue<DataRarity>(table, row, "rarity"),
+                    Description = table.Get(row, "description"),
+                    Trigger = EnumValue<RelicTrigger>(table, row, "trigger"),
+                    Effects = effects
+                });
+            }
+            EnsureUnique(result.Select(x => x.Id), "유물 시트");
+            return result;
+        }
+
+        private static string ProjectIdHeader(CsvTable table, string specificHeader) =>
+            table.Has(specificHeader) ? specificHeader : "Id";
 
         private static void Apply(GameDatabase database, ImportData input)
         {
@@ -416,7 +539,8 @@ namespace SteelFlameAbyss.Editor.Data
             {
                 var asset = GetOrCreate<CharacterData>(database, existing, row.Id);
                 asset.EditorSetIdentity(row.Id, row.Name);
-                asset.EditorApply(row.Class, row.MaxHealth, row.StartingDeck, row.CardPool, row.ResourceName);
+                asset.EditorApply(row.Class, row.MaxHealth, row.StartingEnergy, row.StartingDeck,
+                    row.CardPool, row.ResourceName);
                 retained.Add(asset);
                 EditorUtility.SetDirty(asset);
                 return asset;
@@ -513,6 +637,65 @@ namespace SteelFlameAbyss.Editor.Data
             return result;
         }
 
+        private static List<EnemyActionSpec> ProjectEnemyActions(CsvTable table, int row)
+        {
+            var result = new List<EnemyActionSpec>();
+            for (var slot = 1; slot <= 3; slot++)
+            {
+                var prefix = $"action{slot}";
+                var actionName = table.Get(row, prefix + "Name");
+                var effectName = table.Get(row, prefix + "Effect");
+                if (string.IsNullOrWhiteSpace(actionName) && string.IsNullOrWhiteSpace(effectName))
+                    continue;
+                if (string.IsNullOrWhiteSpace(actionName) || string.IsNullOrWhiteSpace(effectName))
+                    throw Error(table, row, $"{prefix}의 이름과 효과를 모두 입력해 주세요.");
+                if (string.Equals(effectName, "None", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (!TryMapProjectEffect(effectName, out var effectType))
+                    throw Error(table, row, $"{prefix}Effect의 '{effectName}' 효과를 Unity EffectType으로 변환할 수 없습니다.");
+
+                var target = EnumFromText<TargetType>(Required(table, row, prefix + "Target"),
+                    table, row, prefix + "Target");
+                var effect = new EffectSpec(effectType, target,
+                    NonNegativeInt(table, row, prefix + "Value1"),
+                    NonNegativeInt(table, row, prefix + "Value2"),
+                    NonNegativeInt(table, row, prefix + "Value3"));
+                var intent = InferIntent(actionName, effectType);
+                result.Add(new EnemyActionSpec(actionName, intent,
+                    NonNegativeFloat(table, row, prefix + "Weight"), new List<EffectSpec> { effect }));
+            }
+            return result;
+        }
+
+        private static IntentType InferIntent(string actionName, EffectType effectType)
+        {
+            if (Enum.TryParse(actionName.Trim(), true, out IntentType intent))
+                return intent;
+
+            return effectType switch
+            {
+                EffectType.Damage => IntentType.Attack,
+                EffectType.Block => IntentType.Defend,
+                EffectType.Strength or EffectType.Rage or EffectType.Overheat => IntentType.Buff,
+                EffectType.Weak or EffectType.Vulnerable or EffectType.Burn or EffectType.MindFracture => IntentType.Debuff,
+                _ => IntentType.Special
+            };
+        }
+
+        private static void AddProjectEffect(List<EffectSpec> effects, CsvTable table, int row,
+            string effectColumn, string targetColumn, string valueColumn)
+        {
+            var effectName = table.Get(row, effectColumn);
+            if (string.IsNullOrWhiteSpace(effectName) ||
+                string.Equals(effectName, "None", StringComparison.OrdinalIgnoreCase))
+                return;
+            if (!TryMapProjectEffect(effectName, out var effectType))
+                throw Error(table, row, $"{effectColumn}의 '{effectName}' 효과를 Unity EffectType으로 변환할 수 없습니다.");
+
+            var target = EnumFromText<TargetType>(Required(table, row, targetColumn), table, row, targetColumn);
+            effects.Add(new EffectSpec(effectType, target, NonNegativeInt(table, row, valueColumn)));
+        }
+
         private static List<EffectSpec> Effects(CsvTable table, int row, string column) =>
             ParseEffects(table.Get(row, column), '|', table, row, column);
 
@@ -565,6 +748,28 @@ namespace SteelFlameAbyss.Editor.Data
             if (value < 0)
                 throw Error(table, row, $"{column} 값은 음수일 수 없습니다.");
             return value;
+        }
+
+        private static float NonNegativeFloat(CsvTable table, int row, string column)
+        {
+            var raw = Required(table, row, column);
+            if (!float.TryParse(raw.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ||
+                value < 0f)
+                throw Error(table, row, $"{column}의 '{raw}' 값은 0 이상의 숫자여야 합니다.");
+            return value;
+        }
+
+        private static bool ShouldImportRow(CsvTable table, int row, string idColumn)
+        {
+            if (table.IsTypeDeclarationRow(row) || string.IsNullOrWhiteSpace(table.Get(row, idColumn)))
+                return false;
+            if (!table.Has("enabled"))
+                return true;
+
+            var raw = table.Get(row, "enabled");
+            return bool.TryParse(raw, out var enabled)
+                ? enabled
+                : raw == "1" || string.Equals(raw, "yes", StringComparison.OrdinalIgnoreCase);
         }
 
         private static int ParseInt(string raw, CsvTable table, int row, string column)
@@ -652,8 +857,9 @@ namespace SteelFlameAbyss.Editor.Data
             public int Id;
             public string Name, ResourceName;
             public CharacterClass Class;
-            public int MaxHealth;
+            public int MaxHealth, StartingEnergy;
             public List<int> StartingDeck, CardPool;
+            public bool DeriveCardLists;
         }
 
         private sealed class EnemyRow

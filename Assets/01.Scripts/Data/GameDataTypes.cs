@@ -9,9 +9,22 @@ namespace SteelFlameAbyss.Data
     public enum CardType { Attack, Skill, Power, Status }
     public enum DataRarity { Starter, Common, Uncommon, Rare, Special }
     public enum EnemyTier { Normal, Elite, Boss }
-    public enum TargetType { Self, SingleEnemy, AllEnemies, RandomEnemy }
+    public enum TargetType { Self, SingleEnemy, AllEnemies, RandomEnemy, None }
     public enum IntentType { Attack, Defend, Buff, Debuff, Special }
-    public enum RelicTrigger { Passive, BattleStart, TurnStart, CardPlayed, AttackCardPlayed, EnemyDefeated, BattleReward }
+    public enum RelicTrigger
+    {
+        Passive = 0,
+        BattleStart = 1,
+        TurnStart = 2,
+        OnCardPlayed = 3,
+        CardPlayed = OnCardPlayed,
+        AttackCardPlayed = 4,
+        EnemyDefeated = 5,
+        BattleReward = 6,
+        TurnEnd = 7,
+        BattleEnd = 8,
+        OnDamageTaken = 9
+    }
 
     public enum EffectType
     {
@@ -73,16 +86,24 @@ namespace SteelFlameAbyss.Data
     public struct EnemyActionSpec
     {
         // 적 행동 하나는 의도, 선택 가중치, 실제 효과 목록으로 구성됩니다.
+        [SerializeField] private string actionName;
         [SerializeField] private IntentType intent;
         [Min(0f)] [SerializeField] private float weight;
         [SerializeField] private List<EffectSpec> effects;
 
+        public string ActionName => actionName;
         public IntentType Intent => intent;
         public float Weight => weight;
         public IReadOnlyList<EffectSpec> Effects => effects;
 
         public EnemyActionSpec(IntentType intent, float weight, List<EffectSpec> effects)
+            : this(intent.ToString(), intent, weight, effects)
         {
+        }
+
+        public EnemyActionSpec(string actionName, IntentType intent, float weight, List<EffectSpec> effects)
+        {
+            this.actionName = string.IsNullOrWhiteSpace(actionName) ? intent.ToString() : actionName;
             this.intent = intent;
             this.weight = weight;
             this.effects = effects ?? new List<EffectSpec>();

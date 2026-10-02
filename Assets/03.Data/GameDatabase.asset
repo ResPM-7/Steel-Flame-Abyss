@@ -100,8 +100,9 @@ MonoBehaviour:
   displayName: "\uC7BF\uBD88\uC220\uC0AC"
   characterClass: 2
   maxHealth: 66
-  startingDeckIds: 
-  cardPoolIds: 
+  startingEnergy: 3
+  startingDeckIds: 214e0000224e0000
+  cardPoolIds: 214e0000224e0000234e0000419c0000
   resourceName: "\uACFC\uC5F4"
   portrait: {fileID: 0}
 --- !u!114 &-4994107017506138331
@@ -273,8 +274,9 @@ MonoBehaviour:
   displayName: "\uC2EC\uC5F0\uC758 \uC2E0\uBD09\uC790"
   characterClass: 3
   maxHealth: 70
-  startingDeckIds: 
-  cardPoolIds: 
+  startingEnergy: 3
+  startingDeckIds: 3175000032750000
+  cardPoolIds: 317500003275000033750000419c0000
   resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
   portrait: {fileID: 0}
 --- !u!114 &960357282857903389
@@ -355,7 +357,8 @@ MonoBehaviour:
   minGold: 12
   maxGold: 18
   actions:
-  - intent: 0
+  - actionName: Attack
+    intent: 0
     weight: 0.7
     effects:
     - type: 0
@@ -363,7 +366,8 @@ MonoBehaviour:
       amount: 7
       secondaryAmount: 0
       duration: 0
-  - intent: 1
+  - actionName: Defend
+    intent: 1
     weight: 0.3
     effects:
     - type: 1
@@ -392,7 +396,8 @@ MonoBehaviour:
   minGold: 80
   maxGold: 100
   actions:
-  - intent: 0
+  - actionName: Attack
+    intent: 0
     weight: 0.6
     effects:
     - type: 0
@@ -400,7 +405,8 @@ MonoBehaviour:
       amount: 12
       secondaryAmount: 0
       duration: 0
-  - intent: 2
+  - actionName: Buff
+    intent: 2
     weight: 0.2
     effects:
     - type: 2
@@ -408,7 +414,8 @@ MonoBehaviour:
       amount: 2
       secondaryAmount: 0
       duration: 0
-  - intent: 3
+  - actionName: Debuff
+    intent: 3
     weight: 0.2
     effects:
     - type: 105
@@ -546,8 +553,9 @@ MonoBehaviour:
   displayName: "\uC120\uBD09\uB300"
   characterClass: 1
   maxHealth: 80
-  startingDeckIds: 
-  cardPoolIds: 
+  startingEnergy: 3
+  startingDeckIds: 1127000012270000
+  cardPoolIds: 112700001227000013270000419c0000
   resourceName: "\uBD84\uB178"
   portrait: {fileID: 0}
 --- !u!114 &8219795776332101764
