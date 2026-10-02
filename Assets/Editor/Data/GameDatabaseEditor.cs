@@ -11,16 +11,12 @@ namespace SteelFlameAbyss.Editor.Data
     [CustomEditor(typeof(GameDatabase))]
     internal sealed class GameDatabaseEditor : UnityEditor.Editor
     {
-        private const string AppsScriptTemplatePath =
-            "Assets/Editor/Data/GoogleAppsScript/GameDatabaseUpload.gs.txt";
-
         private readonly string[] categoryLabels = { "전체", "카드", "캐릭터", "적", "유물" };
         private string searchText = string.Empty;
         private int categoryIndex;
         private Vector2 listScroll;
         private GameDataEntry selectedEntry;
         private UnityEditor.Editor selectedEntryEditor;
-        private bool showUploadSettings;
         private bool isUploading;
         private GUIStyle selectedButtonStyle;
 
@@ -124,34 +120,8 @@ namespace SteelFlameAbyss.Editor.Data
                     ConfirmAndUpload(database);
             }
 
-            showUploadSettings = EditorGUILayout.Foldout(showUploadSettings, "시트 업로드 연결 설정", true);
-            if (!showUploadSettings)
-                return;
-
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("sheetUploadUrl"),
-                new GUIContent("Apps Script 웹앱 URL"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("cardsSheetName"), new GUIContent("카드 탭 이름"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("charactersSheetName"), new GUIContent("캐릭터 탭 이름"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("enemiesSheetName"), new GUIContent("적 탭 이름"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("relicsSheetName"), new GUIContent("유물 탭 이름"));
-
-            var token = GameDatabaseSheetUpload.UploadToken;
-            var changedToken = EditorGUILayout.PasswordField("업로드 토큰 (선택)", token);
-            if (!string.Equals(token, changedToken, StringComparison.Ordinal))
-                GameDatabaseSheetUpload.UploadToken = changedToken;
-
-            if (GUILayout.Button("Google Apps Script 템플릿 표시"))
-            {
-                var template = AssetDatabase.LoadAssetAtPath<TextAsset>(AppsScriptTemplatePath);
-                Selection.activeObject = template;
-                EditorGUIUtility.PingObject(template);
-            }
-            EditorGUILayout.HelpBox(
-                "템플릿을 Google Sheets의 확장 프로그램 > Apps Script에 붙여 넣고 웹 앱으로 배포한 뒤, " +
-                "배포 URL을 위에 입력하세요. 토큰은 프로젝트 파일이 아닌 이 PC의 EditorPrefs에 저장됩니다.",
-                MessageType.Info);
-            EditorGUI.indentLevel--;
+            if (GUILayout.Button("시트 업로드 연결 열기", GUILayout.Height(26f)))
+                SheetUploadConnectionWindow.Open();
         }
 
         private void DrawDownloadSection()

@@ -268,11 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5799541af03c704a9d2b9a0266e64f3, type: 3}
   m_Name: GameDatabase
   m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.GameDatabase
-  sheetUploadUrl: https://script.google.com/macros/s/AKfycbyhI-KLavy7xaRnSMQsum1YxXvRiMK8-x-u0upr2rIqa8f0hzbwQzl6uQNrK83em4Oa/exec
-  cardsSheetName: Total Card
-  charactersSheetName: Character
-  enemiesSheetName: Enemy
-  relicsSheetName: Relic
   cards:
   - {fileID: -8385031774917651647}
   - {fileID: 4515266384392357887}

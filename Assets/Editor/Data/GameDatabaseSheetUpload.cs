@@ -14,24 +14,17 @@ namespace SteelFlameAbyss.Editor.Data
     /// <summary>GameDatabase의 현재 값을 Google Apps Script 웹앱을 통해 시트에 업로드합니다.</summary>
     internal static class GameDatabaseSheetUpload
     {
-        private const string UploadTokenEditorPrefsKey = "SteelFlameAbyss.GameData.UploadToken";
-
-        internal static string UploadToken
-        {
-            get => EditorPrefs.GetString(UploadTokenEditorPrefsKey, string.Empty);
-            set => EditorPrefs.SetString(UploadTokenEditorPrefsKey, value ?? string.Empty);
-        }
-
         internal static async Task UploadAsync(GameDatabase database)
         {
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
-            if (!Uri.TryCreate(database.SheetUploadUrl?.Trim(), UriKind.Absolute, out var uri) ||
+            var settings = SheetUploadConnectionSettings.GetValidated();
+            if (!Uri.TryCreate(settings.UploadUrl, UriKind.Absolute, out var uri) ||
                 uri.Scheme != Uri.UriSchemeHttps)
                 throw new InvalidOperationException("업로드 연결 설정에 HTTPS Google Apps Script 웹앱 URL을 입력해 주세요.");
 
             AssetDatabase.SaveAssets();
-            var payload = BuildPayload(database);
+            var payload = BuildPayload(database, settings);
             var json = JsonUtility.ToJson(payload);
             using var request = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST)
             {
@@ -58,29 +51,29 @@ namespace SteelFlameAbyss.Editor.Data
                       $"캐릭터 {database.Characters.Count}, 적 {database.Enemies.Count}, 유물 {database.Relics.Count}");
         }
 
-        private static UploadPayload BuildPayload(GameDatabase database)
+        private static UploadPayload BuildPayload(GameDatabase database, SheetUploadConnectionSettings.Values settings)
         {
-            var payload = new UploadPayload { token = UploadToken };
+            var payload = new UploadPayload { token = settings.Token };
             payload.tables.Add(new UploadTable
             {
-                name = database.CardsSheetName,
+                name = settings.CardsSheetName,
                 rows = database.Cards.Where(value => value != null).Select(CardRow).ToList()
             });
             payload.tables.Add(new UploadTable
             {
-                name = database.CharactersSheetName,
+                name = settings.CharactersSheetName,
                 rows = database.Characters.Where(value => value != null).Select(CharacterRow).ToList()
             });
             payload.tables.Add(new UploadTable
             {
-                name = database.EnemiesSheetName,
+                name = settings.EnemiesSheetName,
                 rows = database.Enemies.Where(value => value != null).Select(EnemyRow).ToList()
             });
             if (database.Relics.Count > 0)
             {
                 payload.tables.Add(new UploadTable
                 {
-                    name = database.RelicsSheetName,
+                    name = settings.RelicsSheetName,
                     rows = database.Relics.Where(value => value != null).Select(RelicRow).ToList()
                 });
             }

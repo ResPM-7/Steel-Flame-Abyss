@@ -11,14 +11,6 @@ namespace SteelFlameAbyss.Data
     [CreateAssetMenu(fileName = "GameDatabase", menuName = "강철과 불꽃과 심연/게임 데이터베이스")]
     public sealed class GameDatabase : ScriptableObject
     {
-        [Header("Google 시트 업로드")]
-        [Tooltip("Google Apps Script를 웹앱으로 배포한 실행 URL입니다.")]
-        [SerializeField] private string sheetUploadUrl;
-        [SerializeField] private string cardsSheetName = "Total Card";
-        [SerializeField] private string charactersSheetName = "Character";
-        [SerializeField] private string enemiesSheetName = "Enemy";
-        [SerializeField] private string relicsSheetName = "Relic";
-
         [Header("동기화된 데이터 (서브에셋)")]
         [SerializeField] private List<CardData> cards = new();
         [SerializeField] private List<CharacterData> characters = new();
@@ -34,12 +26,6 @@ namespace SteelFlameAbyss.Data
         public IReadOnlyList<CharacterData> Characters => characters;
         public IReadOnlyList<EnemyData> Enemies => enemies;
         public IReadOnlyList<RelicData> Relics => relics;
-        public string SheetUploadUrl => sheetUploadUrl;
-        public string CardsSheetName => cardsSheetName;
-        public string CharactersSheetName => charactersSheetName;
-        public string EnemiesSheetName => enemiesSheetName;
-        public string RelicsSheetName => relicsSheetName;
-
         private void OnEnable() => RebuildLookup();
 
         public bool TryGetCard(string id, out CardData value)
