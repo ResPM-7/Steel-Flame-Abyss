@@ -25,10 +25,6 @@ namespace SteelFlameAbyss.Editor.Data
         [MenuItem("Tools/데이터/원격 시트 동기화", false, 100)]
         public static async void SyncFromMenu() => await SyncRemoteAsync(showDialogOnFailure: true);
 
-        [MenuItem("Tools/데이터/서브에셋 Script 연결 복구", false, 210)]
-        private static async void RepairScriptLinksFromMenu() =>
-            await SyncRemoteAsync(showDialogOnFailure: true);
-
         /// <summary>Unity 배치 실행에서 원격 시트로 데이터베이스를 복구하기 위한 진입점입니다.</summary>
         public static void RepairScriptLinksFromBatch()
         {

@@ -8,6 +8,9 @@ namespace SteelFlameAbyss.Battle
     /// </summary>
     public sealed class CombatantState
     {
+        /// <summary>체력, 방어도, 능력치가 변경된 직후 알립니다.</summary>
+        public event Action Changed;
+
         public int MaxHealth { get; }
         public int CurrentHealth { get; private set; }
         public int Block { get; private set; }
@@ -45,6 +48,7 @@ namespace SteelFlameAbyss.Battle
 
             int healthDamage = Math.Min(CurrentHealth, amount - blockedDamage);
             CurrentHealth -= healthDamage;
+            Changed?.Invoke();
             return healthDamage;
         }
 
@@ -56,43 +60,61 @@ namespace SteelFlameAbyss.Battle
 
             int healedAmount = Math.Min(MissingHealth, amount);
             CurrentHealth += healedAmount;
+            if (healedAmount > 0)
+                Changed?.Invoke();
             return healedAmount;
         }
 
         public void GainBlock(int amount)
         {
-            if (amount > 0)
+            if (amount > 0 && IsAlive)
+            {
                 Block += amount;
+                Changed?.Invoke();
+            }
         }
 
         public void ClearBlock()
         {
+            if (Block == 0) return;
             Block = 0;
+            Changed?.Invoke();
         }
 
         public void GainStrength(int amount)
         {
-            if (amount > 0)
+            if (amount > 0 && IsAlive)
+            {
                 Strength += amount;
+                Changed?.Invoke();
+            }
         }
 
         public void ApplyWeak(int amount)
         {
-            if (amount > 0)
+            if (amount > 0 && IsAlive)
+            {
                 Weak += amount;
+                Changed?.Invoke();
+            }
         }
 
         public void ApplyVulnerable(int amount)
         {
-            if (amount > 0)
+            if (amount > 0 && IsAlive)
+            {
                 Vulnerable += amount;
+                Changed?.Invoke();
+            }
         }
 
         /// <summary>턴 종료 시 약화와 취약 지속량을 1씩 감소시킵니다.</summary>
         public void TickDebuffs()
         {
+            if (Weak == 0 && Vulnerable == 0) return;
             Weak = Math.Max(0, Weak - 1);
             Vulnerable = Math.Max(0, Vulnerable - 1);
+            Changed?.Invoke();
         }
     }
 }
