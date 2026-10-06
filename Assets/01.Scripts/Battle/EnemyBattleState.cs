@@ -3,7 +3,7 @@ using SteelFlameAbyss.Data;
 
 namespace SteelFlameAbyss.Battle
 {
-    /// <summary>개체별 체력과 다음 행동을 보관합니다. 적 SO는 수정하지 않습니다.</summary>
+    //개체별 체력과 다음 행동을 보관합니다. 적 SO는 수정하지 않습니다.
     public sealed class EnemyBattleState
     {
         public EnemyData Data { get; }
@@ -12,6 +12,7 @@ namespace SteelFlameAbyss.Battle
         public event Action IntentChanged;
         private readonly Random random;
 
+        //적의 체력을 설정 범위에서 뽑고 첫 행동을 선택합니다.
         public EnemyBattleState(EnemyData data, Random random)
         {
             Data = data != null ? data : throw new ArgumentNullException(nameof(data));
@@ -25,7 +26,7 @@ namespace SteelFlameAbyss.Battle
             PlanNextAction();
         }
 
-        /// <summary>살아 있는 적의 행동을 시트 가중치로 선택합니다. 실행은 전투 루프가 담당합니다.</summary>
+        //살아 있는 적의 행동을 시트 가중치로 선택합니다. 실행은 전투 루프가 담당합니다.
         public void PlanNextAction()
         {
             PlannedAction = null;
@@ -48,6 +49,7 @@ namespace SteelFlameAbyss.Battle
             IntentChanged?.Invoke();
         }
 
+        //효과가 있고 가중치가 유효한 선택 가능한 행동인지 확인합니다.
         private static bool IsSelectable(EnemyActionSpec action) =>
             action.Weight > 0 && !float.IsInfinity(action.Weight) &&
             action.Effects != null && action.Effects.Count > 0;

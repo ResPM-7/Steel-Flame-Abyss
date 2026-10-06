@@ -2,13 +2,11 @@ using System;
 
 namespace SteelFlameAbyss.Battle
 {
-    /// <summary>
-    /// 전투 중에만 사용하는 캐릭터/적의 가변 상태입니다.
-    /// ScriptableObject 원본 데이터는 변경하지 않습니다.
-    /// </summary>
+    //전투 중에만 사용하는 캐릭터/적의 가변 상태입니다.
+    //ScriptableObject 원본 데이터는 변경하지 않습니다.
     public sealed class CombatantState
     {
-        /// <summary>체력, 방어도, 능력치가 변경된 직후 알립니다.</summary>
+        //체력, 방어도, 능력치가 변경된 직후 알립니다.
         public event Action Changed;
 
         public int MaxHealth { get; }
@@ -21,11 +19,13 @@ namespace SteelFlameAbyss.Battle
         public bool IsAlive => CurrentHealth > 0;
         public int MissingHealth => MaxHealth - CurrentHealth;
 
+        //최대 체력이 가득 찬 전투 상태를 생성합니다.
         public CombatantState(int maxHealth)
             : this(maxHealth, maxHealth)
         {
         }
 
+        //최대 체력과 현재 체력으로 전투 상태를 생성합니다.
         public CombatantState(int maxHealth, int currentHealth)
         {
             if (maxHealth <= 0)
@@ -35,9 +35,7 @@ namespace SteelFlameAbyss.Battle
             CurrentHealth = Math.Max(0, Math.Min(currentHealth, maxHealth));
         }
 
-        /// <summary>
-        /// 방어도로 먼저 피해를 막고, 실제로 감소한 체력을 반환합니다.
-        /// </summary>
+        //방어도로 먼저 피해를 막고, 실제로 감소한 체력을 반환합니다.
         public int TakeDamage(int amount)
         {
             if (amount <= 0 || !IsAlive)
@@ -52,7 +50,7 @@ namespace SteelFlameAbyss.Battle
             return healthDamage;
         }
 
-        /// <summary>실제로 회복된 체력을 반환합니다.</summary>
+        //실제로 회복된 체력을 반환합니다.
         public int Heal(int amount)
         {
             if (amount <= 0 || !IsAlive)
@@ -65,6 +63,7 @@ namespace SteelFlameAbyss.Battle
             return healedAmount;
         }
 
+        //살아 있는 대상의 방어도를 증가시킵니다.
         public void GainBlock(int amount)
         {
             if (amount > 0 && IsAlive)
@@ -74,6 +73,7 @@ namespace SteelFlameAbyss.Battle
             }
         }
 
+        //남아 있는 방어도를 초기화합니다.
         public void ClearBlock()
         {
             if (Block == 0) return;
@@ -81,6 +81,7 @@ namespace SteelFlameAbyss.Battle
             Changed?.Invoke();
         }
 
+        //살아 있는 대상의 힘을 증가시킵니다.
         public void GainStrength(int amount)
         {
             if (amount > 0 && IsAlive)
@@ -90,6 +91,7 @@ namespace SteelFlameAbyss.Battle
             }
         }
 
+        //살아 있는 대상에게 약화 지속량을 추가합니다.
         public void ApplyWeak(int amount)
         {
             if (amount > 0 && IsAlive)
@@ -99,6 +101,7 @@ namespace SteelFlameAbyss.Battle
             }
         }
 
+        //살아 있는 대상에게 취약 지속량을 추가합니다.
         public void ApplyVulnerable(int amount)
         {
             if (amount > 0 && IsAlive)
@@ -108,7 +111,7 @@ namespace SteelFlameAbyss.Battle
             }
         }
 
-        /// <summary>턴 종료 시 약화와 취약 지속량을 1씩 감소시킵니다.</summary>
+        //턴 종료 시 약화와 취약 지속량을 1씩 감소시킵니다.
         public void TickDebuffs()
         {
             if (Weak == 0 && Vulnerable == 0) return;
