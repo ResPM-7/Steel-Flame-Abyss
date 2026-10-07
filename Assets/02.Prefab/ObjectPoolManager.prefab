@@ -50,7 +50,7 @@ MonoBehaviour:
     prefab: {fileID: 8130386034827836787, guid: e2894600fcf112c4987e28c6153063f6, type: 3}
     poolSize: 2
   canvasPools:
-  - poolName: testPool1
-    prefab: {fileID: 6135062662478228408, guid: 64a7b77efdf62164bbfc32de58ff1c61, type: 3}
+  - poolName: Card
+    prefab: {fileID: 4105020870546156555, guid: 5ac60f4ed208a2e4aa4bc4e9d7dd44e3, type: 3}
     targetCanvas: {fileID: 0}
-    poolSize: 5
+    poolSize: 10
