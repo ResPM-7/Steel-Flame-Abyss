@@ -95,7 +95,6 @@ public class CardHandController : MonoBehaviour
         bool previousEnabled = GUI.enabled;
         GUI.enabled = previousEnabled && IsReady;
         if (GUILayout.Button("1장 드로우", GUILayout.Height(24f))) DrawCards(1);
-        if (GUILayout.Button("3장 드로우", GUILayout.Height(24f))) DrawCards(3);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
