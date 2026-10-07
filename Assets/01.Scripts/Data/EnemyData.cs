@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SteelFlameAbyss.Data
 {
     /// <summary>적의 체력 범위, 보상과 행동 패턴을 보관합니다.</summary>
-    public sealed class EnemyData : GameDataEntry
+    public class EnemyData : GameDataEntry
     {
         [SerializeField] private EnemyTier tier;
         [Min(1)] [SerializeField] private int minHealth = 1;

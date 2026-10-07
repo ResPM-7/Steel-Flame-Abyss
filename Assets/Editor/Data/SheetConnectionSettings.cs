@@ -131,7 +131,7 @@ namespace SteelFlameAbyss.Editor.Data
         }
     }
 
-    internal sealed class SheetConnectionSettingsWindow : EditorWindow
+    internal class SheetConnectionSettingsWindow : EditorWindow
     {
         private string cardsUrl;
         private string charactersUrl;

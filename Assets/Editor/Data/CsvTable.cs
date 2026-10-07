@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SteelFlameAbyss.Editor.Data
 {
-    internal sealed class CsvTable
+    internal class CsvTable
     {
         private readonly string sourceName;
         private readonly List<string> headers;

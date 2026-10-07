@@ -8,7 +8,7 @@ namespace SteelFlameAbyss.Data
     /// 카드, 캐릭터, 적, 유물은 이 에셋의 서브에셋으로 저장됩니다.
     /// </summary>
     [CreateAssetMenu(fileName = "GameDatabase", menuName = "강철과 불꽃과 심연/게임 데이터베이스")]
-    public sealed class GameDatabase : ScriptableObject
+    public class GameDatabase : ScriptableObject
     {
         [Header("동기화된 데이터 (서브에셋)")]
         [SerializeField] private List<CardData> cards = new();

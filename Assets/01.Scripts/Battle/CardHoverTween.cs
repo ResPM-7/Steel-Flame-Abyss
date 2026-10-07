@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace SteelFlameAbyss.Battle
 {
     //마우스를 올린 카드를 전용 레이어로 옮겨 다른 카드보다 앞에 표시합니다.
-    public sealed class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private float riseDistance = 100f;
         [SerializeField] private float hoverScale = 1.05f;

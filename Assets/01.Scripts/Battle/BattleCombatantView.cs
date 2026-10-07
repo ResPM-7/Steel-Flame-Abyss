@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace SteelFlameAbyss.Battle
 {
     //플레이어와 적 공용 표시 컴포넌트입니다. 상태가 바뀔 때만 UI를 갱신합니다.
-    public sealed class BattleCombatantView : MonoBehaviour
+    public class BattleCombatantView : MonoBehaviour
     {
         [SerializeField] private Image portrait;
         [SerializeField] private Image healthFill;

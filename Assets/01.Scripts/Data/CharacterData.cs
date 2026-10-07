@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SteelFlameAbyss.Data
 {
     /// <summary>플레이어 캐릭터의 기본 능력치와 카드 풀을 보관합니다.</summary>
-    public sealed class CharacterData : GameDataEntry
+    public class CharacterData : GameDataEntry
     {
         [SerializeField] private CharacterClass characterClass;
         [Min(1)] [SerializeField] private int maxHealth = 1;

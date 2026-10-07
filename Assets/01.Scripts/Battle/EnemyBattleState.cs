@@ -4,7 +4,7 @@ using SteelFlameAbyss.Data;
 namespace SteelFlameAbyss.Battle
 {
     //개체별 체력과 다음 행동을 보관합니다. 적 SO는 수정하지 않습니다.
-    public sealed class EnemyBattleState
+    public class EnemyBattleState
     {
         public EnemyData Data { get; }
         public CombatantState Stats { get; }

@@ -95,7 +95,7 @@ namespace SteelFlameAbyss.Editor.Data
         }
     }
 
-    internal sealed class SheetUploadConnectionWindow : EditorWindow
+    internal class SheetUploadConnectionWindow : EditorWindow
     {
         private const string AppsScriptTemplatePath =
             "Assets/Editor/Data/GoogleAppsScript/GameDatabaseUpload.gs.txt";

@@ -4,7 +4,7 @@ namespace SteelFlameAbyss.Battle
 {
     //전투 중에만 사용하는 캐릭터/적의 가변 상태입니다.
     //ScriptableObject 원본 데이터는 변경하지 않습니다.
-    public sealed class CombatantState
+    public class CombatantState
     {
         //체력, 방어도, 능력치가 변경된 직후 알립니다.
         public event Action Changed;

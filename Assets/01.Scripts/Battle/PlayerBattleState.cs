@@ -4,7 +4,7 @@ using SteelFlameAbyss.Data;
 namespace SteelFlameAbyss.Battle
 {
     //캐릭터 SO와 별도로 보관하는 플레이어의 전투 상태입니다.
-    public sealed class PlayerBattleState
+    public class PlayerBattleState
     {
         public CharacterData Data { get; }
         public CombatantState Stats { get; }

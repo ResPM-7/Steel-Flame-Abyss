@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace SteelFlameAbyss.Battle
 {
     //첫 1:1 전투의 참가자를 SO에서 만들고 UI에 연결합니다.
-    public sealed class BattleParticipants : MonoBehaviour
+    public class BattleParticipants : MonoBehaviour
     {
         [SerializeField] private GameDataProvider dataProvider;
         [SerializeField] private BattleCombatantView playerView;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SteelFlameAbyss.Data
 {
     /// <summary>카드 한 장의 비용, 효과, 강화 효과와 표시 리소스를 보관합니다.</summary>
-    public sealed class CardData : GameDataEntry
+    public class CardData : GameDataEntry
     {
         [SerializeField] private CharacterClass owner;
         [SerializeField] private CardType cardType;

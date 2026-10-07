@@ -9,7 +9,7 @@ namespace SteelFlameAbyss.Editor.Data
 {
     /// <summary>ID/이름 검색, 서브에셋 편집, 시트 다운로드·업로드를 한 화면에서 제공하는 Inspector입니다.</summary>
     [CustomEditor(typeof(GameDatabase))]
-    internal sealed class GameDatabaseEditor : UnityEditor.Editor
+    internal class GameDatabaseEditor : UnityEditor.Editor
     {
         private readonly string[] categoryLabels = { "전체", "카드", "캐릭터", "적", "유물" };
         private string searchText = string.Empty;

@@ -828,7 +828,7 @@ namespace SteelFlameAbyss.Editor.Data
             AssetDatabase.CreateFolder(parent, name);
         }
 
-        private sealed class ImportData
+        private class ImportData
         {
             public List<CardRow> Cards;
             public List<CharacterRow> Characters;
@@ -836,7 +836,7 @@ namespace SteelFlameAbyss.Editor.Data
             public List<RelicRow> Relics;
         }
 
-        private sealed class CardRow
+        private class CardRow
         {
             public int Id;
             public string Name, Description, UpgradedDescription;
@@ -848,7 +848,7 @@ namespace SteelFlameAbyss.Editor.Data
             public List<string> Keywords;
         }
 
-        private sealed class CharacterRow
+        private class CharacterRow
         {
             public int Id;
             public string Name, ResourceName;
@@ -858,7 +858,7 @@ namespace SteelFlameAbyss.Editor.Data
             public bool DeriveCardLists;
         }
 
-        private sealed class EnemyRow
+        private class EnemyRow
         {
             public int Id;
             public string Name;
@@ -867,7 +867,7 @@ namespace SteelFlameAbyss.Editor.Data
             public List<EnemyActionSpec> Actions;
         }
 
-        private sealed class RelicRow
+        private class RelicRow
         {
             public int Id;
             public string Name, Description;

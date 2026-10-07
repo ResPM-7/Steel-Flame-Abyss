@@ -253,28 +253,28 @@ namespace SteelFlameAbyss.Editor.Data
         };
 
         [Serializable]
-        private sealed class UploadPayload
+        private class UploadPayload
         {
             public string token;
             public List<UploadTable> tables = new();
         }
 
         [Serializable]
-        private sealed class UploadTable
+        private class UploadTable
         {
             public string name;
             public List<UploadRow> rows = new();
         }
 
         [Serializable]
-        private sealed class UploadRow
+        private class UploadRow
         {
             public int id;
             public List<UploadField> fields = new();
         }
 
         [Serializable]
-        private sealed class UploadField
+        private class UploadField
         {
             public string name;
             public string value;

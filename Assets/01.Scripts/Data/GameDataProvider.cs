@@ -26,7 +26,7 @@ namespace SteelFlameAbyss.Data
     /// 사용하는 시스템은 이 컴포넌트를 명시적으로 참조해 데이터 의존성을 전달받습니다.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GameDataProvider : MonoBehaviour, IGameDataProvider
+    public class GameDataProvider : MonoBehaviour, IGameDataProvider
     {
         [Tooltip("시트에서 동기화된 GameDatabase 에셋")]
         [SerializeField] private GameDatabase database;

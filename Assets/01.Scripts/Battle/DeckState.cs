@@ -7,7 +7,7 @@ namespace SteelFlameAbyss.Battle
     /// <summary>
     /// 한 번의 전투에서 사용하는 카드 더미와 손패 상태를 관리합니다.
     /// </summary>
-    public sealed class DeckState
+    public class DeckState
     {
         private readonly List<CardInstance> drawPile = new();
         private readonly List<CardInstance> hand = new();

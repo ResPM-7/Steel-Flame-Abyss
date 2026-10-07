@@ -7,7 +7,7 @@ namespace SteelFlameAbyss.Battle
     /// <summary>
     /// 카드 원본 데이터와 전투 중 변경되는 상태를 분리한 런타임 카드입니다.
     /// </summary>
-    public sealed class CardInstance
+    public class CardInstance
     {
         private int temporaryCostModifier;
 
