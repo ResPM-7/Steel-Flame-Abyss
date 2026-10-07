@@ -10,8 +10,10 @@ namespace SteelFlameAbyss.Battle
         [SerializeField] private float riseDistance = 100f;
         [SerializeField] private float hoverScale = 1.05f;
         [SerializeField] private float duration = 0.2f;
+
         [SerializeField] private Ease enterEase = Ease.OutCubic;
         [SerializeField] private Ease exitEase = Ease.OutCubic;
+
         [SerializeField] private RectTransform hoverLayer;
 
         private RectTransform cardRect;

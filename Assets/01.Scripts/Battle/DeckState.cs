@@ -13,6 +13,7 @@ namespace SteelFlameAbyss.Battle
         private readonly List<CardInstance> hand = new();
         private readonly List<CardInstance> discardPile = new();
         private readonly List<CardInstance> exhaustPile = new();
+
         private readonly Random random;
 
         private readonly ReadOnlyCollection<CardInstance> drawPileView;
