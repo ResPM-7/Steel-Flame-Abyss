@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using SteelFlameAbyss.Battle;
-using SteelFlameAbyss.Data;
 using UnityEngine;
 
 //카드 덱의 드로우와 버리기 결과를 미리 배치한 손패 슬롯에 표시합니다.

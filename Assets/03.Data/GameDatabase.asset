@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
   m_Name: RelicData_70003
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.RelicData
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
   id: 70003
   displayName: "\uBD88\uC528 \uBD80\uC801"
   rarity: 2
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
   m_Name: RelicData_70004
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.RelicData
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
   id: 70004
   displayName: "\uC2EC\uC5F0\uC758 \uC218\uC815"
   rarity: 3
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_20001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 20001
   displayName: "\uD654\uC5FC\uAD6C"
   owner: 2
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
   m_Name: CharacterData_50002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: 50002
   displayName: "\uC7BF\uBD88\uC220\uC0AC"
   characterClass: 2
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
   m_Name: RelicData_70002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.RelicData
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
   id: 70002
   displayName: "\uC804\uC220 \uC9C0\uB3C4"
   rarity: 2
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_20003
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 20003
   displayName: "\uBD88\uC528 \uD655\uC0B0"
   owner: 2
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_30001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 30001
   displayName: "\uC2EC\uC5F0\uC758 \uC190\uAE38"
   owner: 3
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_20002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 20002
   displayName: "\uBD88\uAF43 \uC7A5\uB9C9"
   owner: 2
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5799541af03c704a9d2b9a0266e64f3, type: 3}
   m_Name: GameDatabase
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.GameDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::GameDatabase
   cards:
   - {fileID: 6923530557049175458}
   - {fileID: 960357282857903389}
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
   m_Name: CharacterData_50003
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: 50003
   displayName: "\uC2EC\uC5F0\uC758 \uC2E0\uBD09\uC790"
   characterClass: 3
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_10002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 10002
   displayName: "\uCCA0\uBCBD"
   owner: 1
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_10003
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 10003
   displayName: "\uC804\uD22C \uD568\uC131"
   owner: 1
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b0fa548599c8124c9e0a79f278436cc, type: 3}
   m_Name: EnemyData_60001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.EnemyData
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 60001
   displayName: "\uADE0\uC5F4 \uB291\uB300"
   tier: 0
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b0fa548599c8124c9e0a79f278436cc, type: 3}
   m_Name: EnemyData_60002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.EnemyData
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 60002
   displayName: "\uC2EC\uC5F0\uC758 \uC218\uBB38\uC7A5"
   tier: 2
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_30003
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 30003
   displayName: "\uAE08\uB2E8\uC758 \uACC4\uC2DC"
   owner: 3
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
   m_Name: RelicData_70001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.RelicData
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
   id: 70001
   displayName: "\uAC15\uCCA0 \uBD80\uC801"
   rarity: 1
@@ -489,7 +489,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_10001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 10001
   displayName: "\uBCA0\uAE30"
   owner: 1
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_30002
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 30002
   displayName: "\uC2EC\uC5F0\uC758 \uC18D\uC0AD\uC784"
   owner: 3
@@ -548,7 +548,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3225d3cde00657e4a9416712e1fd7cbf, type: 3}
   m_Name: CharacterData_50001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CharacterData
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: 50001
   displayName: "\uC120\uBD09\uB300"
   characterClass: 1
@@ -569,7 +569,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
   m_Name: CardData_40001
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Data.CardData
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
   id: 40001
   displayName: "\uC804\uC220\uC801 \uD1B5\uCC30"
   owner: 0

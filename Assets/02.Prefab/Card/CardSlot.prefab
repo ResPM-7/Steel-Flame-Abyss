@@ -296,7 +296,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44f64a1fe238c5e44b1c728cddbedfe7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.CardHoverTween
+  m_EditorClassIdentifier: Assembly-CSharp::CardHoverTween
   riseDistance: 150
   hoverScale: 1.05
   duration: 0.2

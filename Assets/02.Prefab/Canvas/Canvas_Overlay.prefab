@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f6411f85c388ea4d9d42ef04d26cd54, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.CardHandLayout
+  m_EditorClassIdentifier: Assembly-CSharp::CardHandLayout
   fallbackSpacing: -100
   spacingSettings:
   - -100

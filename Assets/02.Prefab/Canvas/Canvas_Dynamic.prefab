@@ -943,7 +943,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67347c5571574be4ebe287cda9216c7c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.BattleParticipants
+  m_EditorClassIdentifier: Assembly-CSharp::BattleParticipants
   dataProvider: {fileID: 0}
   playerView: {fileID: 4144041153308906843}
   enemyView: {fileID: 2854292406834404067}
@@ -1640,7 +1640,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62de2a70eff00c04790ed7d579e541c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.BattleCombatantView
+  m_EditorClassIdentifier: Assembly-CSharp::BattleCombatantView
   portrait: {fileID: 8663342216653265104}
   healthFill: {fileID: 3300257343997762362}
   nameLabel: {fileID: 7558649382889245160}
@@ -2534,7 +2534,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62de2a70eff00c04790ed7d579e541c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.BattleCombatantView
+  m_EditorClassIdentifier: Assembly-CSharp::BattleCombatantView
   portrait: {fileID: 777442819218060276}
   healthFill: {fileID: 6691183716934680964}
   nameLabel: {fileID: 632439138528033631}
