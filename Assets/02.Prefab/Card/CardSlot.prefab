@@ -146,6 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4063829718150307256}
+  - component: {fileID: 1533726352018820019}
   m_Layer: 5
   m_Name: CardSlot
   m_TagString: Untagged
@@ -173,6 +174,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1533726352018820019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5874398622031672784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardView
+  nameText: {fileID: 6573683068083523018}
+  costText: {fileID: 2545763237349704087}
+  descriptionText: {fileID: 3351995169905398885}
+  hoverTween: {fileID: 2282064035197305655}
 --- !u!1 &6871617341617053278
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,11 +297,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f64a1fe238c5e44b1c728cddbedfe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteelFlameAbyss.Battle.CardHoverTween
-  riseDistance: 100
+  riseDistance: 150
   hoverScale: 1.05
   duration: 0.2
   enterEase: 9
   exitEase: 9
+  hoverLayer: {fileID: 0}
 --- !u!1 &7861951333717908208
 GameObject:
   m_ObjectHideFlags: 0
