@@ -25,6 +25,9 @@ public class CardHandController : MonoBehaviour
     private readonly Vector3[] targetCorners = new Vector3[4];
     private Canvas testCanvas;
     private int discardNumber = 1;
+    private bool isCheatPanelOpen;
+    private string cardIdInput = "10001";
+    private string cheatMessage = "카드 ID를 입력해 손패에 추가할 수 있습니다.";
 #endif
     public bool IsReady => deck != null;
     public int HandCount => deck?.Hand.Count ?? 0;
@@ -43,7 +46,7 @@ public class CardHandController : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    //에디터 재생 중 적의 위쪽에 카드 테스트 버튼을 표시합니다.
+    //에디터 재생 중 적의 위쪽에 치트 버튼과 선택된 테스트 패널을 표시합니다.
     private void OnGUI()
     {
         if (!Application.isPlaying || testPanelTarget == null ||
@@ -53,12 +56,42 @@ public class CardHandController : MonoBehaviour
         testPanelTarget.GetWorldCorners(targetCorners);
         var camera = testCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : testCanvas.worldCamera;
         var top = RectTransformUtility.WorldToScreenPoint(camera, (targetCorners[1] + targetCorners[2]) * 0.5f);
-        float width = Mathf.Min(260f, Screen.width - 8f);
-        float x = Mathf.Clamp(top.x - width * 0.5f, 4f, Screen.width - width - 4f);
-        float y = Mathf.Max(4f, Screen.height - top.y - 100f);
+        float buttonWidth = 70f;
+        float buttonHeight = 24f;
+        float buttonX = Mathf.Clamp(top.x - buttonWidth * 0.5f, 4f, Screen.width - buttonWidth - 4f);
+        float buttonY = Mathf.Max(4f, Screen.height - top.y - buttonHeight - 6f);
 
-        GUILayout.BeginArea(new Rect(x, y, width, 94f), GUI.skin.box);
-        GUILayout.Label($"카드 테스트  손패 {HandCount} / 뽑기 {DrawCount} / 버림 {DiscardCount}");
+        GUI.depth = -100;
+        if (!isCheatPanelOpen)
+        {
+            if (GUI.Button(new Rect(buttonX, buttonY, buttonWidth, buttonHeight), "치트"))
+                isCheatPanelOpen = true;
+            return;
+        }
+
+        float panelWidth = Mathf.Min(260f, Screen.width - 8f);
+        float panelX = Mathf.Clamp(top.x - panelWidth * 0.5f, 4f, Screen.width - panelWidth - 4f);
+        float panelHeight = 156f;
+        float panelY = Mathf.Max(4f, buttonY - panelHeight - 4f);
+        DrawCheatPanel(new Rect(panelX, panelY, panelWidth, panelHeight));
+    }
+
+    //열린 치트 패널에 카드 테스트 상태와 실행 버튼을 표시합니다.
+    private void DrawCheatPanel(Rect panelRect)
+    {
+        GUILayout.BeginArea(panelRect, GUI.skin.box);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label($"카드 치트  손패 {HandCount} / 뽑기 {DrawCount} / 버림 {DiscardCount}");
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("닫기", GUILayout.Width(44f), GUILayout.Height(20f)))
+        {
+            isCheatPanelOpen = false;
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
+            return;
+        }
+        GUILayout.EndHorizontal();
+
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("초기화", GUILayout.Height(24f))) ResetTestDeck();
         bool previousEnabled = GUI.enabled;
@@ -79,7 +112,44 @@ public class CardHandController : MonoBehaviour
         if (GUILayout.Button("전체 버리기", GUILayout.Height(24f))) DiscardAll();
         GUI.enabled = previousEnabled;
         GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("카드 ID", GUILayout.Width(48f));
+        cardIdInput = GUILayout.TextField(cardIdInput, 10, GUILayout.Height(24f));
+        GUI.enabled = previousEnabled && IsReady;
+        if (GUILayout.Button("손패에 추가", GUILayout.Width(82f), GUILayout.Height(24f)))
+            AddCardToHandFromCheatInput();
+        GUI.enabled = previousEnabled;
+        GUILayout.EndHorizontal();
+        GUILayout.Label(cheatMessage);
         GUILayout.EndArea();
+    }
+
+    //입력한 카드 ID를 조회해 손패에 바로 추가합니다.
+    private void AddCardToHandFromCheatInput()
+    {
+        if (!int.TryParse(cardIdInput, out int cardId))
+        {
+            cheatMessage = "카드 ID는 숫자로 입력해 주세요.";
+            return;
+        }
+
+        if (!dataProvider.TryGetCard(cardId, out var data))
+        {
+            cheatMessage = $"카드 ID {cardId}를 찾을 수 없습니다.";
+            return;
+        }
+
+        if (HandCount >= slots.Length)
+        {
+            cheatMessage = $"손패가 {slots.Length}장으로 가득 찼습니다.";
+            return;
+        }
+
+        deck.AddToHand(new CardInstance(data));
+        RefreshHand();
+        cheatMessage = $"{data.DisplayName} 카드를 손패에 추가했습니다.";
+        LogState($"{data.DisplayName} 손패 추가");
     }
 #endif
 

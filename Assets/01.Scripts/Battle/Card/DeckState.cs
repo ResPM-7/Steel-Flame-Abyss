@@ -92,6 +92,15 @@ namespace SteelFlameAbyss.Battle
             return true;
         }
 
+        //카드를 손패에 바로 추가합니다.
+        public void AddToHand(CardInstance card)
+        {
+            if (card == null)
+                throw new ArgumentNullException(nameof(card));
+
+            hand.Add(card);
+        }
+
         /// <summary>손패의 카드를 버린 더미로 옮깁니다.</summary>
         public bool Discard(CardInstance card)
         {
