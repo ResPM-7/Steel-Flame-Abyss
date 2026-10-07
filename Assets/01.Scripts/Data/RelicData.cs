@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>유물의 발동 시점과 조합 가능한 효과 목록을 보관합니다.</summary>
-/// <remarks>MVP에서는 시트 주소가 비어 있으면 생성되지 않으며, 이후 유물 기능 추가에 대비한 형식만 유지합니다.</remarks>
+//유물의 발동 시점과 조합 가능한 효과 목록을 보관
+//MVP에서 시트 주소가 비어 있을 때 생성 생략
 public class RelicData : GameDataEntry
 {
     [SerializeField] private DataRarity rarity;
@@ -18,7 +18,7 @@ public class RelicData : GameDataEntry
     public Sprite Icon => icon;
 
 #if UNITY_EDITOR
-    /// <summary>검증이 끝난 유물 시트 한 행을 이 서브에셋에 반영합니다.</summary>
+    //검증이 끝난 유물 시트 한 행을 이 서브에셋에 반영
     public void EditorApply(DataRarity newRarity, string newDescription, RelicTrigger newTrigger,
         List<EffectSpec> newEffects)
     {

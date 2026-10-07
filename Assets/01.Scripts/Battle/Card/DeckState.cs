@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-/// <summary>
-/// 한 번의 전투에서 사용하는 카드 더미와 손패 상태를 관리합니다.
-/// </summary>
+//한 번의 전투에서 사용하는 카드 더미와 손패 상태를 관리
 public class DeckState
 {
     private readonly List<CardInstance> drawPile = new();
@@ -32,9 +30,7 @@ public class DeckState
     {
     }
 
-    /// <summary>
-    /// 테스트에서 동일한 셔플 결과가 필요하면 seed를 지정한 Random을 전달할 수 있습니다.
-    /// </summary>
+    //동일한 셔플 결과를 위한 seed Random 전달 가능
     public DeckState(IEnumerable<CardInstance> startingDeck, Random random)
     {
         if (startingDeck == null)
@@ -58,10 +54,8 @@ public class DeckState
         ShuffleDrawPile();
     }
 
-    /// <summary>
-    /// 지정한 수만큼 카드를 뽑습니다. 카드가 부족하면 버린 더미를 섞어 뽑기 더미로 옮깁니다.
-    /// 실제로 뽑은 카드 목록을 반환합니다.
-    /// </summary>
+    //지정한 수만큼 카드 드로우 및 버린 더미 재사용
+    //실제로 뽑은 카드 목록을 반환
     public IReadOnlyList<CardInstance> Draw(int count)
     {
         if (count < 0)
@@ -90,7 +84,7 @@ public class DeckState
         return true;
     }
 
-    //카드를 손패에 바로 추가합니다.
+    //카드를 손패에 바로 추가
     public void AddToHand(CardInstance card)
     {
         if (card == null)
@@ -99,13 +93,13 @@ public class DeckState
         hand.Add(card);
     }
 
-    /// <summary>손패의 카드를 버린 더미로 옮깁니다.</summary>
+    //손패의 카드를 버린 더미로 이동
     public bool Discard(CardInstance card)
     {
         return MoveFromHand(card, discardPile);
     }
 
-    /// <summary>손패의 카드를 이번 전투의 소멸 더미로 옮깁니다.</summary>
+    //손패의 카드를 이번 전투의 소멸 더미로 이동
     public bool Exhaust(CardInstance card)
     {
         return MoveFromHand(card, exhaustPile);

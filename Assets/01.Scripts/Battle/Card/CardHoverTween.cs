@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-//마우스를 올린 카드를 전용 레이어로 옮겨 다른 카드보다 앞에 표시합니다.
+//마우스를 올린 카드를 전용 레이어로 옮겨 다른 카드보다 앞에 표시
 public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private float riseDistance = 100f;
@@ -30,21 +30,21 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private bool isReturning;
     private bool isReady;
 
-    //카드와 현재 슬롯을 저장하고 연결된 호버 레이어를 초기화합니다.
+    //카드와 현재 슬롯을 저장하고 연결된 호버 레이어를 초기화
     private void Awake()
     {
         cardRect = transform as RectTransform;
         Initialize(transform.parent as RectTransform, hoverLayer);
     }
 
-    //카드가 다시 활성화될 때 현재 슬롯 기준으로 RectTransform 정보를 갱신합니다.
+    //카드가 다시 활성화될 때 현재 슬롯 기준으로 RectTransform 정보를 갱신
     private void OnEnable()
     {
         if (!isHovered)
             Initialize(transform.parent as RectTransform, hoverLayer);
     }
 
-    //카드가 사용할 슬롯과 호버 레이어를 전달받아 저장합니다.
+    //카드가 사용할 슬롯과 호버 레이어를 전달받아 저장
     public void Initialize(RectTransform slot, RectTransform layer)
     {
         cardRect ??= transform as RectTransform;
@@ -56,7 +56,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             CacheSlotLayout();
     }
 
-    //마우스가 카드에 들어오면 전용 레이어로 옮긴 뒤 위로 이동하고 확대합니다.
+    //마우스가 카드에 들어오면 전용 레이어로 옮긴 뒤 위로 이동하고 확대
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!isReady)
@@ -95,7 +95,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         PlayHoverTween();
     }
 
-    //마우스가 카드에서 나가면 카드 슬롯 위치로 돌아갑니다.
+    //마우스가 카드에서 나가면 카드 슬롯 위치로 복귀
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!isReady || !isHovered || isReturning)
@@ -105,7 +105,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         PlayReturnTween();
     }
 
-    //슬롯 안에서 사용하던 RectTransform 값을 모두 저장합니다.
+    //슬롯 안에서 사용하던 RectTransform 값을 모두 저장
     private void CacheSlotLayout()
     {
         slotAnchorMin = cardRect.anchorMin;
@@ -118,7 +118,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         slotLocalScale = cardRect.localScale;
     }
 
-    //카드를 현재 위치에서 위로 올리고 조금 확대합니다.
+    //카드를 현재 위치에서 위로 올리고 조금 확대
     private void PlayHoverTween()
     {
         currentTween?.Kill();
@@ -129,7 +129,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             .SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 
-    //카드를 원래 슬롯의 화면 위치로 움직인 뒤 슬롯 아래에 다시 넣습니다.
+    //카드를 원래 슬롯의 화면 위치로 움직인 뒤 슬롯 아래에 다시 추가
     private void PlayReturnTween()
     {
         currentTween?.Kill();
@@ -142,7 +142,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             .OnComplete(RestoreToSlot);
     }
 
-    //카드를 원래 슬롯의 자식으로 되돌리고 로컬 Transform 값을 복구합니다.
+    //카드를 원래 슬롯의 자식으로 되돌리고 로컬 Transform 값을 복구
     private void RestoreToSlot()
     {
         if (cardRect == null || cardSlot == null)
@@ -160,7 +160,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         isReturning = false;
     }
 
-    //카드를 숨기기 전에 애니메이션을 멈추고 원래 슬롯으로 복구합니다.
+    //카드를 숨기기 전에 애니메이션을 멈추고 원래 슬롯으로 복구
     public void ReturnImmediately()
     {
         currentTween?.Kill();
@@ -170,7 +170,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             RestoreToSlot();
     }
 
-    //비활성화될 때 남은 애니메이션과 호버 상태를 정리합니다.
+    //비활성화될 때 남은 애니메이션과 호버 상태를 정리
     private void OnDisable()
     {
         ReturnImmediately();

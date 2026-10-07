@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//ì¼ë°˜ ë° Canvas ì˜¤ë¸Œì íŠ¸ í’€ ê´€ë¦¬
 public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     [System.Serializable]
@@ -21,9 +22,9 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         public int poolSize;
     }
 
-    //±âº» ¿ÀºêÁ§Æ®
+    //ì¼ë°˜ ì˜¤ë¸Œì íŠ¸ í’€ ì„¤ì •
     [SerializeField] public List<ObjectPoolItem> objList = new List<ObjectPoolItem>();
-    //Äµ¹ö½º Àü¿ë ¿ÀºêÁ§Æ® Ç®
+    //Canvas ì˜¤ë¸Œì íŠ¸ í’€ ì„¤ì •
     [SerializeField] public List<CanvasPoolItem> canvasPools = new List<CanvasPoolItem>();
 
     private Dictionary<string, Queue<GameObject>> pools = new Dictionary<string, Queue<GameObject>>();
@@ -32,12 +33,13 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
 
 
 
+    //ë“±ë¡ëœ ì¼ë°˜ ë° Canvas ì˜¤ë¸Œì íŠ¸ í’€ ìƒì„±
     void Start()
     {
-        // ÀÏ¹İ ¿ÀºêÁ§Æ® Ç® ¼¼ÆÃ
+        //ì¼ë°˜ ì˜¤ë¸Œì íŠ¸ í’€ ìƒì„±
         foreach (var item in objList)
         {
-            // ºó ¹®ÀÚ¿­ÀÌ°Å³ª ÇÁ¸®ÆÕÀÌ ºñ¾îÀÖÀ¸¸é ÆĞ½º
+            //ì´ë¦„ì´ë‚˜ í”„ë¦¬íŒ©ì´ ì—†ëŠ” ì„¤ì • ì œì™¸
             if (string.IsNullOrEmpty(item.poolName) || item.prefab == null) continue;
 
             prefabDict[item.poolName] = item.prefab;
@@ -49,7 +51,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             SetupPool(item.poolName, item.prefab, parentPool.transform, item.poolSize);
         }
 
-        // Äµ¹ö½º Àü¿ë ¿ÀºêÁ§Æ® Ç® ¼¼ÆÃ (ÀÛ¼ºÇÏ½Å ¿øº» ·ÎÁ÷ ¿Ïº® º¹±¸)
+        //Canvas ì˜¤ë¸Œì íŠ¸ í’€ ìƒì„±
         foreach (var item in canvasPools)
         {
             if (string.IsNullOrEmpty(item.poolName) || item.prefab == null) continue;
@@ -58,13 +60,14 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             pools[item.poolName] = new Queue<GameObject>();
 
             GameObject parentPool = new GameObject($"{item.poolName}_Pool");
-            // UI °´Ã¼°¡ ±úÁöÁö ¾Êµµ·Ï targetCanvas¿¡ false·Î ºÙÀÓ
+            //UI í¬ê¸° ë³€í˜• ë°©ì§€ë¥¼ ìœ„í•œ ë¡œì»¬ Transform ìœ ì§€
             parentPool.transform.SetParent(item.targetCanvas, false);
 
             SetupPool(item.poolName, item.prefab, parentPool.transform, item.poolSize);
         }
     }
 
+    //ì§€ì •í•œ ê°œìˆ˜ë§Œí¼ ë¹„í™œì„± ì˜¤ë¸Œì íŠ¸ ìƒì„±
     private void SetupPool(string poolName, GameObject prefab, Transform parent, int size)
     {
         poolParents[poolName] = parent;
@@ -78,6 +81,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         }
     }
 
+    //í’€ì—ì„œ ì˜¤ë¸Œì íŠ¸ë¥¼ ê°€ì ¸ì˜¤ê±°ë‚˜ ë¶€ì¡±í•  ë•Œ ì¶”ê°€ ìƒì„±
     public GameObject GetObject(string poolName)
     {
         if (!pools.ContainsKey(poolName))
@@ -104,6 +108,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         }
     }
 
+    //í’€ ì´ë¦„ìœ¼ë¡œ ë“±ë¡ëœ í”„ë¦¬íŒ© ì¡°íšŒ
     private GameObject GetPrefabFromList(string poolName)
     {
         if (prefabDict.TryGetValue(poolName, out GameObject prefab))
@@ -113,6 +118,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         return null;
     }
 
+    //ì‚¬ìš©í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ë¹„í™œì„±í™”í•´ í’€ì— ë°˜í™˜
     public void ReturnObject(string poolName, GameObject go)
     {
         if (!pools.ContainsKey(poolName))

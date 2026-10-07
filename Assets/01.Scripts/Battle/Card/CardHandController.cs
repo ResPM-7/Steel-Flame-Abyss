@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//카드 덱의 드로우와 버리기 결과를 미리 배치한 손패 슬롯에 표시합니다.
+//카드 덱의 드로우와 버리기 결과를 미리 배치한 손패 슬롯에 표시
 public class CardHandController : MonoBehaviour
 {
     [SerializeField] private GameDataProvider dataProvider;
@@ -32,7 +32,7 @@ public class CardHandController : MonoBehaviour
     public int DrawCount => deck?.DrawPile.Count ?? 0;
     public int DiscardCount => deck?.DiscardPile.Count ?? 0;
 
-    //재생을 시작하면 테스트 덱을 만들고 초기 손패를 표시합니다.
+    //재생을 시작하면 테스트 덱을 만들고 초기 손패를 표시
     private void Start()
     {
 #if UNITY_EDITOR
@@ -44,7 +44,7 @@ public class CardHandController : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    //에디터 재생 중 적의 위쪽에 치트 버튼과 선택된 테스트 패널을 표시합니다.
+    //에디터 재생 중 적의 위쪽에 치트 버튼과 선택된 테스트 패널을 표시
     private void OnGUI()
     {
         if (!Application.isPlaying || testPanelTarget == null ||
@@ -74,7 +74,7 @@ public class CardHandController : MonoBehaviour
         DrawCheatPanel(new Rect(panelX, panelY, panelWidth, panelHeight));
     }
 
-    //열린 치트 패널에 카드 테스트 상태와 실행 버튼을 표시합니다.
+    //열린 치트 패널에 카드 테스트 상태와 실행 버튼을 표시
     private void DrawCheatPanel(Rect panelRect)
     {
         GUILayout.BeginArea(panelRect, GUI.skin.box);
@@ -122,7 +122,7 @@ public class CardHandController : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    //입력한 카드 ID를 조회해 손패에 바로 추가합니다.
+    //입력한 카드 ID를 조회해 손패에 바로 추가
     private void AddCardToHandFromCheatInput()
     {
         if (!int.TryParse(cardIdInput, out int cardId))
@@ -150,7 +150,7 @@ public class CardHandController : MonoBehaviour
     }
 #endif
 
-    //SO에서 테스트 카드 ID를 조회해 새 덱을 만들고 초기 손패를 뽑습니다.
+    //SO에서 테스트 카드 ID를 조회해 새 덱을 만들고 초기 손패를 드로우
     public void ResetTestDeck()
     {
         if (!Application.isPlaying || !ValidateReferences())
@@ -171,7 +171,7 @@ public class CardHandController : MonoBehaviour
         DrawCards(initialHandCount);
     }
 
-    //손패 빈자리만큼 카드를 뽑고 표시를 갱신합니다.
+    //손패 빈자리만큼 카드를 뽑고 표시를 갱신
     public void DrawCards(int count)
     {
         if (!Application.isPlaying || !IsReady)
@@ -183,7 +183,7 @@ public class CardHandController : MonoBehaviour
         LogState($"드로우 {drawn}장");
     }
 
-    //지정한 손패 인덱스의 카드를 버린 더미로 옮깁니다.
+    //지정한 손패 인덱스의 카드를 버린 더미로 이동
     public void DiscardAt(int index)
     {
         if (!Application.isPlaying || !IsReady)
@@ -200,7 +200,7 @@ public class CardHandController : MonoBehaviour
         LogState($"{card.Data.DisplayName} 버리기");
     }
 
-    //현재 손패 전체를 버린 더미로 옮깁니다.
+    //현재 손패 전체를 버린 더미로 이동
     public void DiscardAll()
     {
         if (!Application.isPlaying || !IsReady)
@@ -211,7 +211,7 @@ public class CardHandController : MonoBehaviour
         LogState("전체 버리기");
     }
 
-    //기존 카드를 슬롯으로 복구하고 손패 순서대로 데이터를 연결합니다.
+    //기존 카드를 슬롯으로 복구하고 손패 순서대로 데이터를 연결
     private void RefreshHand()
     {
         foreach (var slot in slots)
@@ -223,7 +223,7 @@ public class CardHandController : MonoBehaviour
         handLayout.RefreshSpacing();
     }
 
-    //필수 참조와 슬롯 연결을 검사해 잘못된 상태에서 덱 생성을 막습니다.
+    //필수 참조와 슬롯 연결을 검사해 잘못된 상태에서 덱 생성을 방지
     private bool ValidateReferences()
     {
         if (dataProvider == null || !dataProvider.IsReady || handLayout == null ||
@@ -247,7 +247,7 @@ public class CardHandController : MonoBehaviour
         return true;
     }
 
-    //드로우와 버리기 결과 및 카드 더미 개수를 Console에 표시합니다.
+    //드로우와 버리기 결과 및 카드 더미 개수를 Console에 표시
     private void LogState(string action)
     {
         Debug.Log($"[카드 테스트] {action} / 손패 {HandCount}, 뽑기 {DrawCount}, 버림 {DiscardCount}", this);

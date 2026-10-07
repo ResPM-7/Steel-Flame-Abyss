@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//플레이어와 적 공용 표시 컴포넌트입니다. 상태가 바뀔 때만 UI를 갱신합니다.
+//플레이어와 적 공용 표시 컴포넌트 상태가 바뀔 때만 UI를 갱신
 public class BattleCombatantView : MonoBehaviour
 {
     [SerializeField] private Image portrait;
@@ -20,7 +20,7 @@ public class BattleCombatantView : MonoBehaviour
     private Color aliveColor;
     public CombatantState State => state;
 
-    //전투 상태와 이름, 이미지를 UI에 연결합니다.
+    //전투 상태와 이름 이미지를 UI에 연결
     public void Bind(string displayName, Sprite sprite, CombatantState value)
     {
         if (state != null) state.Changed -= Refresh;
@@ -35,27 +35,27 @@ public class BattleCombatantView : MonoBehaviour
         Refresh();
     }
 
-    //캐릭터 설명이나 적의 다음 행동 표시를 갱신합니다.
+    //캐릭터 설명이나 적의 다음 행동 표시를 갱신
     public void SetDetail(string value)
     {
         detail = value ?? string.Empty;
         Refresh();
     }
 
-    //활성화 시 상태 변경을 구독하고 현재 UI를 갱신합니다.
+    //활성화 시 상태 변경을 구독하고 현재 UI를 갱신
     private void OnEnable()
     {
         if (state != null) state.Changed += Refresh;
         Refresh();
     }
 
-    //비활성화 시 상태 변경 구독을 해제합니다.
+    //비활성화 시 상태 변경 구독을 해제
     private void OnDisable()
     {
         if (state != null) state.Changed -= Refresh;
     }
 
-    //체력, 능력치, 생존 여부를 UI에 반영합니다.
+    //체력 능력치 생존 여부를 UI에 반영
     private void Refresh()
     {
         if (state == null) return;

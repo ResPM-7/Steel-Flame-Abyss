@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 시트에는 아래 enum 이름을 그대로 입력합니다. 대소문자는 구분하지 않습니다.
+//시트에는 아래 enum 이름을 그대로 입력 대소문자는 구분하지 않음
 public enum CharacterClass { Common, Warrior, FireMage, Warlock }
 public enum CardType { Attack, Skill, Power, Status }
 public enum DataRarity { Starter, Common, Uncommon, Rare, Special }
@@ -57,7 +57,7 @@ public enum EffectType
 [Serializable]
 public struct EffectSpec
 {
-    // 하나의 카드/유물 효과를 데이터만으로 조합하기 위한 공통 명세입니다.
+    //하나의 카드/유물 효과를 데이터만으로 조합하기 위한 공통 명세
     [SerializeField] private EffectType type;
     [SerializeField] private TargetType target;
     [SerializeField] private int amount;
@@ -83,7 +83,7 @@ public struct EffectSpec
 [Serializable]
 public struct EnemyActionSpec
 {
-    // 적 행동 하나는 의도, 선택 가중치, 실제 효과 목록으로 구성됩니다.
+    //적 행동 하나는 의도 선택 가중치 실제 효과 목록으로 구성
     [SerializeField] private string actionName;
     [SerializeField] private IntentType intent;
     [Min(0f)] [SerializeField] private float weight;

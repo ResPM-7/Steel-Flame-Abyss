@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 게임에서 사용하는 정적 데이터를 한 파일에 모아 두는 루트 데이터베이스입니다.
-/// 카드, 캐릭터, 적, 유물은 이 에셋의 서브에셋으로 저장됩니다.
-/// </summary>
+//게임에서 사용하는 정적 데이터를 한 파일에 모아 두는 루트 데이터베이스
+//카드 캐릭터 적 유물은 이 에셋의 서브에셋으로 저장
 [CreateAssetMenu(fileName = "GameDatabase", menuName = "강철과 불꽃과 심연/게임 데이터베이스")]
 public class GameDatabase : ScriptableObject
 {
@@ -57,7 +55,7 @@ public class GameDatabase : ScriptableObject
 
     private void RebuildLookup()
     {
-        // 런타임에서는 정수 ID로 빠르게 데이터를 찾을 수 있도록 사전을 구성합니다.
+        //런타임에서는 정수 ID로 빠르게 데이터를 찾을 수 있도록 사전을 구성
         cardById = BuildLookup(cards);
         characterById = BuildLookup(characters);
         enemyById = BuildLookup(enemies);

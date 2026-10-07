@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>플레이어 캐릭터의 기본 능력치와 카드 풀을 보관합니다.</summary>
+//플레이어 캐릭터의 기본 능력치와 카드 풀을 보관
 public class CharacterData : GameDataEntry
 {
     [SerializeField] private CharacterClass characterClass;
@@ -21,7 +21,7 @@ public class CharacterData : GameDataEntry
     public Sprite Portrait => portrait;
 
 #if UNITY_EDITOR
-    /// <summary>검증이 끝난 캐릭터 시트 한 행을 이 서브에셋에 반영합니다.</summary>
+    //검증이 끝난 캐릭터 시트 한 행을 이 서브에셋에 반영
     public void EditorApply(CharacterClass newClass, int newMaxHealth, int newStartingEnergy,
         List<int> newStartingDeckIds,
         List<int> newCardPoolIds, string newResourceName)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>카드 한 장의 비용, 효과, 강화 효과와 표시 리소스를 보관합니다.</summary>
+//카드 한 장의 비용 효과 강화 효과와 표시 리소스를 보관
 public class CardData : GameDataEntry
 {
     [SerializeField] private CharacterClass owner;
@@ -27,7 +27,7 @@ public class CardData : GameDataEntry
     public Sprite Artwork => artwork;
 
 #if UNITY_EDITOR
-    /// <summary>검증이 끝난 카드 시트 한 행을 이 서브에셋에 반영합니다.</summary>
+    //검증이 끝난 카드 시트 한 행을 이 서브에셋에 반영
     public void EditorApply(CharacterClass newOwner, CardType newCardType, DataRarity newRarity, int newCost,
         string newDescription, string newUpgradedDescription, List<EffectSpec> newEffects,
         List<EffectSpec> newUpgradedEffects, List<string> newKeywords)

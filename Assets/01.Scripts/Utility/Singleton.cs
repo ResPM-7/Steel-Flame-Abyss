@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//í•˜ë‚˜ì˜ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ê³µìœ í•˜ëŠ” ì‹±ê¸€í†¤ ê´€ë¦¬
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
@@ -15,8 +16,8 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
             if (_instance == null)
             {
-                // ¾À¿¡ ¹èÄ¡µÈ ÀÎ½ºÅÏ½º¸¸ Ã£½À´Ï´Ù.
-                // Á¸ÀçÇÏÁö ¾Ê´Â´Ù°í ºó ¸Å´ÏÀú¸¦ »ı¼ºÇÏÁö ¾Ê½À´Ï´Ù.
+                //í˜„ì¬ ì”¬ì˜ ì¸ìŠ¤í„´ìŠ¤ë¥¼ í•œ ë²ˆ ê²€ìƒ‰
+                //ì¸ìŠ¤í„´ìŠ¤ê°€ ì—†ì„ ë•Œ ìë™ ìƒì„±í•˜ì§€ ì•ŠìŒ
                 _instance = FindFirstObjectByType<T>();
             }
 
@@ -26,6 +27,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     [SerializeField] protected bool isDontDestroy = false;
 
+    //ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤ ë“±ë¡ê³¼ ì¤‘ë³µ ì œê±°
     protected virtual void Awake()
     {
         _applicationIsQuitting = false;
@@ -43,18 +45,18 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    //ë“±ë¡ëœ ì¸ìŠ¤í„´ìŠ¤ê°€ ì œê±°ë  ë•Œ ì°¸ì¡° ì´ˆê¸°í™”
     protected virtual void OnDestroy()
     {
-        // ¾À ÀÌµ¿À¸·Î ÆÄ±«µÉ ¶§´Â ÀÎ½ºÅÏ½º¸¸ ºñ¿ó´Ï´Ù.
         if (_instance == this)
         {
             _instance = null;
         }
     }
 
+    //ì•± ì¢…ë£Œ ì¤‘ ì‹±ê¸€í†¤ ì¬íƒìƒ‰ ë°©ì§€
     protected virtual void OnApplicationQuit()
     {
-        // ½ÇÁ¦ ¾ÖÇÃ¸®ÄÉÀÌ¼Ç Á¾·á ¶§¸¸ true·Î º¯°æÇÕ´Ï´Ù.
         _applicationIsQuitting = true;
     }
 }

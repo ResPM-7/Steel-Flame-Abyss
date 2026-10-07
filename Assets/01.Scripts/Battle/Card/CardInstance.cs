@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>
-/// 카드 원본 데이터와 전투 중 변경되는 상태를 분리한 런타임 카드입니다.
-/// </summary>
+//카드 원본 데이터와 전투 중 변경되는 상태를 분리한 런타임 카드
 public class CardInstance
 {
     private int temporaryCostModifier;
@@ -33,9 +31,7 @@ public class CardInstance
         IsUpgraded = true;
     }
 
-    /// <summary>
-    /// 전투 중 비용을 증감합니다. 예: -1은 비용 1 감소, +1은 비용 1 증가입니다.
-    /// </summary>
+    //전투 중 카드 비용 증감
     public void ModifyCostForBattle(int amount)
     {
         temporaryCostModifier += amount;
