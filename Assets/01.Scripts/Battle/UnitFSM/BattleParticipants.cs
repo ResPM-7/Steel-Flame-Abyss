@@ -80,7 +80,7 @@ public class BattleParticipants : MonoBehaviour
 
         var nextPlayer = new PlayerBattleState(character);
         var nextEnemy = new EnemyBattleState(enemy, new System.Random());
-        Unsubscribe();
+        UnsubscribeParticipantEvents();
         Player = nextPlayer;
         Enemy = nextEnemy;
         Player.Changed += RefreshPlayer;
@@ -121,11 +121,17 @@ public class BattleParticipants : MonoBehaviour
             string.Join(" / ", action.Effects.Select(e => $"{e.Type} {e.Amount}")));
     }
 
-    //컴포넌트가 제거되면 상태 변경 구독을 해제
-    private void OnDestroy() => Unsubscribe();
+    //컴포넌트 제거 시 모든 상태 변경 구독 해제
+    private void OnDestroy()
+    {
+        UnsubscribeParticipantEvents();
 
-    //기존 참가자의 UI 갱신 이벤트 구독을 해제
-    private void Unsubscribe()
+        if (deckManager != null)
+            deckManager.Changed -= RefreshDeckCounts;
+    }
+
+    //기존 참가자의 UI 갱신 이벤트 구독 해제
+    private void UnsubscribeParticipantEvents()
     {
         if (Player != null)
         {
@@ -133,7 +139,6 @@ public class BattleParticipants : MonoBehaviour
             Player.Stats.Changed -= RefreshPlayer;
         }
         if (Enemy != null) Enemy.IntentChanged -= RefreshEnemy;
-        if (deckManager != null) deckManager.Changed -= RefreshDeckCounts;
     }
 
     //인스펙터 컴포넌트 메뉴에서 Play Mode에만 수행하는 수동 검증

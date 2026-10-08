@@ -40,7 +40,7 @@ public class CardHandController : MonoBehaviour
         deckManager.Changed += RefreshHand;
     }
 
-    //재생을 시작하면 테스트 덱을 만들고 초기 손패를 표시
+    //에디터 치트 패널의 기준 캔버스 저장
     private void Start()
     {
         #region 에디터 전용 치트창
@@ -49,9 +49,6 @@ public class CardHandController : MonoBehaviour
             testCanvas = testPanelTarget.GetComponentInParent<Canvas>();
 #endif
         #endregion
-
-        if (!IsReady)
-            ResetTestDeck();
     }
 
     //컴포넌트 제거 시 덱 변경 이벤트 연결 해제

@@ -27,6 +27,9 @@ public interface IBattleDeckManager
     //현재 손패 전체를 버린 더미로 이동
     void DiscardAll();
 
+    //현재 손패를 버리고 지정한 수만큼 새 손패 드로우
+    int DrawNewHand(int count);
+
     //카드 ID를 조회해 손패에 바로 추가
     bool TryAddCardToHand(int cardId, out CardInstance card);
 }
@@ -143,6 +146,18 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
 
         deck.DiscardHand();
         Changed?.Invoke();
+    }
+
+    //현재 손패를 버리고 지정한 수만큼 새 손패 드로우
+    public int DrawNewHand(int count)
+    {
+        if (!IsReady || count < 0)
+            return 0;
+
+        deck.DiscardHand();
+        int drawnCount = deck.Draw(count).Count;
+        Changed?.Invoke();
+        return drawnCount;
     }
 
     //카드 ID를 조회해 손패에 바로 추가
