@@ -247,7 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381e2f84c9a7ea846ad504b136b00dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardHandController
-  dataProvider: {fileID: 0}
   handLayout: {fileID: 2146015268819664133}
   hoverLayer: {fileID: 8740953757758459190}
   slots:
@@ -261,8 +260,6 @@ MonoBehaviour:
   - {fileID: 784346401588885564}
   - {fileID: 4907962153821656778}
   - {fileID: 4869837950323761271}
-  testDeckIds: 112700001127000011270000112700001127000012270000122700001227000012270000419c000013270000419c0000
-  initialHandCount: 3
   testPanelTarget: {fileID: 0}
 --- !u!1001 &293001353484860786
 PrefabInstance:
@@ -417,26 +414,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7196472620538215907}
     m_Modifications:
-    - target: {fileID: 1886823810873507822, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886823810873507822, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886823810873507822, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2282064035197305655, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
       propertyPath: hoverLayer
       value: 
       objectReference: {fileID: 8740953757758459190}
-    - target: {fileID: 2282064035197305655, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-      propertyPath: riseDistance
-      value: 150
-      objectReference: {fileID: 0}
     - target: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

@@ -21,6 +21,6 @@ public class BattleInstaller : MonoBehaviour
 
         deckManager.Inject(dataProvider);
         handController.Inject(deckManager);
-        participants.Inject(dataProvider);
+        participants.Inject(dataProvider, deckManager);
     }
 }

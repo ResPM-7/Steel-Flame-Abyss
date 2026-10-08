@@ -8,18 +8,30 @@ using UnityEngine.InputSystem;
 public class BattleParticipants : MonoBehaviour
 {
     private IGameDataProvider dataProvider;
+    private IBattleDeckManager deckManager;
 
-    //외부에서 전달한 데이터 조회 기능 저장
-    public void Inject(IGameDataProvider provider)
+    //외부에서 전달한 데이터 조회 기능과 전투 덱 관리자 저장
+    public void Inject(IGameDataProvider provider, IBattleDeckManager manager)
     {
         if (provider == null)
             throw new System.ArgumentNullException(nameof(provider));
+        if (manager == null)
+            throw new System.ArgumentNullException(nameof(manager));
+
+        if (deckManager != null)
+            deckManager.Changed -= RefreshDeckCounts;
 
         dataProvider = provider;
+        deckManager = manager;
+        deckManager.Changed += RefreshDeckCounts;
+        RefreshDeckCounts();
     }
+
     [SerializeField] private BattleCombatantView playerView;
     [SerializeField] private BattleCombatantView enemyView;
-    [SerializeField] private TMP_Text playerStatusLabel;
+    [SerializeField] private TMP_Text playerEnergyStatus;
+    [SerializeField] private TMP_Text deckCountText;
+
     [SerializeField] private bool initializeOnStart = true;
     [SerializeField] private int playerId = 50001;
     [SerializeField] private int enemyId = 60001;
@@ -53,7 +65,8 @@ public class BattleParticipants : MonoBehaviour
     public bool Initialize(int characterId, int targetEnemyId)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
-            enemyView == null || playerStatusLabel == null)
+            enemyView == null || playerEnergyStatus == null || deckManager == null ||
+            deckCountText == null)
         {
             Debug.LogError("[전투] BattleParticipants의 데이터 및 UI 연결을 확인해 주세요.", this);
             return false;
@@ -83,8 +96,15 @@ public class BattleParticipants : MonoBehaviour
     //플레이어의 에너지와 고유 자원 설명을 갱신
     private void RefreshPlayer()
     {
-        playerStatusLabel.text = $"에너지  {Player.Energy} / {Player.Data.StartingEnergy}";
+        playerEnergyStatus.text = $"에너지  {Player.Energy} / {Player.Data.StartingEnergy}";
         playerView.SetDetail($"{Player.Data.ResourceName} 사용 캐릭터");
+    }
+
+    //뽑기 더미와 버린 더미 카드 수 갱신
+    private void RefreshDeckCounts()
+    {
+        if (deckCountText != null)
+            deckCountText.text = $"덱 {deckManager.DrawCount} / {deckManager.DiscardCount}";
     }
 
     //적의 다음 행동과 효과 수치를 표시
@@ -113,6 +133,7 @@ public class BattleParticipants : MonoBehaviour
             Player.Stats.Changed -= RefreshPlayer;
         }
         if (Enemy != null) Enemy.IntentChanged -= RefreshEnemy;
+        if (deckManager != null) deckManager.Changed -= RefreshDeckCounts;
     }
 
     //인스펙터 컴포넌트 메뉴에서 Play Mode에만 수행하는 수동 검증
