@@ -8,13 +8,6 @@ public class BattleTurnController : MonoBehaviour
 
     private IBattleDeckManager deckManager;
     private BattleParticipants participants;
-    private Button endTurnButton;
-
-    //같은 개체의 턴 종료 버튼 저장
-    private void Awake()
-    {
-        endTurnButton = GetComponent<Button>();
-    }
 
     //외부에서 전달한 덱 관리자와 전투 참가자 저장
     public void Inject(IBattleDeckManager manager, BattleParticipants battleParticipants)
