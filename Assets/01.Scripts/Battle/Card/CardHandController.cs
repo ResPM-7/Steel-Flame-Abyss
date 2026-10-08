@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardHandController : MonoBehaviour
 {
     private IBattleDeckManager deckManager;
+    private CardPlayController cardPlayController;
 
     [SerializeField] private CardHandLayout handLayout;
     [SerializeField] private RectTransform hoverLayer;
@@ -27,16 +28,20 @@ public class CardHandController : MonoBehaviour
     public int DiscardCount => deckManager?.DiscardCount ?? 0;
 
 
-    //외부에서 전달한 전투 덱 관리자 저장
-    public void Inject(IBattleDeckManager manager)
+    //외부에서 전달한 전투 덱과 카드 사용 기능 저장
+    public void Inject(IBattleDeckManager manager, CardPlayController playController)
     {
         if (manager == null)
             throw new System.ArgumentNullException(nameof(manager));
+        if (playController == null)
+            throw new System.ArgumentNullException(nameof(playController));
 
         if (deckManager != null)
             deckManager.Changed -= RefreshHand;
 
+        CacheSlots();
         deckManager = manager;
+        cardPlayController = playController;
         deckManager.Changed += RefreshHand;
     }
 
@@ -213,23 +218,57 @@ public class CardHandController : MonoBehaviour
     //기존 카드를 슬롯으로 복구하고 손패 순서대로 데이터를 연결
     private void RefreshHand()
     {
-        foreach (var slot in slots)
-            slot.Hide();
+        CacheSlots();
+        if (slots == null || slots.Length == 0 || handLayout == null || hoverLayer == null)
+        {
+            Debug.LogError("[카드 손패] 슬롯과 레이아웃 연결을 확인해 주세요", this);
+            return;
+        }
+
+        for (int index = 0; index < slots.Length; index++)
+        {
+            if (slots[index] != null)
+                slots[index].Hide();
+        }
 
         if (IsReady)
         {
             int visibleCount = Mathf.Min(HandCount, slots.Length);
             for (int index = 0; index < visibleCount; index++)
-                slots[index].Bind(deckManager.Hand[index], hoverLayer);
+            {
+                if (slots[index] != null)
+                    slots[index].Bind(deckManager.Hand[index], hoverLayer, cardPlayController);
+            }
         }
 
         handLayout.RefreshSpacing();
     }
 
+    //비어 있는 슬롯 배열을 자식 카드 슬롯으로 한 번 캐싱
+    private void CacheSlots()
+    {
+        bool needsCache = slots == null || slots.Length == 0;
+        if (!needsCache)
+        {
+            for (int index = 0; index < slots.Length; index++)
+            {
+                if (slots[index] == null)
+                {
+                    needsCache = true;
+                    break;
+                }
+            }
+        }
+
+        if (needsCache)
+            slots = GetComponentsInChildren<CardView>(true);
+    }
+
     //필수 참조와 슬롯 연결을 검사해 잘못된 상태에서 덱 생성을 방지
     private bool ValidateReferences()
     {
-        if (deckManager == null || handLayout == null || hoverLayer == null ||
+        CacheSlots();
+        if (deckManager == null || cardPlayController == null || handLayout == null || hoverLayer == null ||
             slots == null || slots.Length == 0)
         {
             Debug.LogError("[카드 테스트] 덱 관리자와 손패 UI 연결을 확인해 주세요.", this);

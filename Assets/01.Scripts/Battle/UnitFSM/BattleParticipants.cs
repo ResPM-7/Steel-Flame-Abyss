@@ -37,6 +37,8 @@ public class BattleParticipants : MonoBehaviour
     [SerializeField] private int enemyId = 60001;
     public PlayerBattleState Player { get; private set; }
     public EnemyBattleState Enemy { get; private set; }
+    public BattleCombatantView PlayerView => playerView;
+    public BattleCombatantView EnemyView => enemyView;
     public bool IsReady => Player != null && Enemy != null;
 
     //자동 시작이 켜져 있으면 설정된 ID로 참가자를 생성

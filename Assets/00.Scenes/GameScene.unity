@@ -1105,6 +1105,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 777442819218060276, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 777442819218060276, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 777442819218060276, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 777442819218060276, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4297816557255494549, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
       propertyPath: m_Name
       value: Canvas_Dynamic
@@ -1187,6 +1203,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7949347367134498923, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663342216653265104, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663342216653265104, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663342216653265104, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663342216653265104, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+      propertyPath: m_PreserveAspect
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

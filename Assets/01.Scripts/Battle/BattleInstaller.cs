@@ -10,7 +10,9 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private BattleParticipants participants;
     [SerializeField] private BattleTurnController turnController;
 
-    //전투 초기화 전에 데이터 조회 기능 주입
+    private CardPlayController cardPlayController;
+
+    //전투 구성 요소에 필요한 의존성 주입
     private void Awake()
     {
         if (dataProvider == null || !dataProvider.IsReady ||
@@ -22,8 +24,9 @@ public class BattleInstaller : MonoBehaviour
         }
 
         deckManager.Inject(dataProvider);
-        handController.Inject(deckManager);
         participants.Inject(dataProvider, deckManager);
+        cardPlayController = new CardPlayController(deckManager, participants);
+        handController.Inject(deckManager, cardPlayController);
         turnController.Inject(deckManager, participants);
     }
 }

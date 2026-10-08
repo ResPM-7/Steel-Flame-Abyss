@@ -20,7 +20,7 @@ public class BattleCombatantView : MonoBehaviour
     private Color aliveColor;
     public CombatantState State => state;
 
-    //전투 상태와 이름 이미지를 UI에 연결
+    //전투 상태와 표시 데이터 연결 및 초상화 대상 감지 활성화
     public void Bind(string displayName, Sprite sprite, CombatantState value)
     {
         if (state != null) state.Changed -= Refresh;
@@ -28,7 +28,6 @@ public class BattleCombatantView : MonoBehaviour
         state = value;
         nameLabel.text = displayName;
         portrait.sprite = sprite;
-        portrait.preserveAspect = true;
         aliveColor = sprite != null ? Color.white : placeholderColor;
 
         if (state != null && isActiveAndEnabled) state.Changed += Refresh;

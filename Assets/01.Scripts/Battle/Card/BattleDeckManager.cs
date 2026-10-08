@@ -12,6 +12,9 @@ public interface IBattleDeckManager
     int DiscardCount { get; }
     IReadOnlyList<CardInstance> Hand { get; }
 
+    //지정한 카드의 현재 손패 포함 여부 확인
+    bool ContainsInHand(CardInstance card);
+
     //카드 ID로 전투 덱 생성
     bool InitializeDeck(IEnumerable<int> cardIds);
 
@@ -32,6 +35,9 @@ public interface IBattleDeckManager
 
     //카드 ID를 조회해 손패에 바로 추가
     bool TryAddCardToHand(int cardId, out CardInstance card);
+
+    //사용한 카드를 버린 더미나 소멸 더미로 이동
+    bool FinishPlayingCard(CardInstance card, bool exhaust);
 }
 
 //현재 전투의 카드 더미와 손패 상태를 관리
@@ -56,6 +62,21 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
     public int DiscardCount => deck?.DiscardPile.Count ?? 0;
     public IReadOnlyList<CardInstance> Hand =>
         deck != null ? deck.Hand : Array.Empty<CardInstance>();
+
+    //지정한 카드의 현재 손패 포함 여부 확인
+    public bool ContainsInHand(CardInstance card)
+    {
+        if (!IsReady || card == null)
+            return false;
+
+        for (int index = 0; index < deck.Hand.Count; index++)
+        {
+            if (ReferenceEquals(deck.Hand[index], card))
+                return true;
+        }
+
+        return false;
+    }
 
     //외부에서 전달한 데이터 조회 기능 저장
     public void Inject(IGameDataProvider provider)
@@ -173,5 +194,18 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
         deck.AddToHand(card);
         Changed?.Invoke();
         return true;
+    }
+
+    //사용한 카드를 버린 더미나 소멸 더미로 이동
+    public bool FinishPlayingCard(CardInstance card, bool exhaust)
+    {
+        if (!ContainsInHand(card))
+            return false;
+
+        bool moved = exhaust ? deck.Exhaust(card) : deck.Discard(card);
+        if (moved)
+            Changed?.Invoke();
+
+        return moved;
     }
 }
