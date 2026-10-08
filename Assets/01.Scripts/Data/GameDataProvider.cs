@@ -21,7 +21,6 @@ public interface IGameDataProvider
 
 //GameDatabase SO를 직접 노출하지 않고 카드·캐릭터·적·유물 조회를 한곳에서 제공
 //사용하는 시스템은 이 컴포넌트를 명시적으로 참조해 데이터 의존성을 전달
-[DisallowMultipleComponent]
 public class GameDataProvider : MonoBehaviour, IGameDataProvider
 {
     [Tooltip("시트에서 동기화된 GameDatabase 에셋")]

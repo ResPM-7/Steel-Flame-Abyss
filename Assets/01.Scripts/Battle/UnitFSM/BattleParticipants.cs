@@ -7,7 +7,16 @@ using UnityEngine.InputSystem;
 //첫 1:1 전투의 참가자를 SO에서 만들고 UI에 연결
 public class BattleParticipants : MonoBehaviour
 {
-    [SerializeField] private GameDataProvider dataProvider;
+    private IGameDataProvider dataProvider;
+
+    //외부에서 전달한 데이터 조회 기능 저장
+    public void Inject(IGameDataProvider provider)
+    {
+        if (provider == null)
+            throw new System.ArgumentNullException(nameof(provider));
+
+        dataProvider = provider;
+    }
     [SerializeField] private BattleCombatantView playerView;
     [SerializeField] private BattleCombatantView enemyView;
     [SerializeField] private TMP_Text playerStatusLabel;

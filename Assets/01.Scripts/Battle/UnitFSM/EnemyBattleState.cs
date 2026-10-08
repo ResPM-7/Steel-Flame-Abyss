@@ -13,7 +13,10 @@ public class EnemyBattleState
     public EnemyBattleState(EnemyData data, Random random)
     {
         Data = data != null ? data : throw new ArgumentNullException(nameof(data));
-        this.random = random ?? throw new ArgumentNullException(nameof(random));
+        if (random == null)
+            throw new ArgumentNullException(nameof(random));
+
+        this.random = random;
         if (data.MinHealth <= 0 || data.MaxHealth < data.MinHealth)
             throw new ArgumentException("적의 체력 범위가 올바르지 않습니다.", nameof(data));
         //최댓값 포함과 int 오버플로 방지

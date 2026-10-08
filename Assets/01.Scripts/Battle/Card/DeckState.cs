@@ -36,7 +36,10 @@ public class DeckState
         if (startingDeck == null)
             throw new ArgumentNullException(nameof(startingDeck));
 
-        this.random = random ?? throw new ArgumentNullException(nameof(random));
+        if (random == null)
+            throw new ArgumentNullException(nameof(random));
+
+        this.random = random;
 
         foreach (CardInstance card in startingDeck)
         {

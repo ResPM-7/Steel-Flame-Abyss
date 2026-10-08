@@ -4,19 +4,12 @@ using UnityEngine;
 //카드 덱의 드로우와 버리기 결과를 미리 배치한 손패 슬롯에 표시
 public class CardHandController : MonoBehaviour
 {
-    [SerializeField] private GameDataProvider dataProvider;
+    private IBattleDeckManager deckManager;
+
     [SerializeField] private CardHandLayout handLayout;
     [SerializeField] private RectTransform hoverLayer;
     [SerializeField] private CardView[] slots;
-    [Header("임시 테스트 덱")]
-    [SerializeField] private int[] testDeckIds =
-    {
-        10001, 10001, 10001, 10001, 10001,
-        10002, 10002, 10002, 10002, 10002, 10003, 10003
-    };
-    [Min(0)] [SerializeField] private int initialHandCount = 3;
 
-    private DeckState deck;
 #if UNITY_EDITOR
     [Header("에디터 테스트 패널")]
     [SerializeField] private RectTransform testPanelTarget;
@@ -27,22 +20,47 @@ public class CardHandController : MonoBehaviour
     private string cardIdInput = "10001";
     private string cheatMessage = "카드 ID를 입력해 손패에 추가할 수 있습니다.";
 #endif
-    public bool IsReady => deck != null;
-    public int HandCount => deck?.Hand.Count ?? 0;
-    public int DrawCount => deck?.DrawPile.Count ?? 0;
-    public int DiscardCount => deck?.DiscardPile.Count ?? 0;
+
+    public bool IsReady => deckManager != null && deckManager.IsReady;
+    public int HandCount => deckManager?.HandCount ?? 0;
+    public int DrawCount => deckManager?.DrawCount ?? 0;
+    public int DiscardCount => deckManager?.DiscardCount ?? 0;
+
+
+    //외부에서 전달한 전투 덱 관리자 저장
+    public void Inject(IBattleDeckManager manager)
+    {
+        if (manager == null)
+            throw new System.ArgumentNullException(nameof(manager));
+
+        if (deckManager != null)
+            deckManager.Changed -= RefreshHand;
+
+        deckManager = manager;
+        deckManager.Changed += RefreshHand;
+    }
 
     //재생을 시작하면 테스트 덱을 만들고 초기 손패를 표시
     private void Start()
     {
+        #region 에디터 전용 치트창
 #if UNITY_EDITOR
         if (testPanelTarget != null)
             testCanvas = testPanelTarget.GetComponentInParent<Canvas>();
 #endif
+        #endregion
+
         if (!IsReady)
             ResetTestDeck();
     }
 
+    //컴포넌트 제거 시 덱 변경 이벤트 연결 해제
+    private void OnDestroy()
+    {
+        if (deckManager != null)
+            deckManager.Changed -= RefreshHand;
+    }
+    #region 에디터 전용 
 #if UNITY_EDITOR
     //에디터 재생 중 적의 위쪽에 치트 버튼과 선택된 테스트 패널을 표시
     private void OnGUI()
@@ -131,44 +149,31 @@ public class CardHandController : MonoBehaviour
             return;
         }
 
-        if (!dataProvider.TryGetCard(cardId, out var data))
-        {
-            cheatMessage = $"카드 ID {cardId}를 찾을 수 없습니다.";
-            return;
-        }
-
         if (HandCount >= slots.Length)
         {
             cheatMessage = $"손패가 {slots.Length}장으로 가득 찼습니다.";
             return;
         }
 
-        deck.AddToHand(new CardInstance(data));
-        RefreshHand();
-        cheatMessage = $"{data.DisplayName} 카드를 손패에 추가했습니다.";
-        LogState($"{data.DisplayName} 손패 추가");
+        if (!deckManager.TryAddCardToHand(cardId, out CardInstance card))
+        {
+            cheatMessage = $"카드 ID {cardId}를 찾을 수 없습니다.";
+            return;
+        }
+
+        cheatMessage = $"{card.Data.DisplayName} 카드를 손패에 추가했습니다.";
+        LogState($"{card.Data.DisplayName} 손패 추가");
     }
 #endif
 
-    //SO에서 테스트 카드 ID를 조회해 새 덱을 만들고 초기 손패를 드로우
+    //전투 덱 관리자에 테스트 덱 초기화 요청
     public void ResetTestDeck()
     {
         if (!Application.isPlaying || !ValidateReferences())
             return;
 
-        var cards = new List<CardInstance>();
-        foreach (var id in testDeckIds)
-        {
-            if (!dataProvider.TryGetCard(id, out var data))
-            {
-                Debug.LogWarning($"[카드 테스트] 카드 ID {id}가 없어 초기화를 취소했습니다.", this);
-                return;
-            }
-            cards.Add(new CardInstance(data));
-        }
-
-        deck = new DeckState(cards);
-        DrawCards(initialHandCount);
+        if (deckManager.ResetTestDeck())
+            LogState("테스트 덱 초기화");
     }
 
     //손패 빈자리만큼 카드를 뽑고 표시를 갱신
@@ -178,8 +183,7 @@ public class CardHandController : MonoBehaviour
             return;
 
         int requested = Mathf.Clamp(count, 0, slots.Length - HandCount);
-        int drawn = deck.Draw(requested).Count;
-        RefreshHand();
+        int drawn = deckManager.DrawCards(requested);
         LogState($"드로우 {drawn}장");
     }
 
@@ -194,10 +198,9 @@ public class CardHandController : MonoBehaviour
             return;
         }
 
-        var card = deck.Hand[index];
-        deck.Discard(card);
-        RefreshHand();
-        LogState($"{card.Data.DisplayName} 버리기");
+        var card = deckManager.Hand[index];
+        if (deckManager.DiscardAt(index))
+            LogState($"{card.Data.DisplayName} 버리기");
     }
 
     //현재 손패 전체를 버린 더미로 이동
@@ -206,8 +209,7 @@ public class CardHandController : MonoBehaviour
         if (!Application.isPlaying || !IsReady)
             return;
 
-        deck.DiscardHand();
-        RefreshHand();
+        deckManager.DiscardAll();
         LogState("전체 버리기");
     }
 
@@ -217,8 +219,12 @@ public class CardHandController : MonoBehaviour
         foreach (var slot in slots)
             slot.Hide();
 
-        for (int index = 0; index < HandCount; index++)
-            slots[index].Bind(deck.Hand[index], hoverLayer);
+        if (IsReady)
+        {
+            int visibleCount = Mathf.Min(HandCount, slots.Length);
+            for (int index = 0; index < visibleCount; index++)
+                slots[index].Bind(deckManager.Hand[index], hoverLayer);
+        }
 
         handLayout.RefreshSpacing();
     }
@@ -226,11 +232,10 @@ public class CardHandController : MonoBehaviour
     //필수 참조와 슬롯 연결을 검사해 잘못된 상태에서 덱 생성을 방지
     private bool ValidateReferences()
     {
-        if (dataProvider == null || !dataProvider.IsReady || handLayout == null ||
-            hoverLayer == null || slots == null || slots.Length == 0 ||
-            testDeckIds == null || testDeckIds.Length == 0)
+        if (deckManager == null || handLayout == null || hoverLayer == null ||
+            slots == null || slots.Length == 0)
         {
-            Debug.LogError("[카드 테스트] 데이터, 슬롯, 호버 레이어, 테스트 덱 연결을 확인해 주세요.", this);
+            Debug.LogError("[카드 테스트] 덱 관리자와 손패 UI 연결을 확인해 주세요.", this);
             return false;
         }
 
@@ -252,4 +257,6 @@ public class CardHandController : MonoBehaviour
     {
         Debug.Log($"[카드 테스트] {action} / 손패 {HandCount}, 뽑기 {DrawCount}, 버림 {DiscardCount}", this);
     }
+
+    #endregion 에디터 전용 치트
 }
