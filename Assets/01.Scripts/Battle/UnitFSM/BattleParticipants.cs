@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum BattleResult { Ongoing, Victory, Defeat }
+
 //첫 1:1 전투의 참가자를 SO에서 만들고 UI에 연결
 public class BattleParticipants : MonoBehaviour
 {
@@ -12,6 +14,10 @@ public class BattleParticipants : MonoBehaviour
     private int displayedStrength = -1;
 
     public event Action StrengthChanged;
+    public event Action<BattleResult> ResultChanged;
+    public BattleResult Result { get; private set; } = BattleResult.Ongoing;
+    public bool IsBattleActive => IsReady && Result == BattleResult.Ongoing &&
+        Player.Stats.IsAlive && Enemy.Stats.IsAlive;
 
     //외부에서 전달한 데이터 조회 기능과 전투 덱 관리자 저장
     public void Inject(IGameDataProvider provider, IBattleDeckManager manager)
@@ -66,7 +72,7 @@ public class BattleParticipants : MonoBehaviour
         if (Keyboard.current.numpad9Key.wasPressedThisFrame) VulnerablePlayer();
     }
 
-    //이후 BattleController에서 캐릭터와 조우 ID를 전달해 호출
+    //지정한 참가자 생성과 승패 감지 및 화면 연결
     public bool Initialize(int characterId, int targetEnemyId)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
@@ -88,14 +94,34 @@ public class BattleParticipants : MonoBehaviour
         UnsubscribeParticipantEvents();
         Player = nextPlayer;
         Enemy = nextEnemy;
+        Result = BattleResult.Ongoing;
         Player.Changed += RefreshPlayer;
         Player.Stats.Changed += RefreshPlayer;
+        Player.Stats.Changed += CheckBattleResult;
+        Enemy.Stats.Changed += CheckBattleResult;
         Enemy.IntentChanged += RefreshEnemy;
         playerView.Bind(character.DisplayName, character.Portrait, Player.Stats);
         enemyView.Bind(enemy.DisplayName, enemy.Artwork, Enemy.Stats);
         RefreshPlayer();
         RefreshEnemy();
+        ResultChanged?.Invoke(Result);
         return true;
+    }
+
+    //참가자 사망 여부에 따른 승패 확정과 결과 알림
+    private void CheckBattleResult()
+    {
+        if (!IsReady || Result != BattleResult.Ongoing)
+            return;
+
+        if (!Player.Stats.IsAlive)
+            Result = BattleResult.Defeat;
+        else if (!Enemy.Stats.IsAlive)
+            Result = BattleResult.Victory;
+        else
+            return;
+
+        ResultChanged?.Invoke(Result);
     }
 
     //플레이어 상태 표시와 힘 변경 알림
@@ -149,8 +175,13 @@ public class BattleParticipants : MonoBehaviour
         {
             Player.Changed -= RefreshPlayer;
             Player.Stats.Changed -= RefreshPlayer;
+            Player.Stats.Changed -= CheckBattleResult;
         }
-        if (Enemy != null) Enemy.IntentChanged -= RefreshEnemy;
+        if (Enemy != null)
+        {
+            Enemy.IntentChanged -= RefreshEnemy;
+            Enemy.Stats.Changed -= CheckBattleResult;
+        }
     }
 
     //인스펙터 컴포넌트 메뉴에서 Play Mode에만 수행하는 수동 검증

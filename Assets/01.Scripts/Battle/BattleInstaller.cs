@@ -9,6 +9,7 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private CardHandController handController;
     [SerializeField] private BattleParticipants participants;
     [SerializeField] private BattleTurnController turnController;
+    [SerializeField] private BattleResultView resultView;
 
     private CardPlayController cardPlayController;
 
@@ -28,5 +29,9 @@ public class BattleInstaller : MonoBehaviour
         cardPlayController = new CardPlayController(deckManager, participants);
         handController.Inject(deckManager, cardPlayController);
         turnController.Inject(deckManager, participants);
+        if (resultView != null)
+            resultView.Inject(participants);
+        else
+            Debug.LogError("[전투 연결] 승패 패널을 표시할 Result View를 연결해 주세요", this);
     }
 }

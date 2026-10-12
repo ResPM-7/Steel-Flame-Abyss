@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5070268544556056569}
   - component: {fileID: 8373933809082140700}
+  - component: {fileID: 5497516776104746813}
   m_Layer: 0
   m_Name: BattleInstaller
   m_TagString: Untagged
@@ -48,3 +49,21 @@ MonoBehaviour:
   deckManager: {fileID: 0}
   handController: {fileID: 0}
   participants: {fileID: 0}
+  turnController: {fileID: 0}
+  resultView: {fileID: 0}
+--- !u!114 &5497516776104746813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786037757482568647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752adbffe47de34439a21cfc42160644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinInstaller
+  coinView: {fileID: 0}
+  participants: {fileID: 0}
+  rewardButton: {fileID: 0}
+  rewardText: {fileID: 0}

@@ -37,7 +37,11 @@ public class CardEffectResolver
     public void Resolve(CardInstance card)
     {
         for (int index = 0; index < card.Effects.Count; index++)
+        {
+            if (!participants.IsBattleActive)
+                break;
             ResolveEffect(card, card.Effects[index]);
+        }
     }
 
     //현재 지원하는 효과 종류와 대상 조합 확인

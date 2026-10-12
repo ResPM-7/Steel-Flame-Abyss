@@ -35,7 +35,7 @@ public class BattleTurnController : MonoBehaviour
     {
         if (isResolvingTurn || !ValidateReferences() || !deckManager.IsReady || !participants.IsReady)
             return;
-        if (!participants.Player.Stats.IsAlive || !participants.Enemy.Stats.IsAlive)
+        if (!participants.IsBattleActive)
             return;
 
         isResolvingTurn = true;
@@ -45,7 +45,7 @@ public class BattleTurnController : MonoBehaviour
             participants.Enemy.Stats.ClearBlock();
             participants.Enemy.ExecutePlannedAction(participants.Player.Stats);
 
-            if (!participants.Player.Stats.IsAlive || !participants.Enemy.Stats.IsAlive)
+            if (!participants.IsBattleActive)
             {
                 Debug.Log("[턴] 전투 종료 / 다음 턴 진행 중단", this);
                 return;
