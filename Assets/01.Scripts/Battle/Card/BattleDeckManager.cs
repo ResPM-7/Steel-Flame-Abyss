@@ -52,7 +52,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
         10001, 10001, 10001, 10001, 10001,
         10002, 10002, 10002, 10002, 10002, 10003, 10003
     };
-    [Min(0)] [SerializeField] private int initialHandCount = 3;
+    [SerializeField] private int initialHandCount = 3;
 
     private IGameDataProvider dataProvider;
     private DeckState deck;
