@@ -8,6 +8,8 @@ public class CardPlayController
     private readonly BattleParticipants participants;
     private readonly CardEffectResolver effectResolver;
     private static readonly Regex damageTextPattern = new Regex(@"(?<![\d.])\d+(?=\s*의?\s*피해)");
+    private static readonly Regex effectTextPattern = new Regex(
+        @"\{(?<token>damage|shield|power|burn|mindFracture|draw)(?::(?<index>\d+))?\}|(?<![A-Za-z0-9_{])(?<token>damage|shield|power|burn|mindFracture|draw)(?![A-Za-z0-9_}])");
 
     public event System.Action DescriptionsChanged
     {
@@ -15,7 +17,7 @@ public class CardPlayController
         remove { participants.StrengthChanged -= value; }
     }
 
-    //카드 설명의 피해 수치를 현재 공격 계산값으로 변환
+    //카드 설명의 효과 키워드를 현재 효과 수치로 변환
     public string GetDescription(CardInstance card)
     {
         if (card == null)
@@ -31,19 +33,58 @@ public class CardPlayController
                 continue;
 
             damageEffect = effect;
-            string value = effectResolver.CalculateDamage(card, effect).ToString();
-            description = description.Replace("{damage:" + damageCount + "}", value);
             damageCount++;
         }
 
-        if (damageCount != 1)
-            return description;
+        if (damageCount == 1)
+        {
+            string damage = effectResolver.CalculateDamage(card, damageEffect).ToString();
+            string baseDamage = damageEffect.Amount.ToString();
+            description = damageTextPattern.Replace(description,
+                match => match.Value == baseDamage ? damage : match.Value);
+        }
 
-        string damage = effectResolver.CalculateDamage(card, damageEffect).ToString();
-        string baseDamage = damageEffect.Amount.ToString();
-        description = damageTextPattern.Replace(description,
-            match => match.Value == baseDamage ? damage : match.Value);
-        return description.Replace("{damage}", damage);
+        return effectTextPattern.Replace(description, match => GetEffectText(card, match));
+    }
+
+    //설명 키워드에 해당하는 효과 수치 반환
+    private string GetEffectText(CardInstance card, Match match)
+    {
+        EffectType effectType;
+        switch (match.Groups["token"].Value)
+        {
+            case "damage": effectType = EffectType.Damage; break;
+            case "shield": effectType = EffectType.Block; break;
+            case "power": effectType = EffectType.Strength; break;
+            case "burn": effectType = EffectType.Burn; break;
+            case "mindFracture": effectType = EffectType.MindFracture; break;
+            case "draw": effectType = EffectType.Draw; break;
+            default: return match.Value;
+        }
+
+        int effectIndex = 0;
+        if (match.Groups["index"].Success &&
+            !int.TryParse(match.Groups["index"].Value, out effectIndex))
+            return match.Value;
+
+        for (int index = 0; index < card.Effects.Count; index++)
+        {
+            EffectSpec effect = card.Effects[index];
+            if (effect.Type != effectType)
+                continue;
+            if (effectIndex > 0)
+            {
+                effectIndex--;
+                continue;
+            }
+
+            if (effectType == EffectType.Damage)
+                return effectResolver.CalculateDamage(card, effect).ToString();
+
+            return effect.Amount.ToString();
+        }
+
+        return match.Value;
     }
 
     //카드 사용에 필요한 덱과 전투 참가자 저장

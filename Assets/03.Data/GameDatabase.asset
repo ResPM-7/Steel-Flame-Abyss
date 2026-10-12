@@ -67,8 +67,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 5\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
-    \uD654\uC0C1 2\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uD654\uC0C1 burn\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
-  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 burn\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 21
@@ -177,7 +177,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 4\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
     \uC815\uC2E0\uBD84\uC5F4 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -212,7 +212,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C 5 \uC5BB\uC2B5\uB2C8\uB2E4."
+  description: "\uBC29\uC5B4\uB3C4\uB97C shield  \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 1
@@ -296,8 +296,8 @@ MonoBehaviour:
   owner: 1
   cardType: 1
   rarity: 0
-  cost: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C 5 \uC5BB\uC2B5\uB2C8\uB2E4."
+  cost: 2
+  description: "\uBC29\uC5B4\uB3C4\uB97C shield \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 1
@@ -326,7 +326,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
-  description: "\uD798\uC744 2 \uC5BB\uC2B5\uB2C8\uB2E4."
+  description: "\uD798\uC744 power \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 2
@@ -496,7 +496,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C 6\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 0
@@ -525,7 +525,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 6\uC744
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 mindFracture\uC744
     \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -576,7 +576,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
-  description: "\uCE74\uB4DC\uB97C 2\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
+  description: "\uCE74\uB4DC\uB97C draw\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 101

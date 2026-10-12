@@ -49,6 +49,66 @@ public class EnemyBattleState
         IntentChanged?.Invoke();
     }
 
+    //예고한 적 행동을 플레이어와 자신의 상태에 적용
+    public void ExecutePlannedAction(CombatantState player)
+    {
+        if (player == null)
+            throw new ArgumentNullException(nameof(player));
+        if (!Stats.IsAlive || !player.IsAlive || !PlannedAction.HasValue)
+            return;
+
+        EnemyActionSpec action = PlannedAction.Value;
+        PlannedAction = null;
+        foreach (EffectSpec effect in action.Effects)
+        {
+            if (!Stats.IsAlive || !player.IsAlive)
+                break;
+
+            CombatantState target;
+            switch (effect.Target)
+            {
+                case TargetType.Self:
+                    target = Stats;
+                    break;
+                case TargetType.SingleEnemy:
+                case TargetType.AllEnemies:
+                case TargetType.RandomEnemy:
+                    target = player;
+                    break;
+                default:
+                    UnityEngine.Debug.LogWarning($"[적 행동] 지원하지 않는 대상 {effect.Target}");
+                    continue;
+            }
+
+            switch (effect.Type)
+            {
+                case EffectType.Damage:
+                    int damage = effect.Amount;
+                    if (target != Stats)
+                        damage += Stats.Strength;
+                    target.TakeDamage(Math.Max(0, damage));
+                    break;
+                case EffectType.Block:
+                    target.GainBlock(effect.Amount);
+                    break;
+                case EffectType.Strength:
+                    target.GainStrength(effect.Amount);
+                    break;
+                case EffectType.Weak:
+                    target.ApplyWeak(effect.Amount);
+                    break;
+                case EffectType.Vulnerable:
+                    target.ApplyVulnerable(effect.Amount);
+                    break;
+                default:
+                    UnityEngine.Debug.LogWarning($"[적 행동] 지원하지 않는 효과 {effect.Type}");
+                    break;
+            }
+        }
+
+        IntentChanged?.Invoke();
+    }
+
     //효과가 있고 가중치가 유효한 선택 가능한 행동인지 확인
     private static bool IsSelectable(EnemyActionSpec action) =>
         action.Weight > 0 && !float.IsInfinity(action.Weight) &&
