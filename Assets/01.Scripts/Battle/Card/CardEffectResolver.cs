@@ -33,11 +33,11 @@ public class CardEffectResolver
         return true;
     }
 
-    //카드의 모든 효과를 대상 규칙에 맞춰 순서대로 적용
+    //카드 정보와 대상 규칙에 따른 효과 순차 적용
     public void Resolve(CardInstance card)
     {
         for (int index = 0; index < card.Effects.Count; index++)
-            ResolveEffect(card.Effects[index]);
+            ResolveEffect(card, card.Effects[index]);
     }
 
     //현재 지원하는 효과 종류와 대상 조합 확인
@@ -62,15 +62,15 @@ public class CardEffectResolver
         }
     }
 
-    //효과 종류에 맞는 전투 상태 변경 실행
-    private void ResolveEffect(EffectSpec effect)
+    //카드 종류와 효과에 따른 전투 상태 변경
+    private void ResolveEffect(CardInstance card, EffectSpec effect)
     {
         CombatantState target = GetTargetState(effect.Target);
 
         switch (effect.Type)
         {
             case EffectType.Damage:
-                target?.TakeDamage(effect.Amount);
+                target?.TakeDamage(CalculateDamage(card, effect));
                 break;
             case EffectType.Block:
                 target?.GainBlock(effect.Amount);
@@ -91,6 +91,20 @@ public class CardEffectResolver
                 target?.ApplyVulnerable(effect.Amount);
                 break;
         }
+    }
+
+    //적 대상 공격 카드의 기본 피해에 현재 힘 합산
+    public int CalculateDamage(CardInstance card, EffectSpec effect)
+    {
+        bool targetsEnemy = effect.Target == TargetType.SingleEnemy ||
+            effect.Target == TargetType.AllEnemies ||
+            effect.Target == TargetType.RandomEnemy;
+
+        int damage = effect.Amount;
+        if (card.Data.CardType == CardType.Attack && targetsEnemy && participants.Player != null)
+            damage += participants.Player.Stats.Strength;
+
+        return Mathf.Max(0, damage);
     }
 
     //효과 대상 종류를 현재 전투 상태로 변환

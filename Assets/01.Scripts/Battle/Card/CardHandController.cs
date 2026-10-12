@@ -39,10 +39,14 @@ public class CardHandController : MonoBehaviour
         if (deckManager != null)
             deckManager.Changed -= RefreshHand;
 
+        if (cardPlayController != null)
+            cardPlayController.DescriptionsChanged -= RefreshDescriptions;
+
         CacheSlots();
         deckManager = manager;
         cardPlayController = playController;
         deckManager.Changed += RefreshHand;
+        cardPlayController.DescriptionsChanged += RefreshDescriptions;
     }
 
     //에디터 치트 패널의 기준 캔버스 저장
@@ -56,11 +60,13 @@ public class CardHandController : MonoBehaviour
         #endregion
     }
 
-    //컴포넌트 제거 시 덱 변경 이벤트 연결 해제
+    //컴포넌트 제거 시 덱과 설명 변경 이벤트 연결 해제
     private void OnDestroy()
     {
         if (deckManager != null)
             deckManager.Changed -= RefreshHand;
+        if (cardPlayController != null)
+            cardPlayController.DescriptionsChanged -= RefreshDescriptions;
     }
     #region 에디터 전용 
 #if UNITY_EDITOR
@@ -242,6 +248,19 @@ public class CardHandController : MonoBehaviour
         }
 
         handLayout.RefreshSpacing();
+    }
+
+    //힘 변경에 따른 손패 설명 갱신
+    private void RefreshDescriptions()
+    {
+        if (slots == null)
+            return;
+
+        foreach (var slot in slots)
+        {
+            if (slot != null)
+                slot.RefreshDescription();
+        }
     }
 
     //비어 있는 슬롯 배열을 자식 카드 슬롯으로 한 번 캐싱

@@ -43,10 +43,19 @@ public class CardView : MonoBehaviour
         hoverTween.SetDragReceiver(this);
         nameText.text = card.Data.DisplayName;
         costText.text = card.Cost.ToString();
-        descriptionText.text = card.Description;
+        RefreshDescription();
         gameObject.SetActive(true);
         hoverTween.Initialize(transform as RectTransform, hoverLayer);
         hoverTween.gameObject.SetActive(true);
+    }
+
+    //카드 위치를 유지하며 현재 힘을 설명에 반영
+    public void RefreshDescription()
+    {
+        if (Card == null || cardPlayController == null || descriptionText == null)
+            return;
+
+        descriptionText.text = cardPlayController.GetDescription(Card);
     }
 
     //카드를 호버 레이어에 고정하고 드래그 시작 위치 저장

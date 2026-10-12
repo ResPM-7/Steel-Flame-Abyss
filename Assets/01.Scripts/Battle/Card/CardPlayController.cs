@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 //카드 대상과 에너지를 검사하고 카드 효과 실행
 public class CardPlayController
@@ -6,6 +7,44 @@ public class CardPlayController
     private readonly IBattleDeckManager deckManager;
     private readonly BattleParticipants participants;
     private readonly CardEffectResolver effectResolver;
+    private static readonly Regex damageTextPattern = new Regex(@"(?<![\d.])\d+(?=\s*의?\s*피해)");
+
+    public event System.Action DescriptionsChanged
+    {
+        add { participants.StrengthChanged += value; }
+        remove { participants.StrengthChanged -= value; }
+    }
+
+    //카드 설명의 피해 수치를 현재 공격 계산값으로 변환
+    public string GetDescription(CardInstance card)
+    {
+        if (card == null)
+            return string.Empty;
+
+        string description = card.Description ?? string.Empty;
+        int damageCount = 0;
+        EffectSpec damageEffect = default;
+        for (int index = 0; index < card.Effects.Count; index++)
+        {
+            EffectSpec effect = card.Effects[index];
+            if (effect.Type != EffectType.Damage)
+                continue;
+
+            damageEffect = effect;
+            string value = effectResolver.CalculateDamage(card, effect).ToString();
+            description = description.Replace("{damage:" + damageCount + "}", value);
+            damageCount++;
+        }
+
+        if (damageCount != 1)
+            return description;
+
+        string damage = effectResolver.CalculateDamage(card, damageEffect).ToString();
+        string baseDamage = damageEffect.Amount.ToString();
+        description = damageTextPattern.Replace(description,
+            match => match.Value == baseDamage ? damage : match.Value);
+        return description.Replace("{damage}", damage);
+    }
 
     //카드 사용에 필요한 덱과 전투 참가자 저장
     public CardPlayController(IBattleDeckManager manager, BattleParticipants battleParticipants)

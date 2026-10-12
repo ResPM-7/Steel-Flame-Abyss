@@ -30,13 +30,14 @@ public class BattleTurnController : MonoBehaviour
         deckManager.ResetTestDeck();
     }
 
-    //손패 교체와 플레이어 자원 갱신
+    //다음 턴 손패 교체와 플레이어 방어도 및 에너지 초기화
     public void EndPlayerTurn()
     {
         if (!ValidateReferences() || !deckManager.IsReady || !participants.IsReady)
             return;
 
         int drawnCount = deckManager.DrawNewHand(cardsPerTurn);
+        participants.Player.Stats.ClearBlock();
         participants.Player.ResetEnergy();
         participants.Enemy.PlanNextAction();
         Debug.Log($"[턴] 턴 종료 / 새 손패 {drawnCount}장", this);

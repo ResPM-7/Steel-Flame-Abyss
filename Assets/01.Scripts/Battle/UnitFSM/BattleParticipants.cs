@@ -9,6 +9,9 @@ public class BattleParticipants : MonoBehaviour
 {
     private IGameDataProvider dataProvider;
     private IBattleDeckManager deckManager;
+    private int displayedStrength = -1;
+
+    public event Action StrengthChanged;
 
     //외부에서 전달한 데이터 조회 기능과 전투 덱 관리자 저장
     public void Inject(IGameDataProvider provider, IBattleDeckManager manager)
@@ -95,11 +98,18 @@ public class BattleParticipants : MonoBehaviour
         return true;
     }
 
-    //플레이어의 에너지와 고유 자원 설명을 갱신
+    //플레이어 상태 표시와 힘 변경 알림
     private void RefreshPlayer()
     {
         playerEnergyStatus.text = $"에너지  {Player.Energy} / {Player.Data.StartingEnergy}";
         playerView.SetDetail($"{Player.Data.ResourceName} 사용 캐릭터");
+
+        int strength = Player.Stats.Strength;
+        if (displayedStrength != strength)
+        {
+            displayedStrength = strength;
+            StrengthChanged?.Invoke();
+        }
     }
 
     //뽑기 더미와 버린 더미 카드 수 갱신
