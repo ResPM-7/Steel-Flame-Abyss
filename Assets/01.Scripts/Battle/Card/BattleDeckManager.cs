@@ -21,6 +21,9 @@ public interface IBattleDeckManager
     //테스트 카드 ID로 전투 덱과 초기 손패 생성
     bool ResetTestDeck();
 
+    //보유 덱으로 전투 덱과 초기 손패 생성
+    bool BeginBattle();
+
     //지정한 수만큼 카드를 손패로 이동
     int DrawCards(int count);
 
@@ -53,6 +56,33 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
 
     private IGameDataProvider dataProvider;
     private DeckState deck;
+    private OwnedDeckModel ownedDeck;
+
+    //게임 세션의 보유 덱 저장
+    public void InjectOwnedDeck(OwnedDeckModel model)
+    {
+        if (model == null)
+            throw new ArgumentNullException(nameof(model));
+        ownedDeck = model;
+    }
+
+    //첫 시작 덱 또는 누적 보유 덱으로 전투 준비
+    public bool BeginBattle()
+    {
+        if (ownedDeck == null)
+            return ResetTestDeck();
+        if (!ownedDeck.IsInitialized && (testDeckIds == null || testDeckIds.Length == 0))
+        {
+            Debug.LogError("[덱] 시작 카드 ID를 한 장 이상 등록해 주세요", this);
+            return false;
+        }
+        IEnumerable<int> ids = ownedDeck.IsInitialized ? ownedDeck.CardIds : testDeckIds;
+        if (ids == null || !InitializeDeck(ids))
+            return false;
+        ownedDeck.InitializeOnce(ids);
+        DrawCards(initialHandCount);
+        return true;
+    }
 
     public event Action Changed;
     public DeckState Deck => deck;

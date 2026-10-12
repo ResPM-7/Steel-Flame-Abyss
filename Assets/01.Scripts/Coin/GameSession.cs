@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//게임 실행 동안 코인 모델 유지와 씬 의존성 주입
+//게임 실행 동안 코인과 보유 덱 유지 및 씬 의존성 주입
 [AddComponentMenu("")]
 public class GameSession : MonoBehaviour
 {
     private readonly CoinModel coins = new CoinModel();
+    private readonly OwnedDeckModel ownedDeck = new OwnedDeckModel();
 
     //첫 씬 로드 전 게임 세션 자동 생성
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -22,16 +23,25 @@ public class GameSession : MonoBehaviour
         SceneManager.sceneLoaded += InjectScene;
     }
 
-    //로드된 씬의 코인 설치자와 메뉴에 의존성 전달
+    //로드된 씬의 코인과 전투 설치자 및 메뉴에 의존성 전달
     private void InjectScene(Scene scene, LoadSceneMode mode)
     {
         foreach (GameObject root in scene.GetRootGameObjects())
         {
             foreach (CoinInstaller installer in root.GetComponentsInChildren<CoinInstaller>(true))
                 installer.Inject(coins);
+            foreach (BattleInstaller installer in root.GetComponentsInChildren<BattleInstaller>(true))
+                installer.InjectOwnedDeck(ownedDeck);
             foreach (SceneMenuActions menu in root.GetComponentsInChildren<SceneMenuActions>(true))
-                menu.InjectNewGameAction(coins.Reset);
+                menu.InjectNewGameAction(ResetRun);
         }
+    }
+
+    //새 게임의 코인과 보유 덱 초기화
+    private void ResetRun()
+    {
+        coins.Reset();
+        ownedDeck.Reset();
     }
 
     //게임 세션 제거 시 씬 로드 이벤트 연결 해제

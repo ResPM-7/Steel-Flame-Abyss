@@ -21,13 +21,13 @@ public class BattleTurnController : MonoBehaviour
         participants = battleParticipants;
     }
 
-    //전투 시작용 테스트 덱과 첫 손패 생성
+    //보유 덱 기반 전투 덱과 첫 손패 생성
     private void Start()
     {
         if (!ValidateReferences() || deckManager.IsReady)
             return;
 
-        deckManager.ResetTestDeck();
+        deckManager.BeginBattle();
     }
 
     //손패 정리와 적 행동 실행 후 다음 플레이어 턴 시작

@@ -250,16 +250,16 @@ MonoBehaviour:
   handLayout: {fileID: 2146015268819664133}
   hoverLayer: {fileID: 8740953757758459190}
   slots:
-  - {fileID: 2154113783890398877}
-  - {fileID: 7558707477523353623}
-  - {fileID: 7631676476507545939}
-  - {fileID: 5536898756528922087}
-  - {fileID: 3108170793163900145}
-  - {fileID: 1249767382194370241}
-  - {fileID: 3166458670550122596}
-  - {fileID: 784346401588885564}
-  - {fileID: 4907962153821656778}
-  - {fileID: 4869837950323761271}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   testPanelTarget: {fileID: 0}
 --- !u!1001 &293001353484860786
 PrefabInstance:
@@ -390,17 +390,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &1249767382194370241 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 293001353484860786}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &4356507740322537674 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -507,17 +496,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &2154113783890398877 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 624893068930417966}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &3515498727789156502 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -652,17 +630,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &784346401588885564 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 2281756112090002319}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &2868778122570182199 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -802,17 +769,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
   m_PrefabInstance: {fileID: 4497568960198971202}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3108170793163900145 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 4497568960198971202}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!1001 &4519756537964809175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -947,17 +903,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
   m_PrefabInstance: {fileID: 4519756537964809175}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3166458670550122596 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 4519756537964809175}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!1001 &5860439234080742777
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1087,17 +1032,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &4907962153821656778 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 5860439234080742777}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &7580096890832896193 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -1232,17 +1166,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &4869837950323761271 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 6259370360051821508}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &7978231971794466428 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -1377,17 +1300,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
---- !u!114 &5536898756528922087 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 6458135378293003860}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!224 &7060087788633312236 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
@@ -1511,17 +1423,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
   m_PrefabInstance: {fileID: 8980681987410045664}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7631676476507545939 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 8980681987410045664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
 --- !u!1001 &9055911582300806052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1640,14 +1541,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4063829718150307256, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
   m_PrefabInstance: {fileID: 9055911582300806052}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7558707477523353623 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1533726352018820019, guid: 5503c1498ed5fd346b9081b7dd2aa533, type: 3}
-  m_PrefabInstance: {fileID: 9055911582300806052}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595cd0ba1c48fa8418e4a20b8189b46b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardView
