@@ -1512,7 +1512,7 @@ PrefabInstance:
       objectReference: {fileID: 3580743571891636274}
     - target: {fileID: 6169755409513510045, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -923.13184
+      value: -953.13184
       objectReference: {fileID: 0}
     - target: {fileID: 6694563179820245332, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: m_IsActive
@@ -1641,6 +1641,10 @@ PrefabInstance:
     - target: {fileID: 9122229695130973882, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130111311959406855, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Spacing.y
+      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
