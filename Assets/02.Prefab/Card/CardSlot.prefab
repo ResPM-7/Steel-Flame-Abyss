@@ -189,6 +189,8 @@ MonoBehaviour:
   nameText: {fileID: 6573683068083523018}
   costText: {fileID: 2545763237349704087}
   descriptionText: {fileID: 3351995169905398885}
+  outline: {fileID: 1335490952334046697}
+  rarityColors: {fileID: 11400000, guid: e0defc3e1e6025c4aad9d154bc69d95b, type: 2}
   hoverTween: {fileID: 2282064035197305655}
   playDragDistance: 160
 --- !u!1 &6871617341617053278

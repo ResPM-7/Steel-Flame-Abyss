@@ -33,7 +33,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
 
 
 
-    //등록된 일반 및 Canvas 오브젝트 풀 생성
+    //일반 풀 그룹과 Canvas 직속 오브젝트 풀 생성
     void Start()
     {
         //일반 오브젝트 풀 생성
@@ -55,15 +55,16 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         foreach (var item in canvasPools)
         {
             if (string.IsNullOrEmpty(item.poolName) || item.prefab == null) continue;
+            if (item.targetCanvas == null)
+            {
+                Debug.LogError($"[오브젝트 풀] {item.poolName}의 Target Canvas를 연결해 주세요", this);
+                continue;
+            }
 
             prefabDict[item.poolName] = item.prefab;
             pools[item.poolName] = new Queue<GameObject>();
 
-            GameObject parentPool = new GameObject($"{item.poolName}_Pool");
-            //UI 크기 변형 방지를 위한 로컬 Transform 유지
-            parentPool.transform.SetParent(item.targetCanvas, false);
-
-            SetupPool(item.poolName, item.prefab, parentPool.transform, item.poolSize);
+            SetupPool(item.poolName, item.prefab, item.targetCanvas, item.poolSize);
         }
     }
 

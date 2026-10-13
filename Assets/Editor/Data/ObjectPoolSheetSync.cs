@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 internal static class ObjectPoolSheetSync
 {
-    private const string ManagerPrefabPath = "Assets/02.Prefab/ObjectPoolManager.prefab";
+    private const string ManagerPrefabPath = "Assets/02.Prefab/Manager/ObjectPoolManager.prefab";
     private const string PoolPrefabFolder = "Assets/02.Prefab/ObjectPool";
     private static bool isSyncing;
 

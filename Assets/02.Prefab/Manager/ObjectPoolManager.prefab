@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   isDontDestroy: 0
-  objList:
-  - poolName: testPool
-    prefab: {fileID: 8130386034827836787, guid: e2894600fcf112c4987e28c6153063f6, type: 3}
-    poolSize: 2
-  canvasPools: []
+  objList: []
+  canvasPools:
+  - poolName: ViewCardList
+    prefab: {fileID: 9194296250584613946, guid: 8fcd0d7e953af7140aa7f0aaf00f1c88, type: 3}
+    targetCanvas: {fileID: 0}
+    poolSize: 10

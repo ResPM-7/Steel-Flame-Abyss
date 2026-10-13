@@ -296,7 +296,7 @@ MonoBehaviour:
   owner: 1
   cardType: 1
   rarity: 0
-  cost: 2
+  cost: 1
   description: "\uBC29\uC5B4\uB3C4\uB97C shield \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -324,7 +324,7 @@ MonoBehaviour:
   displayName: "\uC804\uD22C \uD568\uC131"
   owner: 1
   cardType: 1
-  rarity: 1
+  rarity: 0
   cost: 1
   description: "\uD798\uC744 power \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
@@ -574,7 +574,7 @@ MonoBehaviour:
   displayName: "\uC804\uC220\uC801 \uD1B5\uCC30"
   owner: 0
   cardType: 1
-  rarity: 1
+  rarity: 2
   cost: 1
   description: "\uCE74\uB4DC\uB97C draw\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 

@@ -3,11 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 //카드 데이터 표시와 마우스 드래그 입력 전달
-public class CardView : MonoBehaviour
+public class CardView : CardDisplayView
 {
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text costText;
-    [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private CardHoverTween hoverTween;
     [Min(1f)] [SerializeField] private float playDragDistance = 160f;
 
@@ -18,12 +15,16 @@ public class CardView : MonoBehaviour
     private bool isDragging;
 
     public CardInstance Card { get; private set; }
-    public bool IsConfigured => nameText != null && costText != null &&
-        descriptionText != null && hoverTween != null;
+    public override bool IsConfigured => base.IsConfigured && hoverTween != null;
 
     //카드 드래그에 필요한 캔버스와 입력 차단 기능 저장
     private void Awake()
     {
+        if (hoverTween == null)
+        {
+            Debug.LogError("[손패 카드] Hover Tween을 연결하거나 목록용 CardListItemView를 사용해 주세요", this);
+            return;
+        }
         rootCanvas = GetComponentInParent<Canvas>();
         canvasGroup = hoverTween.GetComponent<CanvasGroup>();
         if (canvasGroup == null)
@@ -41,9 +42,7 @@ public class CardView : MonoBehaviour
         Card = card;
         cardPlayController = playController;
         hoverTween.SetDragReceiver(this);
-        nameText.text = card.Data.DisplayName;
-        costText.text = card.Cost.ToString();
-        RefreshDescription();
+        SetDisplay(card.Data, card.Cost, cardPlayController.GetDescription(card));
         gameObject.SetActive(true);
         hoverTween.Initialize(transform as RectTransform, hoverLayer);
         hoverTween.gameObject.SetActive(true);
