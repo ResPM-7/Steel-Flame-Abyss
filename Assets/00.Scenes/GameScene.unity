@@ -1422,6 +1422,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 541522394365240648, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 541522394365240648, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -85488583029258653, guid: 927b49486df88184c9a01be1b80c745f, type: 3}
+    - target: {fileID: 541522394365240648, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 541522394365240648, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 541522394365240648, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1892831876159979008, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: m_Name
       value: Canvas_Popup
@@ -1482,6 +1502,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5928920328319559033, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5998484732898171857, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: endTurnButton
       value: 
@@ -1498,6 +1522,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1620099858}
+    - target: {fileID: 8345951803348001591, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541392086156932052, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541392086156932052, guid: a545694df970d004a8388195d985fa12, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8862426509696972528, guid: a545694df970d004a8388195d985fa12, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
