@@ -11,11 +11,13 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private BattleTurnController turnController;
     [SerializeField] private BattleResultView resultView;
     [SerializeField] private CardRewardView cardRewardView;
+    [SerializeField] private CardListPanelView cardListPanelView;
+    [SerializeField] private ObjectPoolManager objectPoolManager;
 
     private CardPlayController cardPlayController;
     private CardRewardPresenter cardRewardPresenter;
 
-    //게임 세션의 보유 덱과 카드 보상 화면 연결
+    //게임 세션의 보유 덱과 보상 및 목록 화면 연결
     public void InjectOwnedDeck(OwnedDeckModel ownedDeck)
     {
         if (ownedDeck == null)
@@ -24,6 +26,8 @@ public class BattleInstaller : MonoBehaviour
             return;
 
         deckManager.InjectOwnedDeck(ownedDeck);
+        if (cardListPanelView != null)
+            cardListPanelView.Inject(ownedDeck, dataProvider, deckManager, objectPoolManager);
         cardRewardPresenter?.Dispose();
         cardRewardPresenter = null;
         if (cardRewardView == null || !cardRewardView.ValidateReferences())

@@ -11,6 +11,8 @@ public interface IBattleDeckManager
     int DrawCount { get; }
     int DiscardCount { get; }
     IReadOnlyList<CardInstance> Hand { get; }
+    IReadOnlyList<CardInstance> DrawPile { get; }
+    IReadOnlyList<CardInstance> DiscardPile { get; }
 
     //지정한 카드의 현재 손패 포함 여부 확인
     bool ContainsInHand(CardInstance card);
@@ -92,6 +94,10 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
     public int DiscardCount => deck?.DiscardPile.Count ?? 0;
     public IReadOnlyList<CardInstance> Hand =>
         deck != null ? deck.Hand : Array.Empty<CardInstance>();
+    public IReadOnlyList<CardInstance> DrawPile =>
+        deck != null ? deck.DrawPile : Array.Empty<CardInstance>();
+    public IReadOnlyList<CardInstance> DiscardPile =>
+        deck != null ? deck.DiscardPile : Array.Empty<CardInstance>();
 
     //지정한 카드의 현재 손패 포함 여부 확인
     public bool ContainsInHand(CardInstance card)
