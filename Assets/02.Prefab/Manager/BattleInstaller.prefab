@@ -51,6 +51,10 @@ MonoBehaviour:
   participants: {fileID: 0}
   turnController: {fileID: 0}
   resultView: {fileID: 0}
+  cardRewardView: {fileID: 0}
+  cardListPanelView: {fileID: 0}
+  objectPoolManager: {fileID: 0}
+  gameFlowController: {fileID: 0}
 --- !u!114 &5497516776104746813
 MonoBehaviour:
   m_ObjectHideFlags: 0

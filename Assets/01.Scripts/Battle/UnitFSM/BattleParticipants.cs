@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleResult { Ongoing, Victory, Defeat }
+public enum BattleResult { Ongoing, Victory, Defeat, Inactive }
 
 //첫 1:1 전투의 참가자를 SO에서 만들고 UI에 연결
 public class BattleParticipants : MonoBehaviour
@@ -56,10 +56,24 @@ public class BattleParticipants : MonoBehaviour
         if (initializeOnStart && !IsReady) Initialize(playerId, enemyId);
     }
 
-    //넘패드 1~9 입력을 읽어 전투 테스트 기능을 실행
+    //맵 진입 시 자동 전투 시작 해제
+    public void UseMapFlow()
+    {
+        initializeOnStart = false;
+        LeaveBattle();
+    }
+
+    //전투 입력과 보상 수령 종료
+    public void LeaveBattle()
+    {
+        Result = BattleResult.Inactive;
+        ResultChanged?.Invoke(Result);
+    }
+
+    //전투 중 넘패드 테스트 입력 처리
     private void Update()
     {
-        if (!IsReady || Keyboard.current == null) return;
+        if (!IsBattleActive || Keyboard.current == null) return;
 
         if (Keyboard.current.numpad1Key.wasPressedThisFrame) DamageEnemy();
         if (Keyboard.current.numpad2Key.wasPressedThisFrame) DamagePlayer();
@@ -72,8 +86,8 @@ public class BattleParticipants : MonoBehaviour
         if (Keyboard.current.numpad9Key.wasPressedThisFrame) VulnerablePlayer();
     }
 
-    //지정한 참가자 생성과 승패 감지 및 화면 연결
-    public bool Initialize(int characterId, int targetEnemyId)
+    //참가자 생성과 선택적 체력 유지 및 화면 연결
+    public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
             enemyView == null || playerEnergyStatus == null || deckManager == null ||
@@ -90,6 +104,12 @@ public class BattleParticipants : MonoBehaviour
         }
 
         var nextPlayer = new PlayerBattleState(character);
+        if (preserveHealth && Player != null)
+        {
+            if (!Player.Stats.IsAlive)
+                return false;
+            nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - Player.Stats.CurrentHealth));
+        }
         var nextEnemy = new EnemyBattleState(enemy, new System.Random());
         UnsubscribeParticipantEvents();
         Player = nextPlayer;

@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09aad171153b6a642924a99c3fc9aa29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleDeckManager
+  testDeckIds: 112700001127000011270000112700001127000012270000122700001227000012270000122700001327000013270000
+  initialHandCount: 3

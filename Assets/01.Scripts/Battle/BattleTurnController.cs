@@ -8,6 +8,13 @@ public class BattleTurnController : MonoBehaviour
     private IBattleDeckManager deckManager;
     private BattleParticipants participants;
     private bool isResolvingTurn;
+    private bool initializeOnStart = true;
+
+    //맵 선택 전 자동 덱 시작 해제
+    public void UseMapFlow()
+    {
+        initializeOnStart = false;
+    }
 
     //외부에서 전달한 덱 관리자와 전투 참가자 저장
     public void Inject(IBattleDeckManager manager, BattleParticipants battleParticipants)
@@ -24,7 +31,7 @@ public class BattleTurnController : MonoBehaviour
     //보유 덱 기반 전투 덱과 첫 손패 생성
     private void Start()
     {
-        if (!ValidateReferences() || deckManager.IsReady)
+        if (!initializeOnStart || !ValidateReferences() || deckManager.IsReady)
             return;
 
         deckManager.BeginBattle();
