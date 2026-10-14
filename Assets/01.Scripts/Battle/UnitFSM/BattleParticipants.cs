@@ -87,10 +87,11 @@ public class BattleParticipants : MonoBehaviour
         return true;
     }
 
-    //전투 중 넘패드 테스트 입력 처리
+#if UNITY_EDITOR
+    //에디터 전투 중 넘패드 테스트 입력 처리
     private void Update()
     {
-        if (!IsBattleActive || Keyboard.current == null) return;
+        if (!IsBattleActive || Keyboard.current == null || GUIUtility.keyboardControl != 0) return;
 
         if (Keyboard.current.numpad1Key.wasPressedThisFrame) DamageEnemy();
         if (Keyboard.current.numpad2Key.wasPressedThisFrame) DamagePlayer();
@@ -102,6 +103,7 @@ public class BattleParticipants : MonoBehaviour
         if (Keyboard.current.numpad8Key.wasPressedThisFrame) WeakenPlayer();
         if (Keyboard.current.numpad9Key.wasPressedThisFrame) VulnerablePlayer();
     }
+#endif
 
     //참가자 생성과 선택적 체력 유지 및 화면 연결
     public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false)
@@ -221,7 +223,7 @@ public class BattleParticipants : MonoBehaviour
         }
     }
 
-    //인스펙터 컴포넌트 메뉴에서 Play Mode에만 수행하는 수동 검증
+#if UNITY_EDITOR
     //테스트용으로 적에게 피해 10을 부여
     private void DamageEnemy()
     {
@@ -270,11 +272,11 @@ public class BattleParticipants : MonoBehaviour
         Debug.Log("[전투 테스트] 적 다음 행동 재선택", this);
     }
 
-    //테스트용으로 참가자를 처음 상태로 다시 생성
+    //현재 전투의 참가자를 기본 체력으로 다시 생성
     private void ResetParticipants()
     {
-        if (!Application.isPlaying) return;
-        Initialize(playerId, enemyId);
+        if (!Application.isPlaying || !IsBattleActive) return;
+        Initialize(Player.Data.Id, Enemy.Data.Id);
         Debug.Log("[전투 테스트] 참가자 초기화", this);
     }
 
@@ -293,4 +295,5 @@ public class BattleParticipants : MonoBehaviour
         Player.Stats.ApplyVulnerable(1);
         Debug.Log($"[전투 테스트] 플레이어 취약 +1 / 취약 {Player.Stats.Vulnerable}", this);
     }
+#endif
 }

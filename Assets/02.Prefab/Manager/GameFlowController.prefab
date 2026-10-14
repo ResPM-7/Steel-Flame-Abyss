@@ -48,9 +48,13 @@ MonoBehaviour:
   battlePanel: {fileID: 0}
   handRoot: {fileID: 0}
   eventPanel: {fileID: 0}
+  campPanel: {fileID: 0}
+  shopPanel: {fileID: 0}
+  commonHealthView: {fileID: 0}
   mapScroll: {fileID: 0}
   mapTitle: {fileID: 0}
   nodes:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

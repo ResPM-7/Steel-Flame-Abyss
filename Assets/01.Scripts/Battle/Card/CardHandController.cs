@@ -12,14 +12,14 @@ public class CardHandController : MonoBehaviour
     [SerializeField] private CardView[] slots;
 
 #if UNITY_EDITOR
-    [Header("에디터 테스트 패널")]
-    [SerializeField] private RectTransform testPanelTarget;
-    private readonly Vector3[] targetCorners = new Vector3[4];
-    private Canvas testCanvas;
-    private int discardNumber = 1;
-    private bool isCheatPanelOpen;
-    private string cardIdInput = "10001";
-    private string cheatMessage = "카드 ID를 입력해 손패에 추가할 수 있습니다.";
+    //손패 빈자리 확인과 치트 카드 추가
+    public bool TryAddCheatCard(int cardId)
+    {
+        CacheSlots();
+        return Application.isPlaying && IsReady && slots != null && HandCount < slots.Length &&
+            deckManager.TryAddCardToHand(cardId, out _);
+    }
+
 #endif
 
     public bool IsReady => deckManager != null && deckManager.IsReady;
@@ -49,17 +49,6 @@ public class CardHandController : MonoBehaviour
         cardPlayController.DescriptionsChanged += RefreshDescriptions;
     }
 
-    //에디터 치트 패널의 기준 캔버스 저장
-    private void Start()
-    {
-        #region 에디터 전용 치트창
-#if UNITY_EDITOR
-        if (testPanelTarget != null)
-            testCanvas = testPanelTarget.GetComponentInParent<Canvas>();
-#endif
-        #endregion
-    }
-
     //컴포넌트 제거 시 덱과 설명 변경 이벤트 연결 해제
     private void OnDestroy()
     {
@@ -68,111 +57,6 @@ public class CardHandController : MonoBehaviour
         if (cardPlayController != null)
             cardPlayController.DescriptionsChanged -= RefreshDescriptions;
     }
-    #region 에디터 전용 
-#if UNITY_EDITOR
-    //에디터 재생 중 적의 위쪽에 치트 버튼과 선택된 테스트 패널을 표시
-    private void OnGUI()
-    {
-        if (!Application.isPlaying || testPanelTarget == null ||
-            !testPanelTarget.gameObject.activeInHierarchy || testCanvas == null)
-            return;
-
-        testPanelTarget.GetWorldCorners(targetCorners);
-        var camera = testCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : testCanvas.worldCamera;
-        var top = RectTransformUtility.WorldToScreenPoint(camera, (targetCorners[1] + targetCorners[2]) * 0.5f);
-        float buttonWidth = 70f;
-        float buttonHeight = 24f;
-        float buttonX = Mathf.Clamp(top.x - buttonWidth * 0.5f, 4f, Screen.width - buttonWidth - 4f);
-        float buttonY = Mathf.Max(4f, Screen.height - top.y - buttonHeight - 6f);
-
-        GUI.depth = -100;
-        if (!isCheatPanelOpen)
-        {
-            if (GUI.Button(new Rect(buttonX, buttonY, buttonWidth, buttonHeight), "치트"))
-                isCheatPanelOpen = true;
-            return;
-        }
-
-        float panelWidth = Mathf.Min(260f, Screen.width - 8f);
-        float panelX = Mathf.Clamp(top.x - panelWidth * 0.5f, 4f, Screen.width - panelWidth - 4f);
-        float panelHeight = 156f;
-        float panelY = Mathf.Max(4f, buttonY - panelHeight - 4f);
-        DrawCheatPanel(new Rect(panelX, panelY, panelWidth, panelHeight));
-    }
-
-    //열린 치트 패널에 카드 테스트 상태와 실행 버튼을 표시
-    private void DrawCheatPanel(Rect panelRect)
-    {
-        GUILayout.BeginArea(panelRect, GUI.skin.box);
-        GUILayout.BeginHorizontal();
-        GUILayout.Label($"카드 치트  손패 {HandCount} / 뽑기 {DrawCount} / 버림 {DiscardCount}");
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("닫기", GUILayout.Width(44f), GUILayout.Height(20f)))
-        {
-            isCheatPanelOpen = false;
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
-            return;
-        }
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("초기화", GUILayout.Height(24f))) ResetTestDeck();
-        bool previousEnabled = GUI.enabled;
-        GUI.enabled = previousEnabled && IsReady;
-        if (GUILayout.Button("1장 드로우", GUILayout.Height(24f))) DrawCards(1);
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        discardNumber = Mathf.Clamp(discardNumber, 1, Mathf.Max(1, HandCount));
-        if (GUILayout.Button("◀", GUILayout.Width(24f), GUILayout.Height(24f)))
-            discardNumber = Mathf.Max(1, discardNumber - 1);
-        GUILayout.Label($"{discardNumber}번", GUILayout.Width(32f));
-        if (GUILayout.Button("▶", GUILayout.Width(24f), GUILayout.Height(24f)))
-            discardNumber = Mathf.Min(Mathf.Max(1, HandCount), discardNumber + 1);
-        GUI.enabled = previousEnabled && IsReady && HandCount > 0;
-        if (GUILayout.Button("버리기", GUILayout.Height(24f))) DiscardAt(discardNumber - 1);
-        if (GUILayout.Button("전체 버리기", GUILayout.Height(24f))) DiscardAll();
-        GUI.enabled = previousEnabled;
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("카드 ID", GUILayout.Width(48f));
-        cardIdInput = GUILayout.TextField(cardIdInput, 10, GUILayout.Height(24f));
-        GUI.enabled = previousEnabled && IsReady;
-        if (GUILayout.Button("손패에 추가", GUILayout.Width(82f), GUILayout.Height(24f)))
-            AddCardToHandFromCheatInput();
-        GUI.enabled = previousEnabled;
-        GUILayout.EndHorizontal();
-        GUILayout.Label(cheatMessage);
-        GUILayout.EndArea();
-    }
-
-    //입력한 카드 ID를 조회해 손패에 바로 추가
-    private void AddCardToHandFromCheatInput()
-    {
-        if (!int.TryParse(cardIdInput, out int cardId))
-        {
-            cheatMessage = "카드 ID는 숫자로 입력해 주세요.";
-            return;
-        }
-
-        if (HandCount >= slots.Length)
-        {
-            cheatMessage = $"손패가 {slots.Length}장으로 가득 찼습니다.";
-            return;
-        }
-
-        if (!deckManager.TryAddCardToHand(cardId, out CardInstance card))
-        {
-            cheatMessage = $"카드 ID {cardId}를 찾을 수 없습니다.";
-            return;
-        }
-
-        cheatMessage = $"{card.Data.DisplayName} 카드를 손패에 추가했습니다.";
-        LogState($"{card.Data.DisplayName} 손패 추가");
-    }
-#endif
 
     //전투 덱 관리자에 테스트 덱 초기화 요청
     public void ResetTestDeck()
@@ -313,5 +197,4 @@ public class CardHandController : MonoBehaviour
         Debug.Log($"[카드 테스트] {action} / 손패 {HandCount}, 뽑기 {DrawCount}, 버림 {DiscardCount}", this);
     }
 
-    #endregion 에디터 전용 치트
 }

@@ -18,6 +18,14 @@ public class BattleInstaller : MonoBehaviour
     private CardPlayController cardPlayController;
     private CardRewardPresenter cardRewardPresenter;
 
+#if UNITY_EDITOR
+    //통합 에디터 치트창에 전투와 세션 의존성 주입
+    public void InjectEditorCheats(EditorCheatPanel view, CoinModel coins, OwnedDeckModel ownedDeck)
+    {
+        view.Inject(dataProvider, participants, handController, coins, ownedDeck);
+    }
+#endif
+
     //게임 세션의 보유 덱과 보상 및 목록 화면 연결
     public void InjectOwnedDeck(OwnedDeckModel ownedDeck)
     {

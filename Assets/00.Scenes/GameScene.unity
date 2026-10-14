@@ -461,6 +461,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
+--- !u!114 &695813706 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8023501223693468197, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+  m_PrefabInstance: {fileID: 3580743571891636273}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
 --- !u!224 &699133597 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6169755409513510045, guid: a545694df970d004a8388195d985fa12, type: 3}
@@ -676,11 +687,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!224 &1874962302 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6593582708791436491, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
-  m_PrefabInstance: {fileID: 3580743571891636273}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1886555513 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2103215989110835503, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
@@ -782,6 +788,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &2007011821 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2758484529604671576, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+  m_PrefabInstance: {fileID: 3580743571891636273}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c504e2ffc7daf2e4d87f60c4f8640859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopPanelView
 --- !u!114 &2026639622 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
@@ -1185,10 +1202,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_Overlay
       objectReference: {fileID: 0}
-    - target: {fileID: 2360350416530800748, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
-      propertyPath: testPanelTarget
-      value: 
-      objectReference: {fileID: 1874962302}
     - target: {fileID: 3917842493228733841, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1343,6 +1356,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 213295548}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
+      propertyPath: shopPanel
+      value: 
+      objectReference: {fileID: 2007011821}
+    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: eventPanel
       value: 
       objectReference: {fileID: 42510138}
@@ -1368,6 +1385,10 @@ PrefabInstance:
       objectReference: {fileID: 1886555513}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: 'nodes.Array.data[2]'
+      value: 
+      objectReference: {fileID: 695813706}
+    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
+      propertyPath: 'nodes.Array.data[3]'
       value: 
       objectReference: {fileID: 1796323587}
     - target: {fileID: 5425657408461325272, guid: dce490f85d2985242b965680f82626ab, type: 3}

@@ -259,7 +259,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  testPanelTarget: {fileID: 0}
 --- !u!1 &8920848058882375384
 GameObject:
   m_ObjectHideFlags: 0

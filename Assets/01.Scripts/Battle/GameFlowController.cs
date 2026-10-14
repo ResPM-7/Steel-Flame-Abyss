@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete, Camp }
+public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete, Camp, Shop }
 
 //고정 맵과 전투 및 보상 화면 전환 관리
 [DefaultExecutionOrder(100)]
@@ -13,6 +13,7 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private GameObject handRoot;
     [SerializeField] private GameObject eventPanel;
     [SerializeField] private CampPanelView campPanel;
+    [SerializeField] private ShopPanelView shopPanel;
     [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
     [SerializeField] private TMP_Text mapTitle;
@@ -26,7 +27,16 @@ public class GameFlowController : MonoBehaviour
     private BattleParticipants participants;
     private MapProgressModel progress;
     private bool initialized;
+    private ShopPresenter shopPresenter;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
+
+    //게임 세션의 코인과 보유 덱을 상점에 주입
+    public void InjectShop(CoinModel coins, OwnedDeckModel ownedDeck)
+    {
+        shopPresenter?.Dispose();
+        shopPresenter = shopPanel != null && shopPanel.IsConfigured
+            ? new ShopPresenter(coins, ownedDeck, shopPanel) : null;
+    }
 
     //맵 진행 데이터와 전투 기능 및 공통 체력 화면 연결
     public void Inject(IGameDataProvider provider, IBattleDeckManager manager, BattleParticipants battleParticipants)
@@ -64,7 +74,7 @@ public class GameFlowController : MonoBehaviour
         mapScroll.verticalNormalizedPosition = 0f;
     }
 
-    //화면 연결과 지점 중복 및 전투 데이터 확인
+    //화면 연결과 지점 중복 및 전투와 상점 데이터 확인
     private bool ValidateReferences()
     {
         if (data == null || !data.IsReady || deck == null || participants == null ||
@@ -90,19 +100,34 @@ public class GameFlowController : MonoBehaviour
                     return false;
                 }
             }
+            else if (node.NodeType == MapNodeType.Shop)
+            {
+                if (shopPresenter == null || shopPanel == null || !shopPanel.IsConfigured)
+                {
+                    Debug.LogError("[상점] Shop Panel과 카드 세 장 및 맵 버튼을 연결해 주세요", this);
+                    return false;
+                }
+            }
             else if (!data.TryGetEnemy(node.EnemyId, out _))
                 return false;
         }
         return true;
     }
 
-    //열린 지점 선택과 전투 및 이벤트 또는 캠프 진입
+    //열린 지점 선택과 전투 및 이벤트와 캠프 및 상점 진입
     private void SelectNode(int index)
     {
         if (!initialized || State != GameFlowState.Map || !progress.TryEnter(index))
             return;
         CloseCardList();
         MapNodeView node = nodes[index];
+        if (node.NodeType == MapNodeType.Shop)
+        {
+            State = GameFlowState.Shop;
+            SetPanels(false, false, false);
+            shopPresenter.Open(index, data.Database.Cards, participants.Player.Data.Class, CompleteShop);
+            return;
+        }
         if (node.NodeType == MapNodeType.Camp)
         {
             State = GameFlowState.Camp;
@@ -168,6 +193,14 @@ public class GameFlowController : MonoBehaviour
         ShowMap();
     }
 
+    //상점 종료와 다음 지점 개방
+    private void CompleteShop()
+    {
+        if (!initialized || State != GameFlowState.Shop || !progress.CompleteCurrent())
+            return;
+        ShowMap();
+    }
+
     //맵 복귀와 진행 상태 표시
     private void ShowMap()
     {
@@ -179,7 +212,7 @@ public class GameFlowController : MonoBehaviour
             nodes[i].Refresh(progress.CanEnter(i), i < progress.NextIndex);
     }
 
-    //현재 화면의 패널과 손패 및 전투 외 공통 체력 표시
+    //현재 화면의 패널과 상점 및 손패와 전투 외 공통 체력 표시
     private void SetPanels(bool map, bool battle, bool eventVisible)
     {
         mapPanel.SetActive(map);
@@ -191,6 +224,8 @@ public class GameFlowController : MonoBehaviour
             eventPanel.SetActive(eventVisible);
         if (campPanel != null)
             campPanel.gameObject.SetActive(false);
+        if (shopPanel != null)
+            shopPanel.Close();
     }
 
     //화면 전환 시 열린 카드 목록 닫기
@@ -200,9 +235,10 @@ public class GameFlowController : MonoBehaviour
             cardListPanel.Close();
     }
 
-    //전투 결과와 지점 입력 구독 해제
+    //전투 결과와 상점 및 지점 입력 구독 해제
     private void OnDestroy()
     {
+        shopPresenter?.Dispose();
         if (participants != null)
             participants.ResultChanged -= OnBattleResult;
         if (nodes == null)
