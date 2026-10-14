@@ -8,6 +8,7 @@ public class CardData : GameDataEntry
     [SerializeField] private CardType cardType;
     [SerializeField] private DataRarity rarity;
     [Min(0)] [SerializeField] private int cost;
+    [Min(0)] [SerializeField] private int shopPrice;
     [TextArea(2, 5)] [SerializeField] private string description;
     [TextArea(2, 5)] [SerializeField] private string upgradedDescription;
     [SerializeField] private List<EffectSpec> effects = new();
@@ -19,6 +20,7 @@ public class CardData : GameDataEntry
     public CardType CardType => cardType;
     public DataRarity Rarity => rarity;
     public int Cost => cost;
+    public int ShopPrice => shopPrice;
     public string Description => description;
     public string UpgradedDescription => upgradedDescription;
     public IReadOnlyList<EffectSpec> Effects => effects;
@@ -27,15 +29,18 @@ public class CardData : GameDataEntry
     public Sprite Artwork => artwork;
 
 #if UNITY_EDITOR
-    //검증이 끝난 카드 시트 한 행을 이 서브에셋에 반영
+    //검증된 카드 시트의 기본 정보와 상점 가격을 서브에셋에 반영
     public void EditorApply(CharacterClass newOwner, CardType newCardType, DataRarity newRarity, int newCost,
         string newDescription, string newUpgradedDescription, List<EffectSpec> newEffects,
-        List<EffectSpec> newUpgradedEffects, List<string> newKeywords)
+        List<EffectSpec> newUpgradedEffects, List<string> newKeywords, int newShopPrice = 0)
     {
+        if (newShopPrice < 0)
+            throw new System.ArgumentOutOfRangeException(nameof(newShopPrice));
         owner = newOwner;
         cardType = newCardType;
         rarity = newRarity;
         cost = newCost;
+        shopPrice = newShopPrice;
         description = newDescription;
         upgradedDescription = newUpgradedDescription;
         effects = newEffects;

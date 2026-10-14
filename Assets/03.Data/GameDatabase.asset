@@ -67,6 +67,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
     \uD654\uC0C1 burn\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -148,6 +149,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
+  shopPrice: 50
   description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 burn\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -177,6 +179,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
     \uC815\uC2E0\uBD84\uC5F4 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -212,6 +215,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uBC29\uC5B4\uB3C4\uB97C shield  \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -297,6 +301,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uBC29\uC5B4\uB3C4\uB97C shield \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -326,6 +331,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uD798\uC744 power \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -442,6 +448,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 2
+  shopPrice: 50
   description: "\uB300\uC0C1\uC758 \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744 2\uBC30\uB85C
     \uB9CC\uB4ED\uB2C8\uB2E4."
   upgradedDescription: 
@@ -496,6 +503,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -525,6 +533,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  shopPrice: 40
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 mindFracture\uC744
     \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -554,7 +563,7 @@ MonoBehaviour:
   characterClass: 1
   maxHealth: 80
   startingEnergy: 3
-  startingDeckIds: 1127000012270000
+  startingDeckIds: 112700001227000013270000
   cardPoolIds: 112700001227000013270000419c0000
   resourceName: "\uBD84\uB178"
   portrait: {fileID: 0}
@@ -576,6 +585,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 2
   cost: 1
+  shopPrice: 80
   description: "\uCE74\uB4DC\uB97C draw\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:

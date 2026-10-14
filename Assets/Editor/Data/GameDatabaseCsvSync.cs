@@ -210,6 +210,7 @@ internal static class GameDatabaseCsvSync
         return text;
     }
 
+    //카드 시트의 기본 정보와 상점 가격 검증
     private static List<CardRow> ReadCards(CsvTable table)
     {
         // 기존 Total Card 탭은 기획자가 쓰던 열 이름을 유지하고 Unity 형식으로 변환합니다.
@@ -217,7 +218,7 @@ internal static class GameDatabaseCsvSync
                 "effect1", "value1", "effect2", "value2"))
             return ReadTotalCardRows(table);
 
-        table.Require("Id", "Name", "Character", "Type", "Rarity", "Cost", "Description", "UpgradedDescription", "Effects", "UpgradedEffects", "Keywords");
+        table.Require("Id", "Name", "Character", "Type", "Rarity", "Cost", "ShopPrice", "Description", "UpgradedDescription", "Effects", "UpgradedEffects", "Keywords");
         var result = new List<CardRow>();
         for (var row = 0; row < table.RowCount; row++)
         {
@@ -230,6 +231,7 @@ internal static class GameDatabaseCsvSync
                 Type = EnumValue<CardType>(table, row, "Type"),
                 Rarity = EnumValue<DataRarity>(table, row, "Rarity"),
                 Cost = NonNegativeInt(table, row, "Cost"),
+                ShopPrice = NonNegativeInt(table, row, "ShopPrice"),
                 Description = table.Get(row, "Description"),
                 UpgradedDescription = table.Get(row, "UpgradedDescription"),
                 Effects = Effects(table, row, "Effects"),
@@ -241,8 +243,10 @@ internal static class GameDatabaseCsvSync
         return result;
     }
 
+    //기획 카드 시트의 기본 정보와 상점 가격 변환
     private static List<CardRow> ReadTotalCardRows(CsvTable table)
     {
+        table.Require("shopPrice");
         var result = new List<CardRow>();
         for (var row = 0; row < table.RowCount; row++)
         {
@@ -266,6 +270,7 @@ internal static class GameDatabaseCsvSync
                 Type = EnumValue<CardType>(table, row, "cardType"),
                 Rarity = EnumValue<DataRarity>(table, row, "rarity"),
                 Cost = NonNegativeInt(table, row, "cost"),
+                ShopPrice = NonNegativeInt(table, row, "shopPrice"),
                 Description = table.Has("description") ? table.Get(row, "description") : string.Empty,
                 UpgradedDescription = string.Empty,
                 Effects = effects,
@@ -503,6 +508,7 @@ internal static class GameDatabaseCsvSync
     private static string ProjectIdHeader(CsvTable table, string specificHeader) =>
         table.Has(specificHeader) ? specificHeader : "Id";
 
+    //검증된 시트 정보와 카드 상점 가격을 데이터베이스에 반영
     private static void Apply(GameDatabase database, ImportData input)
     {
         // Script 연결이 완전히 끊긴 서브에셋은 Unity API에서도 null이므로,
@@ -523,7 +529,7 @@ internal static class GameDatabaseCsvSync
             var asset = GetOrCreate<CardData>(database, existing, row.Id);
             asset.EditorSetIdentity(row.Id, row.Name);
             asset.EditorApply(row.Owner, row.Type, row.Rarity, row.Cost, row.Description,
-                row.UpgradedDescription, row.Effects, row.UpgradedEffects, row.Keywords);
+                row.UpgradedDescription, row.Effects, row.UpgradedEffects, row.Keywords, row.ShopPrice);
             retained.Add(asset);
             EditorUtility.SetDirty(asset);
             return asset;
@@ -841,6 +847,7 @@ internal static class GameDatabaseCsvSync
         public CardType Type;
         public DataRarity Rarity;
         public int Cost;
+        public int ShopPrice;
         public List<EffectSpec> Effects, UpgradedEffects;
         public List<string> Keywords;
     }
