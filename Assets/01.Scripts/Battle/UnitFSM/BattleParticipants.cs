@@ -70,6 +70,23 @@ public class BattleParticipants : MonoBehaviour
         ResultChanged?.Invoke(Result);
     }
 
+    //첫 전투 전 캠프에서 사용할 플레이어 상태 준비
+    public bool PrepareMapPlayer(int characterId)
+    {
+        if (Player != null)
+            return Player.Stats.IsAlive;
+        if (dataProvider == null || !dataProvider.TryGetCharacter(characterId, out var character) ||
+            playerView == null || playerEnergyStatus == null)
+            return false;
+        Player = new PlayerBattleState(character);
+        Player.Changed += RefreshPlayer;
+        Player.Stats.Changed += RefreshPlayer;
+        Player.Stats.Changed += CheckBattleResult;
+        playerView.Bind(character.DisplayName, character.Portrait, Player.Stats);
+        RefreshPlayer();
+        return true;
+    }
+
     //전투 중 넘패드 테스트 입력 처리
     private void Update()
     {

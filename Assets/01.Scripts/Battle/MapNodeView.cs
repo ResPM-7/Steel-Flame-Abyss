@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum MapNodeType { Battle, Event, Boss }
+public enum MapNodeType { Battle, Event, Boss, Camp }
 
 //맵 지점 종류와 선택 입력 및 진행 색상 표시
 public class MapNodeView : MonoBehaviour

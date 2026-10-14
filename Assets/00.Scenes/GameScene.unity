@@ -466,6 +466,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6169755409513510045, guid: a545694df970d004a8388195d985fa12, type: 3}
   m_PrefabInstance: {fileID: 1417623584441045050}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &770949559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3929482081321413934, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+  m_PrefabInstance: {fileID: 3580743571891636273}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc508e802c45469fb5df3e905b9e089b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
 --- !u!1 &810999598
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +519,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a73fc2f5cbee94aa3fd4f0ecf931a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+--- !u!114 &841454715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1263053270374778937, guid: ffa7207662ba5be459eeb260ea073d94, type: 3}
+  m_PrefabInstance: {fileID: 3580743571891636273}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f36b1e2202b42869f8e901e4d1bc895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CampPanelView
 --- !u!114 &1118476882 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7031225271917335692, guid: 78d9e5ad8c397e64ca8b0b9586eb5562, type: 3}
@@ -1313,6 +1335,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1867561120}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
+      propertyPath: campPanel
+      value: 
+      objectReference: {fileID: 841454715}
+    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: mapScroll
       value: 
       objectReference: {fileID: 213295548}
@@ -1328,6 +1354,10 @@ PrefabInstance:
       propertyPath: cardListPanel
       value: 
       objectReference: {fileID: 1709218029}
+    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
+      propertyPath: commonHealthView
+      value: 
+      objectReference: {fileID: 770949559}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: 'nodes.Array.data[0]'
       value: 

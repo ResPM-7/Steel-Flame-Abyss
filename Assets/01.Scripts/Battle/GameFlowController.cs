@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete }
+public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete, Camp }
 
 //고정 맵과 전투 및 보상 화면 전환 관리
 [DefaultExecutionOrder(100)]
@@ -12,6 +12,8 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private GameObject battlePanel;
     [SerializeField] private GameObject handRoot;
     [SerializeField] private GameObject eventPanel;
+    [SerializeField] private CampPanelView campPanel;
+    [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
     [SerializeField] private TMP_Text mapTitle;
     [Tooltip("아래 지점부터 위 지점 순서로 연결")]
@@ -26,7 +28,7 @@ public class GameFlowController : MonoBehaviour
     private bool initialized;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
 
-    //맵 진행에 필요한 데이터와 전투 기능 주입
+    //맵 진행 데이터와 전투 기능 및 공통 체력 화면 연결
     public void Inject(IGameDataProvider provider, IBattleDeckManager manager, BattleParticipants battleParticipants)
     {
         if (provider == null || manager == null || battleParticipants == null)
@@ -37,6 +39,8 @@ public class GameFlowController : MonoBehaviour
         deck = manager;
         participants = battleParticipants;
         participants.ResultChanged += OnBattleResult;
+        if (commonHealthView != null)
+            commonHealthView.Inject(participants);
     }
 
     //고정 경로 준비와 시작 지점 표시
@@ -47,7 +51,7 @@ public class GameFlowController : MonoBehaviour
             Debug.LogError("[맵] 설치자와 화면 및 아래부터 정렬한 지점 목록을 연결해 주세요", this);
             return;
         }
-        if (!deck.BeginBattle())
+        if (!participants.PrepareMapPlayer(playerId) || !deck.BeginBattle())
             return;
         progress = new MapProgressModel(nodes.Length);
         for (int i = 0; i < nodes.Length; i++)
@@ -78,19 +82,34 @@ public class GameFlowController : MonoBehaviour
                 if (eventPanel == null)
                     return false;
             }
+            else if (node.NodeType == MapNodeType.Camp)
+            {
+                if (campPanel == null || !campPanel.IsConfigured)
+                {
+                    Debug.LogError("[캠프] Camp Panel과 상태 텍스트 및 휴식과 계속 버튼을 연결해 주세요", this);
+                    return false;
+                }
+            }
             else if (!data.TryGetEnemy(node.EnemyId, out _))
                 return false;
         }
         return true;
     }
 
-    //열린 지점 선택과 전투 또는 이벤트 진입
+    //열린 지점 선택과 전투 및 이벤트 또는 캠프 진입
     private void SelectNode(int index)
     {
         if (!initialized || State != GameFlowState.Map || !progress.TryEnter(index))
             return;
         CloseCardList();
         MapNodeView node = nodes[index];
+        if (node.NodeType == MapNodeType.Camp)
+        {
+            State = GameFlowState.Camp;
+            SetPanels(false, false, false);
+            campPanel.Open(participants.Player.Stats, CompleteCamp);
+            return;
+        }
         if (node.NodeType == MapNodeType.Event)
         {
             State = GameFlowState.Event;
@@ -141,6 +160,14 @@ public class GameFlowController : MonoBehaviour
         ShowMap();
     }
 
+    //캠프 휴식 완료와 다음 지점 개방
+    private void CompleteCamp()
+    {
+        if (!initialized || State != GameFlowState.Camp || !progress.CompleteCurrent())
+            return;
+        ShowMap();
+    }
+
     //맵 복귀와 진행 상태 표시
     private void ShowMap()
     {
@@ -152,14 +179,18 @@ public class GameFlowController : MonoBehaviour
             nodes[i].Refresh(progress.CanEnter(i), i < progress.NextIndex);
     }
 
-    //현재 화면에 필요한 패널과 손패 표시
+    //현재 화면의 패널과 손패 및 전투 외 공통 체력 표시
     private void SetPanels(bool map, bool battle, bool eventVisible)
     {
         mapPanel.SetActive(map);
         battlePanel.SetActive(battle);
         handRoot.SetActive(battle);
+        if (commonHealthView != null)
+            commonHealthView.gameObject.SetActive(!battle);
         if (eventPanel != null)
             eventPanel.SetActive(eventVisible);
+        if (campPanel != null)
+            campPanel.gameObject.SetActive(false);
     }
 
     //화면 전환 시 열린 카드 목록 닫기
