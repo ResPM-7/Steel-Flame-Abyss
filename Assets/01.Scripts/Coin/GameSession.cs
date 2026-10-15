@@ -8,7 +8,8 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     private readonly CoinModel coins = new CoinModel();
     private readonly OwnedDeckModel ownedDeck = new OwnedDeckModel();
     private readonly RunProgressModel run = new RunProgressModel();
-    public bool IsLoading { get; private set; }
+    private SceneMenuActions sceneLoader;
+    public bool IsLoading => sceneLoader != null && sceneLoader.IsLoading;
 
     //첫 씬 로드 전 중복 없는 게임 세션 생성
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -18,16 +19,26 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
         new GameObject("GameSession").AddComponent<GameSession>();
     }
 
-    //게임 세션 유지와 씬 로드 이벤트 연결
+    //게임 세션 유지와 공통 씬 로더 및 로드 이벤트 연결
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        sceneLoader = gameObject.AddComponent<SceneMenuActions>();
+        sceneLoader.InjectNewGameAction(ResetRun);
         SceneManager.sceneLoaded += InjectScene;
     }
 
     //로드된 씬의 세션 데이터와 전투 및 맵과 메뉴 연결
     private void InjectScene(Scene scene, LoadSceneMode mode)
     {
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            foreach (SceneMenuActions menu in root.GetComponentsInChildren<SceneMenuActions>(true))
+            {
+                menu.InjectNewGameAction(ResetRun);
+                menu.InjectSceneLoader(sceneLoader);
+            }
+        }
         foreach (GameObject root in scene.GetRootGameObjects())
         {
             foreach (CoinInstaller installer in root.GetComponentsInChildren<CoinInstaller>(true))
@@ -38,8 +49,6 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
                 flow.InjectRun(run, coins, ownedDeck, this);
             foreach (BattleSceneController battle in root.GetComponentsInChildren<BattleSceneController>(true))
                 battle.Inject(run, this);
-            foreach (SceneMenuActions menu in root.GetComponentsInChildren<SceneMenuActions>(true))
-                menu.InjectNewGameAction(ResetRun);
         }
 #if UNITY_EDITOR
         InjectEditorCheats(scene);
@@ -47,13 +56,14 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     }
 
     //전투 대상 저장과 비동기 전투 씬 이동
-    public bool EnterBattle(int enemyId, string battleScenePath, string mapScenePath)
+    public bool EnterBattle(int enemyId)
     {
         if (IsLoading || run.Health == null || !run.Health.IsAlive || run.HasPendingBattle ||
-            run.Map == null || !run.Map.IsVisiting || !CanLoad(battleScenePath) || !CanLoad(mapScenePath))
+            run.Map == null || !run.Map.IsVisiting || !sceneLoader.CanLoad(sceneLoader.BattleScenePath) ||
+            !sceneLoader.CanLoad(sceneLoader.MapScenePath))
             return false;
-        run.SetBattle(enemyId, mapScenePath);
-        if (LoadScene(battleScenePath)) return true;
+        run.SetBattle(enemyId);
+        if (sceneLoader.TryLoadScene(sceneLoader.BattleScenePath)) return true;
         run.ClearBattle();
         return false;
     }
@@ -62,51 +72,12 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     public bool ReturnToMap()
     {
         if (IsLoading || !run.HasPendingBattle || run.Health == null || !run.Health.IsAlive ||
-            (run.Map != null && (!run.Map.IsVisiting || run.Map.IsFailed)) || !CanLoad(run.MapScenePath))
+            (run.Map != null && (!run.Map.IsVisiting || run.Map.IsFailed)) || !sceneLoader.CanLoad(sceneLoader.MapScenePath))
             return false;
-        if (!LoadScene(run.MapScenePath)) return false;
+        if (!sceneLoader.TryLoadScene(sceneLoader.MapScenePath)) return false;
         run.Map?.CompleteCurrent();
         run.ClearBattle();
         return true;
-    }
-
-    //빌드 목록의 씬 경로 확인
-    private bool CanLoad(string path)
-    {
-        if (!string.IsNullOrEmpty(path) && Application.CanStreamedLevelBeLoaded(path)) return true;
-        Debug.LogError($"[씬 이동] 빌드 씬 목록과 경로를 확인해 주세요: {path}", this);
-        return false;
-    }
-
-    //기존 씬 해제와 중복 요청을 막는 비동기 로드
-    private bool LoadScene(string path)
-    {
-        IsLoading = true;
-        Time.timeScale = 1f;
-        try
-        {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(path, LoadSceneMode.Single);
-            if (operation == null)
-            {
-                IsLoading = false;
-                return false;
-            }
-            operation.completed += OnSceneLoaded;
-            return true;
-        }
-        catch (System.Exception exception)
-        {
-            IsLoading = false;
-            Debug.LogException(exception, this);
-            return false;
-        }
-    }
-
-    //씬 로드 완료 후 중복 입력 잠금 해제
-    private void OnSceneLoaded(AsyncOperation operation)
-    {
-        operation.completed -= OnSceneLoaded;
-        IsLoading = false;
     }
 
 #if UNITY_EDITOR

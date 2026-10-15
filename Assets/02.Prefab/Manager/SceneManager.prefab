@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneMenuActions
   titleSceneIndex: 0
-  gameSceneIndex: 1
+  mapSceneIndex: 1
+  battleSceneIndex: 2

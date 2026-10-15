@@ -7,7 +7,6 @@ public class RunProgressModel
     public CombatantState Health { get; private set; }
     public MapProgressModel Map { get; private set; }
     public int PendingEnemyId { get; private set; }
-    public string MapScenePath { get; private set; }
     public bool HasPendingBattle => PendingEnemyId > 0;
     public float MapScrollX { get; private set; }
     public float MapScrollY { get; private set; }
@@ -38,11 +37,10 @@ public class RunProgressModel
         if (Map == null) Map = new MapProgressModel(nodeCount);
     }
 
-    //전투 대상과 복귀 씬 경로 저장
-    public void SetBattle(int enemyId, string mapScenePath)
+    //전투 대상 저장
+    public void SetBattle(int enemyId)
     {
         PendingEnemyId = enemyId;
-        MapScenePath = mapScenePath;
     }
 
     //전투 체력만 저장하고 방어도와 일시 효과 제외
@@ -65,7 +63,6 @@ public class RunProgressModel
         Health = null;
         Map = null;
         PendingEnemyId = 0;
-        MapScenePath = null;
         MapScrollX = 0f;
         MapScrollY = 0f;
     }
@@ -76,8 +73,8 @@ public interface IRunSceneLoader
 {
     bool IsLoading { get; }
 
-    //전투 대상과 씬 경로의 비동기 이동 요청
-    bool EnterBattle(int enemyId, string battleScenePath, string mapScenePath);
+    //전투 대상의 비동기 이동 요청
+    bool EnterBattle(int enemyId);
 
     //승리 보상 완료 후 맵 씬 복귀 요청
     bool ReturnToMap();

@@ -11,7 +11,6 @@ public class BattleSceneController : MonoBehaviour
     [Header("배틀 씬 직접 실행 테스트")]
     [SerializeField] private int testPlayerId = 50001;
     [SerializeField] private int testEnemyId = 60001;
-    [SerializeField] private string mapScenePath = "Assets/00.Scenes/GameScene.unity";
     private RunProgressModel run;
     private IRunSceneLoader loader;
 
@@ -34,7 +33,7 @@ public class BattleSceneController : MonoBehaviour
         if (!run.HasPendingBattle)
         {
             run.PreparePlayer(dataProvider.GetCharacter(testPlayerId));
-            run.SetBattle(testEnemyId, mapScenePath);
+            run.SetBattle(testEnemyId);
         }
         participants.ResultChanged += OnResult;
         nextButton.onClick.AddListener(ContinueAfterReward);

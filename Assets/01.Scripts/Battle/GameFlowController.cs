@@ -10,7 +10,6 @@ public class GameFlowController : MonoBehaviour
 {
     [SerializeField] private GameDataProvider dataProvider;
     [SerializeField] private ObjectPoolManager objectPoolManager;
-    [SerializeField] private string battleScenePath = "Assets/00.Scenes/BattleScene.unity";
     [SerializeField] private GameObject mapPanel;
     [SerializeField] private GameObject eventPanel;
     [SerializeField] private CampPanelView campPanel;
@@ -134,7 +133,7 @@ public class GameFlowController : MonoBehaviour
             State = GameFlowState.Event;
             SetPanels(false, true);
         }
-        else if (sceneLoader.EnterBattle(node.EnemyId, battleScenePath, gameObject.scene.path))
+        else if (sceneLoader.EnterBattle(node.EnemyId))
         {
             State = GameFlowState.Battle;
         }

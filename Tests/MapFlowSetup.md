@@ -4,8 +4,9 @@
 
 | 파일 | 역할 |
 |---|---|
-| GameSession.cs | 세션 데이터 소유와 씬별 DI 및 비동기 씬 이동 |
-| RunProgressModel.cs | 체력과 맵 진행 및 선택 적과 복귀 경로 보관 |
+| GameSession.cs | 세션 데이터 소유와 씬별 DI 및 이동 요청 |
+| SceneMenuActions.cs | 타이틀과 맵 및 배틀 인덱스와 공통 비동기 로딩 |
+| RunProgressModel.cs | 체력과 맵 진행 및 선택 적 보관 |
 | GameFlowController.cs | 전투 객체 없이 맵과 상점 및 캠프 진행 |
 | BattleSceneController.cs | 전투 진입 정보 적용과 결과 저장 및 Next 처리 |
 | BattleInstaller.cs | 전투 씬 내부 의존성 연결과 자동 시작 순서 통일 |
@@ -20,24 +21,23 @@
 ## 씬 역할
 
 - TitleScene: 새 게임 시작과 종료
-- GameScene: 맵과 상점 및 캠프와 이벤트 및 공통 HP와 코인 및 보유 덱
+- MapScene: 맵과 상점 및 캠프와 이벤트 및 공통 HP와 코인 및 보유 덱
 - BattleScene: 전투 참가자와 손패 및 턴과 승패 및 카드와 코인 보상
 - GameSession: 자동 생성되는 DontDestroyOnLoad 객체 하나이며 코인과 보유 덱 및 RunProgressModel 소유
-- RunProgressModel: 현재 HP와 캐릭터 ID 및 맵 진행과 선택 적 ID와 복귀 씬 및 스크롤 위치 보관
+- RunProgressModel: 현재 HP와 캐릭터 ID 및 맵 진행과 선택 적 ID 및 스크롤 위치 보관
 - UI와 전투 컴포넌트 및 오브젝트 풀은 씬 로컬이며 세션에 저장하지 않음
 
 씬 이동은 LoadSceneAsync와 LoadSceneMode.Single 사용
-전투 진입 시 GameScene을 해제하고 보상 종료 시 BattleScene을 해제
+전투 진입 시 MapScene을 해제하고 보상 종료 시 BattleScene을 해제
 씬 전환마다 GC.Collect를 강제로 호출하지 않음
 진행 정보는 실행 중에만 유지하며 앱 종료 후 이어하기는 미구현
 
-## GameScene 연결
+## MapScene 연결
 
 GameFlowController에 다음 항목 연결
 
 - Data Provider: GameDataProvider
 - Object Pool Manager: 해당 씬 ObjectPoolManager
-- Battle Scene Path: Assets/00.Scenes/BattleScene.unity
 - Map Panel과 Event Panel 및 Camp Panel과 Shop Panel: 해당 화면
 - Common Health View: CommonHUD/Health
 - Map Scroll과 Map Title: 맵 스크롤과 제목
@@ -67,8 +67,9 @@ MapServices의 CoinInstaller는 Coin View만 연결
 
 ## 지점과 빌드 설정
 
-Build Profiles의 Scene List에 TitleScene과 GameScene 및 BattleScene 등록
-기존 타이틀 인덱스 0과 게임 인덱스 1을 유지하고 배틀은 마지막에 추가
+Build Profiles의 Scene List에 TitleScene 0과 MapScene 1 및 BattleScene 2 등록
+각 씬의 SceneManager에 있는 SceneMenuActions도 같은 인덱스로 설정
+해당 인덱스는 런타임 공통 로더에 주입되며 별도 씬 경로 입력은 불필요
 
 지점 이름이 아닌 MapNodeView의 Node Type이 실제 행동을 결정
 분리 작업 당시 저장된 설정은 다음과 같으며 사용자 설정을 그대로 보존
@@ -90,7 +91,7 @@ EventPanel 완료 버튼은 GameFlowController.CompleteEvent 연결
 1. TitleScene에서 새 게임 시작
 2. Battle 또는 Boss 타입 지점 선택 후 Hierarchy의 씬이 BattleScene인지 확인
 3. 피해를 받은 후 승리하고 코인과 카드 보상 수령
-4. Next로 GameScene 복귀 후 HP와 코인 및 덱 증가와 다음 지점 개방 확인
+4. Next로 MapScene 복귀 후 HP와 코인 및 덱 증가와 다음 지점 개방 확인
 5. 캠프 회복과 상점 방문 후 다음 전투에서 HP와 보유 덱 유지 확인
 6. 새 전투에서는 방어도와 힘 등 일시 효과 및 카드 더미가 초기화되는지 확인
 7. 보스 완료 후 지도 완료 표시 확인
@@ -103,8 +104,8 @@ EventPanel 완료 버튼은 GameFlowController.CompleteEvent 연결
 ## 자동 검사
 
 Tests/BattleSceneSmokeTests.cs는 Unity CLI run_script로 실행하는 플레이 모드 검사
-Main: 신선한 GameScene 실행에서 전투와 보상 및 캠프와 상점과 보스 왕복
-DefeatAndReset: GameScene 플레이 중 새 게임과 패배 및 타이틀 복귀 검사
+Main: 신선한 MapScene 실행에서 전투와 보상 및 캠프와 상점과 보스 왕복
+DefeatAndReset: MapScene 플레이 중 새 게임과 패배 및 타이틀 복귀 검사
 DirectBattle: BattleScene 직접 플레이에서 승리 후 맵 진입 검사
 지점 타입은 검사 중에만 임시로 변경하고 씬 파일에 저장하지 않음
 

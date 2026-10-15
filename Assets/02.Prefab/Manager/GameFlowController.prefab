@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8140914716c4463b102f2e13240d8f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
+  dataProvider: {fileID: 0}
+  objectPoolManager: {fileID: 0}
   mapPanel: {fileID: 0}
-  battlePanel: {fileID: 0}
-  handRoot: {fileID: 0}
   eventPanel: {fileID: 0}
   campPanel: {fileID: 0}
   shopPanel: {fileID: 0}
@@ -60,3 +60,4 @@ MonoBehaviour:
   - {fileID: 0}
   playerId: 50001
   cardListPanel: {fileID: 0}
+  startingDeckIds: 112700001127000011270000112700001127000012270000122700001227000012270000122700001327000013270000
