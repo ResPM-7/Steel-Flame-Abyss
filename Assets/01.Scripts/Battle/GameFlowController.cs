@@ -11,23 +11,19 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private GameDataProvider dataProvider;
     [SerializeField] private ObjectPoolManager objectPoolManager;
     [SerializeField] private GameObject mapPanel;
-    [SerializeField] private GameObject eventPanel;
-    [SerializeField] private CampPanelView campPanel;
-    [SerializeField] private ShopPanelView shopPanel;
+    [SerializeField] private MapPopupManager popups;
     [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
     [SerializeField] private TMP_Text mapTitle;
     [Tooltip("진행할 지점 순서로 연결")]
     [SerializeField] private MapNodeView[] nodes;
     [SerializeField] private int playerId = 50001;
-    [SerializeField] private CardListPanelView cardListPanel;
     [Tooltip("비어 있으면 캐릭터 SO의 시작 덱 사용")]
     [SerializeField] private int[] startingDeckIds;
 
     private RunProgressModel run;
     private OwnedDeckModel ownedDeck;
     private IRunSceneLoader sceneLoader;
-    private ShopPresenter shopPresenter;
     private bool initialized;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
     public IGameDataProvider Data => dataProvider;
@@ -38,11 +34,7 @@ public class GameFlowController : MonoBehaviour
         run = model;
         ownedDeck = cards;
         sceneLoader = loader;
-        shopPresenter?.Dispose();
-        shopPresenter = shopPanel != null && shopPanel.IsConfigured
-            ? new ShopPresenter(coins, cards, shopPanel) : null;
-        if (cardListPanel != null)
-            cardListPanel.Inject(cards, dataProvider, null, objectPoolManager);
+        if (popups != null) popups.Inject(model, coins, cards, dataProvider, objectPoolManager);
     }
 
     //보유 덱과 체력 준비 및 기존 맵 진행 복원
@@ -82,7 +74,7 @@ public class GameFlowController : MonoBehaviour
     private bool ValidateReferences()
     {
         if (dataProvider == null || !dataProvider.IsReady || run == null || ownedDeck == null ||
-            sceneLoader == null || objectPoolManager == null || mapPanel == null ||
+            sceneLoader == null || objectPoolManager == null || mapPanel == null || popups == null || !popups.IsConfigured ||
             mapScroll == null || mapScroll.content == null || mapTitle == null ||
             nodes == null || nodes.Length == 0 || !dataProvider.TryGetCharacter(playerId, out _))
             return false;
@@ -90,19 +82,8 @@ public class GameFlowController : MonoBehaviour
         foreach (MapNodeView node in nodes)
         {
             if (node == null || !node.IsConfigured || !unique.Add(node)) return false;
-            if (node.NodeType == MapNodeType.Event)
-            {
-                if (eventPanel == null) return false;
-            }
-            else if (node.NodeType == MapNodeType.Camp)
-            {
-                if (campPanel == null || !campPanel.IsConfigured) return false;
-            }
-            else if (node.NodeType == MapNodeType.Shop)
-            {
-                if (shopPresenter == null) return false;
-            }
-            else if (!dataProvider.TryGetEnemy(node.EnemyId, out _)) return false;
+            if ((node.NodeType == MapNodeType.Battle || node.NodeType == MapNodeType.Boss) &&
+                !dataProvider.TryGetEnemy(node.EnemyId, out _)) return false;
         }
         return true;
     }
@@ -118,20 +99,20 @@ public class GameFlowController : MonoBehaviour
         if (node.NodeType == MapNodeType.Shop)
         {
             State = GameFlowState.Shop;
-            SetPanels(false, false);
-            shopPresenter.Open(index, dataProvider.Database.Cards,
-                dataProvider.GetCharacter(run.PlayerId).Class, CompleteShop);
+            SetPanels(false);
+            popups.OpenShop(index, CompleteShop);
         }
         else if (node.NodeType == MapNodeType.Camp)
         {
             State = GameFlowState.Camp;
-            SetPanels(false, false);
-            campPanel.Open(run.Health, CompleteCamp);
+            SetPanels(false);
+            popups.OpenCamp(CompleteCamp);
         }
         else if (node.NodeType == MapNodeType.Event)
         {
             State = GameFlowState.Event;
-            SetPanels(false, true);
+            SetPanels(false);
+            popups.OpenEvent(index, CompleteEvent);
         }
         else if (sceneLoader.EnterBattle(node.EnemyId))
         {
@@ -174,32 +155,29 @@ public class GameFlowController : MonoBehaviour
         CloseCardList();
         State = run.Map.IsFailed ? GameFlowState.Defeat :
             run.Map.IsComplete ? GameFlowState.Complete : GameFlowState.Map;
-        SetPanels(true, false);
+        SetPanels(true);
         mapTitle.text = run.Map.IsFailed ? "진행 종료" : run.Map.IsComplete ? "지도 완료" : "지도";
         for (int i = 0; i < nodes.Length; i++)
             nodes[i].Refresh(run.Map.CanEnter(i), i < run.Map.NextIndex);
     }
 
-    //맵과 이벤트 및 비전투 패널 표시 전환
-    private void SetPanels(bool map, bool eventVisible)
+    //맵 표시 전환과 생성된 팝업 닫기
+    private void SetPanels(bool map)
     {
         mapPanel.SetActive(map);
         if (commonHealthView != null) commonHealthView.gameObject.SetActive(true);
-        if (eventPanel != null) eventPanel.SetActive(eventVisible);
-        if (campPanel != null) campPanel.gameObject.SetActive(false);
-        if (shopPanel != null) shopPanel.Close();
+        popups.CloseAll();
     }
 
     //화면 전환 시 카드 목록 닫기
     private void CloseCardList()
     {
-        if (cardListPanel != null) cardListPanel.Close();
+        if (popups != null) popups.CloseDeck();
     }
 
     //상점과 맵 지점 입력 구독 해제
     private void OnDestroy()
     {
-        shopPresenter?.Dispose();
         if (nodes == null) return;
         foreach (MapNodeView node in nodes)
             if (node != null) node.Unbind();
