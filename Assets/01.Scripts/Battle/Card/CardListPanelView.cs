@@ -25,11 +25,11 @@ public class CardListPanelView : MonoBehaviour
             panel.SetActive(false);
     }
 
-    //목록 데이터와 오브젝트 풀 주입
+    //보유 목록과 선택적 전투 목록 및 오브젝트 풀 주입
     public void Inject(OwnedDeckModel ownedDeck, IGameDataProvider provider,
         IBattleDeckManager battleDeck, ObjectPoolManager objectPool)
     {
-        if (ownedDeck == null || provider == null || battleDeck == null || objectPool == null)
+        if (ownedDeck == null || provider == null || objectPool == null)
         {
             Debug.LogError("[카드 목록] 덱과 데이터 공급자 및 오브젝트 풀을 연결해 주세요", this);
             return;
@@ -40,9 +40,9 @@ public class CardListPanelView : MonoBehaviour
         pool = objectPool;
         deck = battleDeck;
         ownedSource = new OwnedCardListSource(ownedDeck, provider);
-        drawSource = new DrawCardListSource(deck);
-        discardSource = new DiscardCardListSource(deck);
-        deck.Changed += RefreshVisible;
+        drawSource = deck != null ? new DrawCardListSource(deck) : null;
+        discardSource = deck != null ? new DiscardCardListSource(deck) : null;
+        if (deck != null) deck.Changed += RefreshVisible;
     }
 
     //전체 보유 덱 목록 열기

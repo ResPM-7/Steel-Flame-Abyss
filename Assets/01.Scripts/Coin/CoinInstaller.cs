@@ -16,14 +16,14 @@ public class CoinInstaller : MonoBehaviour
     private EnemyBattleState rewardEnemy;
     private readonly System.Random random = new System.Random();
 
-    //게임 세션의 코인 모델과 화면 및 보상 이벤트 연결
+    //세션 코인 화면 연결과 전투 씬의 선택적 보상 연결
     public void Inject(CoinModel coinModel)
     {
         if (coinModel == null)
             throw new System.ArgumentNullException(nameof(coinModel));
         if (model == coinModel)
             return;
-        if (coinView == null || !coinView.IsConfigured || participants == null || rewardButton == null)
+        if (coinView == null || !coinView.IsConfigured || (participants == null) != (rewardButton == null))
         {
             Debug.LogError("[코인] Coin View와 Coin Text 및 참가자와 보상 버튼을 연결해 주세요", this);
             return;
@@ -32,6 +32,7 @@ public class CoinInstaller : MonoBehaviour
         ReleaseBindings();
         model = coinModel;
         presenter = new CoinPresenter(model, coinView);
+        if (participants == null) return;
         participants.ResultChanged += RefreshReward;
         rewardButton.onClick.AddListener(ClaimReward);
         RefreshReward(participants.Result);

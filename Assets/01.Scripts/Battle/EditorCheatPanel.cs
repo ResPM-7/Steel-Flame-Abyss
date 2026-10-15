@@ -12,6 +12,15 @@ public class EditorCheatPanel : MonoBehaviour
     private CoinModel coins;
     private OwnedDeckModel ownedDeck;
     private Func<int, bool> grantRelic;
+    private Func<CombatantState> getRunHealth;
+    private CombatantState PlayerHealth => battle != null && battle.Player != null
+        ? battle.Player.Stats : getRunHealth?.Invoke();
+
+    //비전투 씬의 세션 체력 조회 기능 주입
+    public void InjectRunHealth(Func<CombatantState> getter)
+    {
+        getRunHealth = getter;
+    }
     private readonly List<UnityEngine.UI.GraphicRaycaster> blockedRaycasters = new List<UnityEngine.UI.GraphicRaycaster>();
     private bool open;
     private RectTransform positionTarget;
@@ -118,12 +127,12 @@ public class EditorCheatPanel : MonoBehaviour
         return rect;
     }
 
-    //전투 피해와 회복 및 기존 상태 테스트 버튼 표시
+    //전투 피해와 씬 공통 회복 및 상태 테스트 버튼 표시
     private void DrawHealth()
     {
         GUILayout.Label("체력 / 전투");
-        if (battle != null && battle.Player != null)
-            GUILayout.Label($"플레이어 HP {battle.Player.Stats.CurrentHealth}/{battle.Player.Stats.MaxHealth}");
+        if (PlayerHealth != null)
+            GUILayout.Label($"플레이어 HP {PlayerHealth.CurrentHealth}/{PlayerHealth.MaxHealth}");
         if (ActiveBattle)
             GUILayout.Label($"적 HP {battle.Enemy.Stats.CurrentHealth}/{battle.Enemy.Stats.MaxHealth}");
         damageInput = InputRow("피해 / 회복량", damageInput);
@@ -135,14 +144,14 @@ public class EditorCheatPanel : MonoBehaviour
         ActionButton("플레이어 피해", ActiveBattle, () => Damage(false, false));
         ActionButton("플레이어 즉사", ActiveBattle, () => Damage(false, true));
         GUILayout.EndHorizontal();
-        bool alive = battle != null && battle.Player != null && battle.Player.Stats.IsAlive;
+        bool alive = PlayerHealth != null && PlayerHealth.IsAlive;
         GUILayout.BeginHorizontal();
         ActionButton("플레이어 회복", alive, () =>
         {
             if (PositiveNumber(damageInput, out int amount))
-                message = $"체력 {battle.Player.Stats.Heal(amount)} 회복";
+                message = $"체력 {PlayerHealth.Heal(amount)} 회복";
         });
-        ActionButton("체력 전부 회복", alive, () => battle.Player.Stats.Heal(battle.Player.Stats.MaxHealth));
+        ActionButton("체력 전부 회복", alive, () => PlayerHealth.Heal(PlayerHealth.MaxHealth));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         ActionButton("방어 +5", ActiveBattle, () => battle.Player.Stats.GainBlock(5));

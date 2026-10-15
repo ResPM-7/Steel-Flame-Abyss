@@ -45,6 +45,7 @@ CommonHUD 자체가 아니라 Health만 GameFlowController의 Common Health View
 8. 최대 체력에서도 휴식은 완료 처리되고 계속 진행 가능
 9. 첫 지점을 캠프로 설정해도 정상 방문 가능
 
-현재는 기존 플레이어 CombatantState를 주입해 공유하는 방식
-별도의 영구 저장용 체력 모델과 카드 강화 기능은 미구현
+현재는 GameSession의 RunProgressModel.Health를 캠프와 공통 HP에 주입하는 방식
+전투 종료 시 HP만 세션으로 복사하며 방어도와 일시 효과는 유지하지 않음
+씬 이동 중 HP는 유지하지만 앱 종료 후 이어하기와 카드 강화 기능은 미구현
 씬과 프리팹의 UI 생성 및 필드 연결은 별도로 필요

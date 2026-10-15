@@ -4,247 +4,205 @@ using UnityEngine;
 
 public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete, Camp, Shop }
 
-//고정 맵과 전투 및 보상 화면 전환 관리
+//맵 씬의 지점 진행과 캠프 및 상점 화면 관리
 [DefaultExecutionOrder(100)]
 public class GameFlowController : MonoBehaviour
 {
+    [SerializeField] private GameDataProvider dataProvider;
+    [SerializeField] private ObjectPoolManager objectPoolManager;
+    [SerializeField] private string battleScenePath = "Assets/00.Scenes/BattleScene.unity";
     [SerializeField] private GameObject mapPanel;
-    [SerializeField] private GameObject battlePanel;
-    [SerializeField] private GameObject handRoot;
     [SerializeField] private GameObject eventPanel;
     [SerializeField] private CampPanelView campPanel;
     [SerializeField] private ShopPanelView shopPanel;
     [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
     [SerializeField] private TMP_Text mapTitle;
-    [Tooltip("아래 지점부터 위 지점 순서로 연결")]
+    [Tooltip("진행할 지점 순서로 연결")]
     [SerializeField] private MapNodeView[] nodes;
     [SerializeField] private int playerId = 50001;
     [SerializeField] private CardListPanelView cardListPanel;
+    [Tooltip("비어 있으면 캐릭터 SO의 시작 덱 사용")]
+    [SerializeField] private int[] startingDeckIds;
 
-    private IGameDataProvider data;
-    private IBattleDeckManager deck;
-    private BattleParticipants participants;
-    private MapProgressModel progress;
-    private bool initialized;
+    private RunProgressModel run;
+    private OwnedDeckModel ownedDeck;
+    private IRunSceneLoader sceneLoader;
     private ShopPresenter shopPresenter;
+    private bool initialized;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
+    public IGameDataProvider Data => dataProvider;
 
-    //게임 세션의 코인과 보유 덱을 상점에 주입
-    public void InjectShop(CoinModel coins, OwnedDeckModel ownedDeck)
+    //세션의 진행과 코인 및 보유 덱과 씬 이동 기능 주입
+    public void InjectRun(RunProgressModel model, CoinModel coins, OwnedDeckModel cards, IRunSceneLoader loader)
     {
+        run = model;
+        ownedDeck = cards;
+        sceneLoader = loader;
         shopPresenter?.Dispose();
         shopPresenter = shopPanel != null && shopPanel.IsConfigured
-            ? new ShopPresenter(coins, ownedDeck, shopPanel) : null;
+            ? new ShopPresenter(coins, cards, shopPanel) : null;
+        if (cardListPanel != null)
+            cardListPanel.Inject(cards, dataProvider, null, objectPoolManager);
     }
 
-    //맵 진행 데이터와 전투 기능 및 공통 체력 화면 연결
-    public void Inject(IGameDataProvider provider, IBattleDeckManager manager, BattleParticipants battleParticipants)
-    {
-        if (provider == null || manager == null || battleParticipants == null)
-            throw new System.ArgumentNullException();
-        if (participants != null)
-            participants.ResultChanged -= OnBattleResult;
-        data = provider;
-        deck = manager;
-        participants = battleParticipants;
-        participants.ResultChanged += OnBattleResult;
-        if (commonHealthView != null)
-            commonHealthView.Inject(participants);
-    }
-
-    //고정 경로 준비와 시작 지점 표시
+    //보유 덱과 체력 준비 및 기존 맵 진행 복원
     private void Start()
     {
         if (!ValidateReferences())
         {
-            Debug.LogError("[맵] 설치자와 화면 및 아래부터 정렬한 지점 목록을 연결해 주세요", this);
+            Debug.LogError("[맵] 데이터 공급자와 풀 및 패널과 지점 목록을 연결해 주세요", this);
             return;
         }
-        if (!participants.PrepareMapPlayer(playerId) || !deck.BeginBattle())
-            return;
-        progress = new MapProgressModel(nodes.Length);
-        for (int i = 0; i < nodes.Length; i++)
-            nodes[i].Bind(i, SelectNode);
+        CharacterData character = dataProvider.GetCharacter(playerId);
+        if (!ownedDeck.IsInitialized)
+        {
+            IEnumerable<int> ids = startingDeckIds != null && startingDeckIds.Length > 0
+                ? startingDeckIds : character.StartingDeckIds;
+            var validated = new List<int>(ids);
+            if (validated.Count == 0 || validated.Exists(id => !dataProvider.TryGetCard(id, out _)))
+            {
+                Debug.LogError("[맵] 시작 덱 카드 ID를 확인해 주세요", this);
+                return;
+            }
+            ownedDeck.InitializeOnce(validated);
+        }
+        run.PreparePlayer(character);
+        run.PrepareMap(nodes.Length);
+        if (commonHealthView != null) commonHealthView.InjectHealth(run.Health);
+        for (int i = 0; i < nodes.Length; i++) nodes[i].Bind(i, SelectNode);
         initialized = true;
-        participants.LeaveBattle();
         ShowMap();
         Canvas.ForceUpdateCanvases();
         mapScroll.StopMovement();
-        mapScroll.verticalNormalizedPosition = 0f;
+        mapScroll.horizontalNormalizedPosition = run.MapScrollX;
+        mapScroll.verticalNormalizedPosition = run.MapScrollY;
     }
 
-    //화면 연결과 지점 중복 및 전투와 상점 데이터 확인
+    //맵 화면과 지점별 데이터 및 세션 연결 확인
     private bool ValidateReferences()
     {
-        if (data == null || !data.IsReady || deck == null || participants == null ||
-            mapPanel == null || battlePanel == null || handRoot == null ||
+        if (dataProvider == null || !dataProvider.IsReady || run == null || ownedDeck == null ||
+            sceneLoader == null || objectPoolManager == null || mapPanel == null ||
             mapScroll == null || mapScroll.content == null || mapTitle == null ||
-            nodes == null || nodes.Length == 0 || !data.TryGetCharacter(playerId, out _))
+            nodes == null || nodes.Length == 0 || !dataProvider.TryGetCharacter(playerId, out _))
             return false;
         var unique = new HashSet<MapNodeView>();
         foreach (MapNodeView node in nodes)
         {
-            if (node == null || !node.IsConfigured || !unique.Add(node))
-                return false;
+            if (node == null || !node.IsConfigured || !unique.Add(node)) return false;
             if (node.NodeType == MapNodeType.Event)
             {
-                if (eventPanel == null)
-                    return false;
+                if (eventPanel == null) return false;
             }
             else if (node.NodeType == MapNodeType.Camp)
             {
-                if (campPanel == null || !campPanel.IsConfigured)
-                {
-                    Debug.LogError("[캠프] Camp Panel과 상태 텍스트 및 휴식과 계속 버튼을 연결해 주세요", this);
-                    return false;
-                }
+                if (campPanel == null || !campPanel.IsConfigured) return false;
             }
             else if (node.NodeType == MapNodeType.Shop)
             {
-                if (shopPresenter == null || shopPanel == null || !shopPanel.IsConfigured)
-                {
-                    Debug.LogError("[상점] Shop Panel과 카드 세 장 및 맵 버튼을 연결해 주세요", this);
-                    return false;
-                }
+                if (shopPresenter == null) return false;
             }
-            else if (!data.TryGetEnemy(node.EnemyId, out _))
-                return false;
+            else if (!dataProvider.TryGetEnemy(node.EnemyId, out _)) return false;
         }
         return true;
     }
 
-    //열린 지점 선택과 전투 및 이벤트와 캠프 및 상점 진입
+    //열린 지점 선택과 전투 씬 또는 비전투 패널 진입
     private void SelectNode(int index)
     {
-        if (!initialized || State != GameFlowState.Map || !progress.TryEnter(index))
+        if (!initialized || State != GameFlowState.Map || sceneLoader.IsLoading || !run.Map.TryEnter(index))
             return;
         CloseCardList();
+        run.SaveMapScroll(mapScroll.horizontalNormalizedPosition, mapScroll.verticalNormalizedPosition);
         MapNodeView node = nodes[index];
         if (node.NodeType == MapNodeType.Shop)
         {
             State = GameFlowState.Shop;
-            SetPanels(false, false, false);
-            shopPresenter.Open(index, data.Database.Cards, participants.Player.Data.Class, CompleteShop);
-            return;
+            SetPanels(false, false);
+            shopPresenter.Open(index, dataProvider.Database.Cards,
+                dataProvider.GetCharacter(run.PlayerId).Class, CompleteShop);
         }
-        if (node.NodeType == MapNodeType.Camp)
+        else if (node.NodeType == MapNodeType.Camp)
         {
             State = GameFlowState.Camp;
-            SetPanels(false, false, false);
-            campPanel.Open(participants.Player.Stats, CompleteCamp);
-            return;
+            SetPanels(false, false);
+            campPanel.Open(run.Health, CompleteCamp);
         }
-        if (node.NodeType == MapNodeType.Event)
+        else if (node.NodeType == MapNodeType.Event)
         {
             State = GameFlowState.Event;
-            SetPanels(false, false, true);
-            return;
+            SetPanels(false, true);
         }
-        if (!participants.Initialize(playerId, node.EnemyId, true) || !deck.BeginBattle())
+        else if (sceneLoader.EnterBattle(node.EnemyId, battleScenePath, gameObject.scene.path))
         {
-            participants.LeaveBattle();
-            progress.CancelEntry();
+            State = GameFlowState.Battle;
+        }
+        else
+        {
+            run.Map.CancelEntry();
             ShowMap();
-            return;
         }
-        State = GameFlowState.Battle;
-        SetPanels(false, true, false);
-    }
-
-    //승리 보상 대기와 패배 진행 차단
-    private void OnBattleResult(BattleResult result)
-    {
-        if (!initialized || State != GameFlowState.Battle)
-            return;
-        if (result == BattleResult.Victory)
-            State = GameFlowState.Reward;
-        else if (result == BattleResult.Defeat)
-        {
-            State = GameFlowState.Defeat;
-            progress.Fail();
-        }
-    }
-
-    //승리 보상 화면 종료와 다음 지점 개방
-    public void ContinueAfterReward()
-    {
-        if (!initialized || State != GameFlowState.Reward || participants.Result != BattleResult.Victory)
-            return;
-        if (!progress.CompleteCurrent())
-            return;
-        participants.LeaveBattle();
-        ShowMap();
     }
 
     //임시 이벤트 완료와 다음 지점 개방
     public void CompleteEvent()
     {
-        if (!initialized || State != GameFlowState.Event || !progress.CompleteCurrent())
-            return;
-        ShowMap();
+        CompleteVisit(GameFlowState.Event);
     }
 
-    //캠프 휴식 완료와 다음 지점 개방
+    //캠프 완료와 다음 지점 개방
     private void CompleteCamp()
     {
-        if (!initialized || State != GameFlowState.Camp || !progress.CompleteCurrent())
-            return;
-        ShowMap();
+        CompleteVisit(GameFlowState.Camp);
     }
 
-    //상점 종료와 다음 지점 개방
+    //상점 완료와 다음 지점 개방
     private void CompleteShop()
     {
-        if (!initialized || State != GameFlowState.Shop || !progress.CompleteCurrent())
-            return;
-        ShowMap();
+        CompleteVisit(GameFlowState.Shop);
     }
 
-    //맵 복귀와 진행 상태 표시
+    //현재 방문 상태 확인과 맵 복귀
+    private void CompleteVisit(GameFlowState expected)
+    {
+        if (initialized && State == expected && run.Map.CompleteCurrent()) ShowMap();
+    }
+
+    //맵 복귀와 누적 진행 상태 표시
     private void ShowMap()
     {
         CloseCardList();
-        State = progress.IsComplete ? GameFlowState.Complete : GameFlowState.Map;
-        SetPanels(true, false, false);
-        mapTitle.text = progress.IsComplete ? "지도 완료" : "지도";
+        State = run.Map.IsFailed ? GameFlowState.Defeat :
+            run.Map.IsComplete ? GameFlowState.Complete : GameFlowState.Map;
+        SetPanels(true, false);
+        mapTitle.text = run.Map.IsFailed ? "진행 종료" : run.Map.IsComplete ? "지도 완료" : "지도";
         for (int i = 0; i < nodes.Length; i++)
-            nodes[i].Refresh(progress.CanEnter(i), i < progress.NextIndex);
+            nodes[i].Refresh(run.Map.CanEnter(i), i < run.Map.NextIndex);
     }
 
-    //현재 화면의 패널과 상점 및 손패와 전투 외 공통 체력 표시
-    private void SetPanels(bool map, bool battle, bool eventVisible)
+    //맵과 이벤트 및 비전투 패널 표시 전환
+    private void SetPanels(bool map, bool eventVisible)
     {
         mapPanel.SetActive(map);
-        battlePanel.SetActive(battle);
-        handRoot.SetActive(battle);
-        if (commonHealthView != null)
-            commonHealthView.gameObject.SetActive(!battle);
-        if (eventPanel != null)
-            eventPanel.SetActive(eventVisible);
-        if (campPanel != null)
-            campPanel.gameObject.SetActive(false);
-        if (shopPanel != null)
-            shopPanel.Close();
+        if (commonHealthView != null) commonHealthView.gameObject.SetActive(true);
+        if (eventPanel != null) eventPanel.SetActive(eventVisible);
+        if (campPanel != null) campPanel.gameObject.SetActive(false);
+        if (shopPanel != null) shopPanel.Close();
     }
 
-    //화면 전환 시 열린 카드 목록 닫기
+    //화면 전환 시 카드 목록 닫기
     private void CloseCardList()
     {
-        if (cardListPanel != null)
-            cardListPanel.Close();
+        if (cardListPanel != null) cardListPanel.Close();
     }
 
-    //전투 결과와 상점 및 지점 입력 구독 해제
+    //상점과 맵 지점 입력 구독 해제
     private void OnDestroy()
     {
         shopPresenter?.Dispose();
-        if (participants != null)
-            participants.ResultChanged -= OnBattleResult;
-        if (nodes == null)
-            return;
+        if (nodes == null) return;
         foreach (MapNodeView node in nodes)
-            if (node != null)
-                node.Unbind();
+            if (node != null) node.Unbind();
     }
 }

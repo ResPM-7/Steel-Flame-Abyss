@@ -105,8 +105,8 @@ public class BattleParticipants : MonoBehaviour
     }
 #endif
 
-    //참가자 생성과 선택적 체력 유지 및 화면 연결
-    public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false)
+    //참가자 생성과 세션 체력 또는 기존 체력 적용 및 화면 연결
+    public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false, int? currentHealth = null)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
             enemyView == null || playerEnergyStatus == null || deckManager == null ||
@@ -123,7 +123,12 @@ public class BattleParticipants : MonoBehaviour
         }
 
         var nextPlayer = new PlayerBattleState(character);
-        if (preserveHealth && Player != null)
+        if (currentHealth.HasValue)
+        {
+            if (currentHealth.Value <= 0) return false;
+            nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - currentHealth.Value));
+        }
+        else if (preserveHealth && Player != null)
         {
             if (!Player.Stats.IsAlive)
                 return false;

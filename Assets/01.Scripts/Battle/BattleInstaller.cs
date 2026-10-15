@@ -13,7 +13,6 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private CardRewardView cardRewardView;
     [SerializeField] private CardListPanelView cardListPanelView;
     [SerializeField] private ObjectPoolManager objectPoolManager;
-    [SerializeField] private GameFlowController gameFlowController;
 
     private CardPlayController cardPlayController;
     private CardRewardPresenter cardRewardPresenter;
@@ -69,12 +68,8 @@ public class BattleInstaller : MonoBehaviour
         cardPlayController = new CardPlayController(deckManager, participants);
         handController.Inject(deckManager, cardPlayController);
         turnController.Inject(deckManager, participants);
-        if (gameFlowController != null)
-        {
-            participants.UseMapFlow();
-            turnController.UseMapFlow();
-            gameFlowController.Inject(dataProvider, deckManager, participants);
-        }
+        participants.UseMapFlow();
+        turnController.UseMapFlow();
         if (resultView != null)
             resultView.Inject(participants);
         else

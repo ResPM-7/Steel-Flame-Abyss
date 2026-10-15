@@ -1,0 +1,84 @@
+using System;
+
+//씬과 분리된 체력과 맵 진행 및 전투 진입 정보 보관
+public class RunProgressModel
+{
+    public int PlayerId { get; private set; }
+    public CombatantState Health { get; private set; }
+    public MapProgressModel Map { get; private set; }
+    public int PendingEnemyId { get; private set; }
+    public string MapScenePath { get; private set; }
+    public bool HasPendingBattle => PendingEnemyId > 0;
+    public float MapScrollX { get; private set; }
+    public float MapScrollY { get; private set; }
+
+    //전투 진입 전 맵 스크롤 위치 저장
+    public void SaveMapScroll(float horizontal, float vertical)
+    {
+        MapScrollX = horizontal;
+        MapScrollY = vertical;
+    }
+
+    //첫 플레이어 체력 준비와 캐릭터 변경 차단
+    public void PreparePlayer(CharacterData character)
+    {
+        if (character == null) throw new ArgumentNullException(nameof(character));
+        if (Health != null && PlayerId != character.Id)
+            throw new InvalidOperationException("진행 중인 캐릭터 변경은 새 게임에서만 가능합니다");
+        if (Health != null) return;
+        PlayerId = character.Id;
+        Health = new CombatantState(character.MaxHealth);
+    }
+
+    //맵 최초 생성과 씬 복귀 시 기존 진행 유지
+    public void PrepareMap(int nodeCount)
+    {
+        if (Map != null && Map.NodeCount != nodeCount)
+            throw new InvalidOperationException("맵 지점 수가 변경되었습니다 새 게임을 시작해 주세요");
+        if (Map == null) Map = new MapProgressModel(nodeCount);
+    }
+
+    //전투 대상과 복귀 씬 경로 저장
+    public void SetBattle(int enemyId, string mapScenePath)
+    {
+        PendingEnemyId = enemyId;
+        MapScenePath = mapScenePath;
+    }
+
+    //전투 체력만 저장하고 방어도와 일시 효과 제외
+    public void CaptureHealth(CombatantState source)
+    {
+        if (source == null) throw new ArgumentNullException(nameof(source));
+        Health = new CombatantState(source.MaxHealth, source.CurrentHealth);
+    }
+
+    //전투 진입 정보 제거
+    public void ClearBattle()
+    {
+        PendingEnemyId = 0;
+    }
+
+    //새 게임의 체력과 맵 및 전투 정보 초기화
+    public void Reset()
+    {
+        PlayerId = 0;
+        Health = null;
+        Map = null;
+        PendingEnemyId = 0;
+        MapScenePath = null;
+        MapScrollX = 0f;
+        MapScrollY = 0f;
+    }
+}
+
+//씬 객체가 세션에 요청하는 전투 이동 기능
+public interface IRunSceneLoader
+{
+    bool IsLoading { get; }
+
+    //전투 대상과 씬 경로의 비동기 이동 요청
+    bool EnterBattle(int enemyId, string battleScenePath, string mapScenePath);
+
+    //승리 보상 완료 후 맵 씬 복귀 요청
+    bool ReturnToMap();
+}
