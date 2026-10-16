@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AddressableAssets;
+using UnityEditor.AddressableAssets;
 
 internal static class ObjectPoolSheetSync
 {
@@ -149,6 +151,7 @@ internal static class ObjectPoolSheetSync
             throw new InvalidDataException($"{PoolPrefabFolder}에서 같은 이름의 프리팹을 찾지 못했습니다: {string.Join(", ", missing)}");
     }
 
+    //시트 풀 설정의 어드레서블 참조 적용
     private static void ApplyToManagerPrefab(IReadOnlyList<PoolRow> objectRows,
         IReadOnlyList<PoolRow> canvasRows, IReadOnlyDictionary<string, GameObject> prefabs)
     {
@@ -171,14 +174,14 @@ internal static class ObjectPoolSheetSync
             manager.objList = objectRows.Select(row => new ObjectPoolManager.ObjectPoolItem
             {
                 poolName = row.Name,
-                prefab = prefabs[row.Name],
+                addressablePrefab = GetAddressableReference(prefabs[row.Name]),
                 poolSize = row.Size
             }).ToList();
 
             manager.canvasPools = canvasRows.Select(row => new ObjectPoolManager.CanvasPoolItem
             {
                 poolName = row.Name,
-                prefab = prefabs[row.Name],
+                addressablePrefab = GetAddressableReference(prefabs[row.Name]),
                 targetCanvas = targetCanvasByName.TryGetValue(row.Name, out var target) ? target : null,
                 poolSize = row.Size
             }).ToList();
@@ -190,6 +193,17 @@ internal static class ObjectPoolSheetSync
         {
             PrefabUtility.UnloadPrefabContents(root);
         }
+    }
+
+    //프리팹 어드레서블 등록 검증과 GUID 참조 생성
+    private static AssetReferenceGameObject GetAddressableReference(GameObject prefab)
+    {
+        string path = AssetDatabase.GetAssetPath(prefab);
+        string guid = AssetDatabase.AssetPathToGUID(path);
+        var settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null || settings.FindAssetEntry(guid) == null)
+            throw new InvalidDataException($"Addressables Groups에 프리팹을 먼저 등록해 주세요: {path}");
+        return new AssetReferenceGameObject(guid);
     }
 
     private readonly struct PoolRow

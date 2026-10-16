@@ -17,6 +17,7 @@ public class CardListPanelView : MonoBehaviour
     private CardListSource drawSource;
     private CardListSource discardSource;
     private CardListSource currentSource;
+    private int refreshVersion;
 
     //초기 카드 목록 패널 숨김
     private void Awake()
@@ -81,12 +82,22 @@ public class CardListPanelView : MonoBehaviour
         scrollRect.horizontalNormalizedPosition = 0f;
     }
 
-    //열린 목록의 카드 정보 갱신
-    private void RefreshVisible()
+    //풀 로드 대기 후 최신 요청의 카드 목록 갱신
+    private async void RefreshVisible()
     {
         if (currentSource == null || panel == null || !panel.activeInHierarchy)
             return;
         ReturnCards();
+        int version = ++refreshVersion;
+        var requestedPool = pool;
+        bool ready = await requestedPool.EnsurePoolReadyAsync(poolName);
+        if (this == null || version != refreshVersion || currentSource == null ||
+            panel == null || !panel.activeInHierarchy || requestedPool == null) return;
+        if (!ready)
+        {
+            titleText.text = "카드 로드 실패 — 닫은 후 다시 시도해 주세요";
+            return;
+        }
         List<CardData> cards = currentSource.GetCards();
         cards.Sort((left, right) => left.Id.CompareTo(right.Id));
         titleText.text = $"{currentSource.Title} ({cards.Count})";
@@ -111,11 +122,16 @@ public class CardListPanelView : MonoBehaviour
             item.transform.SetAsLastSibling();
             view.Show(card);
         }
+        Canvas.ForceUpdateCanvases();
+        scrollRect.StopMovement();
+        scrollRect.verticalNormalizedPosition = 1f;
+        scrollRect.horizontalNormalizedPosition = 0f;
     }
 
     //표시 카드 반환과 목록 패널 닫기
     public void Close()
     {
+        refreshVersion++;
         currentSource = null;
         ReturnCards(!isActiveAndEnabled || panel == null || !panel.activeInHierarchy);
         if (panel != null)
@@ -141,6 +157,7 @@ public class CardListPanelView : MonoBehaviour
     //부모 비활성화 중 재진입 없이 카드 반환 예약
     private void OnDisable()
     {
+        refreshVersion++;
         currentSource = null;
         ReturnCards(true);
     }

@@ -333,7 +333,6 @@ MonoBehaviour:
   nextButton: {fileID: 1417623584441045051}
   testPlayerId: 50001
   testEnemyId: 60001
-  mapScenePath: Assets/00.Scenes/GameScene.unity
 --- !u!4 &587055151
 Transform:
   m_ObjectHideFlags: 0
