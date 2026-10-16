@@ -117,33 +117,39 @@ public class CardListPanelView : MonoBehaviour
     public void Close()
     {
         currentSource = null;
-        ReturnCards();
+        ReturnCards(!isActiveAndEnabled || panel == null || !panel.activeInHierarchy);
         if (panel != null)
             panel.SetActive(false);
     }
 
-    //사용한 카드 오브젝트를 풀로 반환
-    private void ReturnCards()
+    //카드 소유 목록 제거 후 즉시 반환 또는 안전한 반환 예약
+    private void ReturnCards(bool deferred = false)
     {
-        foreach (GameObject item in displayedCards)
+        while (displayedCards.Count > 0)
         {
+            int index = displayedCards.Count - 1;
+            GameObject item = displayedCards[index];
+            displayedCards.RemoveAt(index);
             if (item != null && pool != null)
-                pool.ReturnObject(poolName, item);
+            {
+                if (deferred) pool.RequestReturn(poolName, item);
+                else pool.ReturnObject(poolName, item);
+            }
         }
-        displayedCards.Clear();
     }
 
-    //비활성화 시 목록 카드 반환
+    //부모 비활성화 중 재진입 없이 카드 반환 예약
     private void OnDisable()
     {
-        Close();
+        currentSource = null;
+        ReturnCards(true);
     }
 
-    //전투 덱 이벤트 구독 해제
+    //씬 제거 시 부모 이동 없이 전투 구독과 카드 참조 해제
     private void OnDestroy()
     {
         if (deck != null)
             deck.Changed -= RefreshVisible;
-        ReturnCards();
+        displayedCards.Clear();
     }
 }

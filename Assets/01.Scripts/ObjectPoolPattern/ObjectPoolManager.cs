@@ -30,6 +30,10 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     private Dictionary<string, Queue<GameObject>> pools = new Dictionary<string, Queue<GameObject>>();
     private Dictionary<string, Transform> poolParents = new Dictionary<string, Transform>();
     private Dictionary<string, GameObject> prefabDict = new Dictionary<string, GameObject>();
+    private readonly HashSet<GameObject> availableObjects = new HashSet<GameObject>();
+    private readonly HashSet<GameObject> pendingObjects = new HashSet<GameObject>();
+    private readonly Queue<KeyValuePair<string, GameObject>> pendingReturns = new Queue<KeyValuePair<string, GameObject>>();
+    private bool shuttingDown;
 
 
 
@@ -78,6 +82,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             GameObject go = Instantiate(prefab, parent);
             go.name = poolName;
             go.SetActive(false);
+            availableObjects.Add(go);
             pools[poolName].Enqueue(go);
         }
     }
@@ -85,22 +90,23 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     //풀에서 오브젝트를 가져오거나 부족할 때 추가 생성
     public GameObject GetObject(string poolName)
     {
-        if (!pools.ContainsKey(poolName))
+        if (shuttingDown || !pools.ContainsKey(poolName))
         {
             return null;
         }
 
-        if (pools[poolName].Count > 0)
+        while (pools[poolName].Count > 0)
         {
             GameObject go = pools[poolName].Dequeue();
+            availableObjects.Remove(go);
+            if (go == null) continue;
             go.SetActive(true);
             return go;
         }
-        else
         {
             GameObject prefab = GetPrefabFromList(poolName);
 
-            if (prefab == null) return null;
+            if (prefab == null || poolParents[poolName] == null) return null;
 
             GameObject go = Instantiate(prefab, poolParents[poolName]);
             go.name = poolName;
@@ -119,17 +125,55 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         return null;
     }
 
-    //사용한 오브젝트를 비활성화해 풀에 반환
+    //중복 반환 차단과 비활성 오브젝트의 풀 복귀
     public void ReturnObject(string poolName, GameObject go)
     {
-        if (!pools.ContainsKey(poolName))
+        if (shuttingDown || go == null || availableObjects.Contains(go) || pendingObjects.Contains(go)) return;
+        if (!pools.ContainsKey(poolName) || poolParents[poolName] == null)
         {
             Destroy(go);
             return;
         }
+        availableObjects.Add(go);
         go.SetActive(false);
-        go.transform.SetParent(poolParents[poolName]);
+        if (go == null)
+        {
+            availableObjects.Remove(go);
+            return;
+        }
+        go.transform.SetParent(poolParents[poolName], false);
         pools[poolName].Enqueue(go);
     }
 
+    //활성화 상태 변경 중 부모 이동 없는 반환 예약
+    public void RequestReturn(string poolName, GameObject go)
+    {
+        if (shuttingDown || go == null || availableObjects.Contains(go) || !pendingObjects.Add(go)) return;
+        pendingReturns.Enqueue(new KeyValuePair<string, GameObject>(poolName, go));
+    }
+
+    //비활성화 콜백 종료 후 예약 카드 반환
+    private void LateUpdate()
+    {
+        int count = pendingReturns.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var request = pendingReturns.Dequeue();
+            pendingObjects.Remove(request.Value);
+            if (request.Value != null) ReturnObject(request.Key, request.Value);
+        }
+    }
+
+    //씬 종료 시 부모 이동 없이 풀 참조 해제
+    protected override void OnDestroy()
+    {
+        shuttingDown = true;
+        pendingReturns.Clear();
+        pendingObjects.Clear();
+        availableObjects.Clear();
+        pools.Clear();
+        poolParents.Clear();
+        prefabDict.Clear();
+        base.OnDestroy();
+    }
 }
