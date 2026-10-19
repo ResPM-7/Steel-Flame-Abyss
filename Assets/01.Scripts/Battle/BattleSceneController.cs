@@ -27,7 +27,7 @@ public class BattleSceneController : MonoBehaviour
         if (run == null || loader == null || dataProvider == null || participants == null ||
             deckManager == null || nextButton == null)
         {
-            Debug.LogError("[전투 씬] 세션과 데이터 및 참가자와 덱 및 다음 버튼을 연결해 주세요", this);
+            GameLogger.LogError("[전투 씬] 세션과 데이터 및 참가자와 덱 및 다음 버튼을 연결해 주세요", this);
             return;
         }
         if (!run.HasPendingBattle)
@@ -40,7 +40,7 @@ public class BattleSceneController : MonoBehaviour
         nextButton.interactable = false;
         if (!participants.Initialize(run.PlayerId, run.PendingEnemyId, false, run.Health.CurrentHealth) ||
             !deckManager.BeginBattle())
-            Debug.LogError("[전투 씬] 전투 초기화 실패 데이터와 시작 덱을 확인해 주세요", this);
+            GameLogger.LogError("[전투 씬] 전투 초기화 실패 데이터와 시작 덱을 확인해 주세요", this);
     }
 
     //전투 종료 체력 저장과 패배 진행 차단

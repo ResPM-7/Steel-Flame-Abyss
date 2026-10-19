@@ -32,7 +32,7 @@ public class GameDataProvider : MonoBehaviour, IGameDataProvider
     private void Awake()
     {
         if (database == null)
-            Debug.LogError("[게임 데이터] GameDataProvider에 GameDatabase가 지정되지 않았습니다.", this);
+            GameLogger.LogError("[게임 데이터] GameDataProvider에 GameDatabase가 지정되지 않았습니다.", this);
     }
 
     public bool TryGetCard(int id, out CardData value)

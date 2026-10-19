@@ -54,7 +54,7 @@ public class BattleTurnController : MonoBehaviour
 
             if (!participants.IsBattleActive)
             {
-                Debug.Log("[턴] 전투 종료 / 다음 턴 진행 중단", this);
+                GameLogger.Log("[턴] 전투 종료 / 다음 턴 진행 중단", this);
                 return;
             }
 
@@ -73,7 +73,7 @@ public class BattleTurnController : MonoBehaviour
         participants.Player.ResetEnergy();
         participants.Enemy.PlanNextAction();
         int drawnCount = deckManager.DrawCards(cardsPerTurn);
-        Debug.Log($"[턴] 적 행동 완료 / 내 턴 시작 / 새 손패 {drawnCount}장", this);
+        GameLogger.Log($"[턴] 적 행동 완료 / 내 턴 시작 / 새 손패 {drawnCount}장", this);
     }
 
     //턴 진행에 필요한 연결 상태 확인
@@ -82,7 +82,7 @@ public class BattleTurnController : MonoBehaviour
         if (deckManager != null && participants != null)
             return true;
 
-        Debug.LogError("[턴] 덱 관리자와 전투 참가자 연결을 확인해 주세요", this);
+        GameLogger.LogError("[턴] 덱 관리자와 전투 참가자 연결을 확인해 주세요", this);
         return false;
     }
 }

@@ -86,7 +86,7 @@ public class CardHandController : MonoBehaviour
             return;
         if (index < 0 || index >= HandCount)
         {
-            Debug.LogWarning("[카드 테스트] 버릴 카드 순번을 확인해 주세요.", this);
+            GameLogger.LogWarning("[카드 테스트] 버릴 카드 순번을 확인해 주세요.", this);
             return;
         }
 
@@ -111,7 +111,7 @@ public class CardHandController : MonoBehaviour
         CacheSlots();
         if (slots == null || slots.Length == 0 || handLayout == null || hoverLayer == null)
         {
-            Debug.LogError("[카드 손패] 슬롯과 레이아웃 연결을 확인해 주세요", this);
+            GameLogger.LogError("[카드 손패] 슬롯과 레이아웃 연결을 확인해 주세요", this);
             return;
         }
 
@@ -174,7 +174,7 @@ public class CardHandController : MonoBehaviour
         if (deckManager == null || cardPlayController == null || handLayout == null || hoverLayer == null ||
             slots == null || slots.Length == 0)
         {
-            Debug.LogError("[카드 테스트] 덱 관리자와 손패 UI 연결을 확인해 주세요.", this);
+            GameLogger.LogError("[카드 테스트] 덱 관리자와 손패 UI 연결을 확인해 주세요.", this);
             return false;
         }
 
@@ -184,7 +184,7 @@ public class CardHandController : MonoBehaviour
             if (slot == null || !slot.IsConfigured || !uniqueSlots.Add(slot) ||
                 slot.transform.parent != handLayout.transform)
             {
-                Debug.LogError("[카드 테스트] 슬롯의 텍스트 연결, 중복 또는 부모를 확인해 주세요.", this);
+                GameLogger.LogError("[카드 테스트] 슬롯의 텍스트 연결, 중복 또는 부모를 확인해 주세요.", this);
                 return false;
             }
         }
@@ -194,7 +194,7 @@ public class CardHandController : MonoBehaviour
     //드로우와 버리기 결과 및 카드 더미 개수를 Console에 표시
     private void LogState(string action)
     {
-        Debug.Log($"[카드 테스트] {action} / 손패 {HandCount}, 뽑기 {DrawCount}, 버림 {DiscardCount}", this);
+        GameLogger.Log($"[카드 테스트] {action} / 손패 {HandCount}, 뽑기 {DrawCount}, 버림 {DiscardCount}", this);
     }
 
 }

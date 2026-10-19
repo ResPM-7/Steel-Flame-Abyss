@@ -18,6 +18,8 @@ public class CardListPanelView : MonoBehaviour
     private CardListSource discardSource;
     private CardListSource currentSource;
     private int refreshVersion;
+    public event System.Action<bool> VisibilityChanged;
+    private bool isVisible;
 
     //초기 카드 목록 패널 숨김
     private void Awake()
@@ -32,7 +34,7 @@ public class CardListPanelView : MonoBehaviour
     {
         if (ownedDeck == null || provider == null || objectPool == null)
         {
-            Debug.LogError("[카드 목록] 덱과 데이터 공급자 및 오브젝트 풀을 연결해 주세요", this);
+            GameLogger.LogError("[카드 목록] 덱과 데이터 공급자 및 오브젝트 풀을 연결해 주세요", this);
             return;
         }
         Close();
@@ -70,11 +72,12 @@ public class CardListPanelView : MonoBehaviour
         if (source == null || pool == null || panel == null || titleText == null ||
             scrollRect == null || scrollRect.content == null)
         {
-            Debug.LogError("[카드 목록] 의존성 주입과 Panel 및 Title Text와 Scroll Rect 연결을 확인해 주세요", this);
+            GameLogger.LogError("[카드 목록] 의존성 주입과 Panel 및 Title Text와 Scroll Rect 연결을 확인해 주세요", this);
             return;
         }
         currentSource = source;
         panel.SetActive(true);
+        NotifyVisibility(true);
         RefreshVisible();
         Canvas.ForceUpdateCanvases();
         scrollRect.StopMovement();
@@ -106,7 +109,7 @@ public class CardListPanelView : MonoBehaviour
             GameObject item = pool.GetObject(poolName);
             if (item == null)
             {
-                Debug.LogError($"[카드 목록] {poolName} 풀 등록과 초기화를 확인해 주세요", this);
+                GameLogger.LogError($"[카드 목록] {poolName} 풀 등록과 초기화를 확인해 주세요", this);
                 Close();
                 return;
             }
@@ -114,7 +117,7 @@ public class CardListPanelView : MonoBehaviour
             CardListItemView view = item.GetComponent<CardListItemView>();
             if (view == null || !view.IsConfigured)
             {
-                Debug.LogError("[카드 목록] 풀 프리팹의 CardListItemView와 표시 항목을 연결해 주세요", item);
+                GameLogger.LogError("[카드 목록] 풀 프리팹의 CardListItemView와 표시 항목을 연결해 주세요", item);
                 Close();
                 return;
             }
@@ -136,6 +139,15 @@ public class CardListPanelView : MonoBehaviour
         ReturnCards(!isActiveAndEnabled || panel == null || !panel.activeInHierarchy);
         if (panel != null)
             panel.SetActive(false);
+        NotifyVisibility(false);
+    }
+
+    //카드 목록 표시 상태 변경 알림
+    private void NotifyVisibility(bool visible)
+    {
+        if (isVisible == visible) return;
+        isVisible = visible;
+        VisibilityChanged?.Invoke(visible);
     }
 
     //카드 소유 목록 제거 후 즉시 반환 또는 안전한 반환 예약
@@ -160,6 +172,7 @@ public class CardListPanelView : MonoBehaviour
         refreshVersion++;
         currentSource = null;
         ReturnCards(true);
+        NotifyVisibility(false);
     }
 
     //씬 제거 시 부모 이동 없이 전투 구독과 카드 참조 해제

@@ -94,7 +94,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         if (!isReady)
         {
-            Debug.LogWarning($"[카드 호버] {name}: CardSlot 또는 CardHoverLayer 연결이 필요합니다.", this);
+            GameLogger.LogWarning($"[카드 호버] {name}: CardSlot 또는 CardHoverLayer 연결이 필요합니다.", this);
             return;
         }
 

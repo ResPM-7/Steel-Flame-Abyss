@@ -115,12 +115,12 @@ public class CardPlayController
             return false;
         if (!effectResolver.CanResolve(card))
         {
-            Debug.LogWarning($"[카드 사용] {card.Data.DisplayName} 효과는 아직 지원하지 않습니다");
+            GameLogger.LogWarning($"[카드 사용] {card.Data.DisplayName} 효과는 아직 지원하지 않습니다");
             return false;
         }
         if (participants.Player.Energy < card.Cost)
         {
-            Debug.LogWarning($"[카드 사용] {card.Data.DisplayName} 카드의 에너지가 부족합니다");
+            GameLogger.LogWarning($"[카드 사용] {card.Data.DisplayName} 카드의 에너지가 부족합니다");
             return false;
         }
         if (!participants.Player.TrySpendEnergy(card.Cost))
@@ -131,7 +131,7 @@ public class CardPlayController
         if (!deckManager.FinishPlayingCard(card, exhaust))
             return false;
 
-        Debug.Log($"[카드 사용] {card.Data.DisplayName} 사용");
+        GameLogger.Log($"[카드 사용] {card.Data.DisplayName} 사용");
         return true;
     }
 

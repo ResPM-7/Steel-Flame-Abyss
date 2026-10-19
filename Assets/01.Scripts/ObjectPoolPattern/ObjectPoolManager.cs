@@ -84,12 +84,12 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         if (string.IsNullOrWhiteSpace(item.poolName)) return false;
         if (item.addressablePrefab == null || !item.addressablePrefab.RuntimeKeyIsValid() || parent == null)
         {
-            Debug.LogError($"[오브젝트 풀] {item.poolName}의 Addressable Prefab과 부모를 연결해 주세요", this);
+            GameLogger.LogError($"[오브젝트 풀] {item.poolName}의 Addressable Prefab과 부모를 연결해 주세요", this);
             return false;
         }
         if (pools.ContainsKey(item.poolName))
         {
-            Debug.LogError($"[오브젝트 풀] 중복 이름 {item.poolName}", this);
+            GameLogger.LogError($"[오브젝트 풀] 중복 이름 {item.poolName}", this);
             return false;
         }
         pools[item.poolName] = new Queue<GameObject>();
@@ -134,7 +134,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         {
             if (!shuttingDown && this != null)
             {
-                Debug.LogError($"[오브젝트 풀] {item.poolName} 로드 실패: {error.Message}", this);
+                GameLogger.LogError($"[오브젝트 풀] {item.poolName} 로드 실패: {error.Message}", this);
                 loadHandles.Remove(item.poolName);
                 if (handle.IsValid()) Addressables.Release(handle);
             }
@@ -261,7 +261,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     private static async void ReleaseAfterInstancesDestroyed(GameObject[] instances, List<AsyncOperationHandle<GameObject>> handles)
     {
         while (Application.isPlaying && System.Array.Exists(instances, item => item != null))
-            await Task.Yield();
+            await Task.Delay(16);
         foreach (var handle in handles)
             if (handle.IsValid()) Addressables.Release(handle);
     }

@@ -76,7 +76,7 @@ public class EnemyBattleState
                     target = player;
                     break;
                 default:
-                    UnityEngine.Debug.LogWarning($"[적 행동] 지원하지 않는 대상 {effect.Target}");
+                    GameLogger.LogWarning($"[적 행동] 지원하지 않는 대상 {effect.Target}");
                     continue;
             }
 
@@ -101,7 +101,7 @@ public class EnemyBattleState
                     target.ApplyVulnerable(effect.Amount);
                     break;
                 default:
-                    UnityEngine.Debug.LogWarning($"[적 행동] 지원하지 않는 효과 {effect.Type}");
+                    GameLogger.LogWarning($"[적 행동] 지원하지 않는 효과 {effect.Type}");
                     break;
             }
         }

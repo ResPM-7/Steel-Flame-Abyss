@@ -17,7 +17,7 @@ public class BattleCoinInstaller : CoinInstaller
     {
         if (!base.ValidateBindings()) return false;
         if (participants != null && rewardButton != null) return true;
-        Debug.LogError("[전투 코인] Participants와 Reward Button을 연결해 주세요", this);
+        GameLogger.LogError("[전투 코인] Participants와 Reward Button을 연결해 주세요", this);
         return false;
     }
 

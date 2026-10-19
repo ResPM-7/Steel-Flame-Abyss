@@ -40,7 +40,7 @@ public class BattleInstaller : MonoBehaviour
         cardRewardPresenter = null;
         if (cardRewardView == null || !cardRewardView.ValidateReferences())
         {
-            Debug.LogError("[카드 보상] Card Reward View와 화면 연결을 확인해 주세요", this);
+            GameLogger.LogError("[카드 보상] Card Reward View와 화면 연결을 확인해 주세요", this);
             return;
         }
         cardRewardPresenter = new CardRewardPresenter(dataProvider, participants, ownedDeck, cardRewardView);
@@ -59,7 +59,7 @@ public class BattleInstaller : MonoBehaviour
             deckManager == null || handController == null || participants == null ||
             turnController == null)
         {
-            Debug.LogError("[전투 연결] 데이터 공급자와 전투 구성 요소를 연결해 주세요", this);
+            GameLogger.LogError("[전투 연결] 데이터 공급자와 전투 구성 요소를 연결해 주세요", this);
             return;
         }
 
@@ -73,6 +73,6 @@ public class BattleInstaller : MonoBehaviour
         if (resultView != null)
             resultView.Inject(participants);
         else
-            Debug.LogError("[전투 연결] 승패 패널을 표시할 Result View를 연결해 주세요", this);
+            GameLogger.LogError("[전투 연결] 승패 패널을 표시할 Result View를 연결해 주세요", this);
     }
 }

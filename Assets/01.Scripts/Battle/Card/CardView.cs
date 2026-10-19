@@ -22,7 +22,7 @@ public class CardView : CardDisplayView
     {
         if (hoverTween == null)
         {
-            Debug.LogError("[손패 카드] Hover Tween을 연결하거나 목록용 CardListItemView를 사용해 주세요", this);
+            GameLogger.LogError("[손패 카드] Hover Tween을 연결하거나 목록용 CardListItemView를 사용해 주세요", this);
             return;
         }
         rootCanvas = GetComponentInParent<Canvas>();

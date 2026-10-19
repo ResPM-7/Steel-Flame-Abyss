@@ -112,13 +112,13 @@ public class BattleParticipants : MonoBehaviour
             enemyView == null || playerEnergyStatus == null || deckManager == null ||
             deckCountText == null)
         {
-            Debug.LogError("[전투] BattleParticipants의 데이터 및 UI 연결을 확인해 주세요.", this);
+            GameLogger.LogError("[전투] BattleParticipants의 데이터 및 UI 연결을 확인해 주세요.", this);
             return false;
         }
         if (!dataProvider.TryGetCharacter(characterId, out var character) ||
             !dataProvider.TryGetEnemy(targetEnemyId, out var enemy))
         {
-            Debug.LogError($"[전투] 캐릭터 {characterId} 또는 적 {targetEnemyId}를 찾지 못했습니다.", this);
+            GameLogger.LogError($"[전투] 캐릭터 {characterId} 또는 적 {targetEnemyId}를 찾지 못했습니다.", this);
             return false;
         }
 
@@ -234,7 +234,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Enemy.Stats.TakeDamage(10);
-        Debug.Log($"[전투 테스트] 적 피해 10 / HP {Enemy.Stats.CurrentHealth}", this);
+        GameLogger.Log($"[전투 테스트] 적 피해 10 / HP {Enemy.Stats.CurrentHealth}", this);
     }
 
     //테스트용으로 플레이어에게 피해 10을 부여
@@ -242,7 +242,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Player.Stats.TakeDamage(10);
-        Debug.Log($"[전투 테스트] 플레이어 피해 10 / HP {Player.Stats.CurrentHealth}", this);
+        GameLogger.Log($"[전투 테스트] 플레이어 피해 10 / HP {Player.Stats.CurrentHealth}", this);
     }
 
     //테스트용으로 플레이어에게 방어도 5를 추가
@@ -250,7 +250,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Player.Stats.GainBlock(5);
-        Debug.Log($"[전투 테스트] 플레이어 방어 +5 / 방어 {Player.Stats.Block}", this);
+        GameLogger.Log($"[전투 테스트] 플레이어 방어 +5 / 방어 {Player.Stats.Block}", this);
     }
 
     //테스트용으로 플레이어의 체력을 10 회복
@@ -258,7 +258,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Player.Stats.Heal(10);
-        Debug.Log($"[전투 테스트] 플레이어 회복 10 / HP {Player.Stats.CurrentHealth}", this);
+        GameLogger.Log($"[전투 테스트] 플레이어 회복 10 / HP {Player.Stats.CurrentHealth}", this);
     }
 
     //테스트용으로 에너지 1 소비를 시도
@@ -266,7 +266,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         bool spent = Player.TrySpendEnergy(1);
-        Debug.Log($"[전투 테스트] 에너지 사용 {(spent ? "성공" : "실패")} / 에너지 {Player.Energy}", this);
+        GameLogger.Log($"[전투 테스트] 에너지 사용 {(spent ? "성공" : "실패")} / 에너지 {Player.Energy}", this);
     }
 
     //테스트용으로 적의 다음 행동을 다시 선택
@@ -274,7 +274,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Enemy.PlanNextAction();
-        Debug.Log("[전투 테스트] 적 다음 행동 재선택", this);
+        GameLogger.Log("[전투 테스트] 적 다음 행동 재선택", this);
     }
 
     //현재 전투의 참가자를 기본 체력으로 다시 생성
@@ -282,7 +282,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsBattleActive) return;
         Initialize(Player.Data.Id, Enemy.Data.Id);
-        Debug.Log("[전투 테스트] 참가자 초기화", this);
+        GameLogger.Log("[전투 테스트] 참가자 초기화", this);
     }
 
     //테스트용으로 플레이어에게 약화 1을 부여
@@ -290,7 +290,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Player.Stats.ApplyWeak(1);
-        Debug.Log($"[전투 테스트] 플레이어 약화 +1 / 약화 {Player.Stats.Weak}", this);
+        GameLogger.Log($"[전투 테스트] 플레이어 약화 +1 / 약화 {Player.Stats.Weak}", this);
     }
 
     //테스트용으로 플레이어에게 취약 1을 부여
@@ -298,7 +298,7 @@ public class BattleParticipants : MonoBehaviour
     {
         if (!Application.isPlaying || !IsReady) return;
         Player.Stats.ApplyVulnerable(1);
-        Debug.Log($"[전투 테스트] 플레이어 취약 +1 / 취약 {Player.Stats.Vulnerable}", this);
+        GameLogger.Log($"[전투 테스트] 플레이어 취약 +1 / 취약 {Player.Stats.Vulnerable}", this);
     }
 #endif
 }

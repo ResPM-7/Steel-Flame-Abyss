@@ -54,13 +54,13 @@ public class SceneMenuActions : MonoBehaviour
         if (sceneIndex < 0 || sceneIndex >= SceneManager.sceneCountInBuildSettings ||
             !Application.CanStreamedLevelBeLoaded(sceneIndex))
         {
-            Debug.LogError($"[메뉴] 빌드 씬 목록의 {sceneIndex}번 씬을 확인해 주세요", this);
+            GameLogger.LogError($"[메뉴] 빌드 씬 목록의 {sceneIndex}번 씬을 확인해 주세요", this);
             return;
         }
 
         if (newGame && startNewGame == null)
         {
-            Debug.LogError("[메뉴] 새 게임 초기화 기능을 연결해 주세요", this);
+            GameLogger.LogError("[메뉴] 새 게임 초기화 기능을 연결해 주세요", this);
             return;
         }
         TryLoadScene(SceneUtility.GetScenePathByBuildIndex(sceneIndex), newGame ? startNewGame : null);
@@ -70,7 +70,7 @@ public class SceneMenuActions : MonoBehaviour
     public bool CanLoad(string path)
     {
         if (!string.IsNullOrEmpty(path) && Application.CanStreamedLevelBeLoaded(path)) return true;
-        Debug.LogError($"[씬 이동] 빌드 씬 목록과 경로를 확인해 주세요: {path}", this);
+        GameLogger.LogError($"[씬 이동] 빌드 씬 목록과 경로를 확인해 주세요: {path}", this);
         return false;
     }
 
@@ -98,7 +98,7 @@ public class SceneMenuActions : MonoBehaviour
         catch (System.Exception exception)
         {
             if (operation == null) isLoading = false;
-            Debug.LogException(exception, this);
+            GameLogger.LogException(exception, this);
             return false;
         }
         finally

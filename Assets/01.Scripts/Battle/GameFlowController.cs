@@ -42,7 +42,7 @@ public class GameFlowController : MonoBehaviour
     {
         if (!ValidateReferences())
         {
-            Debug.LogError("[맵] 데이터 공급자와 풀 및 패널과 지점 목록을 연결해 주세요", this);
+            GameLogger.LogError("[맵] 데이터 공급자와 풀 및 패널과 지점 목록을 연결해 주세요", this);
             return;
         }
         CharacterData character = dataProvider.GetCharacter(playerId);
@@ -53,7 +53,7 @@ public class GameFlowController : MonoBehaviour
             var validated = new List<int>(ids);
             if (validated.Count == 0 || validated.Exists(id => !dataProvider.TryGetCard(id, out _)))
             {
-                Debug.LogError("[맵] 시작 덱 카드 ID를 확인해 주세요", this);
+                GameLogger.LogError("[맵] 시작 덱 카드 ID를 확인해 주세요", this);
                 return;
             }
             ownedDeck.InitializeOnce(validated);

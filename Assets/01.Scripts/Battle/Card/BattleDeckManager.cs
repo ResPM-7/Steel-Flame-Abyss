@@ -75,7 +75,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
             return ResetTestDeck();
         if (!ownedDeck.IsInitialized && (testDeckIds == null || testDeckIds.Length == 0))
         {
-            Debug.LogError("[덱] 시작 카드 ID를 한 장 이상 등록해 주세요", this);
+            GameLogger.LogError("[덱] 시작 카드 ID를 한 장 이상 등록해 주세요", this);
             return false;
         }
         IEnumerable<int> ids = ownedDeck.IsInitialized ? ownedDeck.CardIds : testDeckIds;
@@ -128,7 +128,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
     {
         if (dataProvider == null || !dataProvider.IsReady)
         {
-            Debug.LogError("[덱] 사용 가능한 데이터 공급자를 먼저 주입해 주세요", this);
+            GameLogger.LogError("[덱] 사용 가능한 데이터 공급자를 먼저 주입해 주세요", this);
             return false;
         }
 
@@ -141,7 +141,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
         {
             if (!dataProvider.TryGetCard(cardId, out CardData data))
             {
-                Debug.LogError($"[덱] 카드 ID {cardId}가 없어 덱 생성을 취소했습니다", this);
+                GameLogger.LogError($"[덱] 카드 ID {cardId}가 없어 덱 생성을 취소했습니다", this);
                 return false;
             }
 
@@ -158,7 +158,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
     {
         if (testDeckIds == null || testDeckIds.Length == 0)
         {
-            Debug.LogError("[덱] 테스트 카드 ID를 한 장 이상 등록해 주세요", this);
+            GameLogger.LogError("[덱] 테스트 카드 ID를 한 장 이상 등록해 주세요", this);
             return false;
         }
 

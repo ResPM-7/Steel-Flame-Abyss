@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!223 &149632298 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4462344081249760422, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+  m_PrefabInstance: {fileID: 8576531962738312486}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &301910337
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,6 +449,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a73fc2f5cbee94aa3fd4f0ecf931a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+--- !u!1 &1157179804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1157179806}
+  - component: {fileID: 1157179805}
+  m_Layer: 0
+  m_Name: GeneralPoolTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1157179805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157179804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a73fc2f5cbee94aa3fd4f0ecf931a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+  isDontDestroy: 0
+  objList:
+  - poolName: GeneralTest
+    addressablePrefab:
+      m_AssetGUID: 8fcd0d7e953af7140aa7f0aaf00f1c88
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    poolSize: 2
+  canvasPools: []
+--- !u!4 &1157179806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157179804}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2113138752}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1208521812 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6580073172880301890, guid: 3315ad85516db6c47a035f7ab809fd1c, type: 3}
@@ -564,6 +625,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2113138751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2113138752}
+  m_Layer: 0
+  m_Name: GeneralTest_Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2113138752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113138751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1157179806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &123569918818120133
 PrefabInstance:
@@ -1065,6 +1157,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
+      propertyPath: commonHudCanvas
+      value: 
+      objectReference: {fileID: 149632298}
     - target: {fileID: 8901989180541690705, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: m_Name
       value: Canvas_Popup
@@ -1226,10 +1322,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[0].poolSize
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: canvasPools.Array.data[0].targetCanvas
       value: 
       objectReference: {fileID: 5217015714264259144}
@@ -1311,3 +1403,4 @@ SceneRoots:
   - {fileID: 588405011}
   - {fileID: 1887231104}
   - {fileID: 519420032}
+  - {fileID: 1157179806}

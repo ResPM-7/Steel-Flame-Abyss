@@ -25,7 +25,7 @@ public class CoinInstaller : MonoBehaviour
     protected virtual bool ValidateBindings()
     {
         if (coinView != null && coinView.IsConfigured) return true;
-        Debug.LogError("[코인] Coin View와 Coin Text를 연결해 주세요", this);
+        GameLogger.LogError("[코인] Coin View와 Coin Text를 연결해 주세요", this);
         return false;
     }
 

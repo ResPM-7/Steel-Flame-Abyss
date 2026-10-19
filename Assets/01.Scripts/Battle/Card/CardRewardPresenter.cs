@@ -52,7 +52,7 @@ public class CardRewardPresenter : IDisposable
             reward = new CardRewardModel(data.Database.Cards, participants.Player.Data.Class, random);
         if (reward.Candidates.Count == 0)
         {
-            Debug.LogWarning("[카드 보상] 선택 가능한 캐릭터 또는 공용 카드가 없습니다");
+            GameLogger.LogWarning("[카드 보상] 선택 가능한 캐릭터 또는 공용 카드가 없습니다");
             return;
         }
         view.Show(reward.Candidates);
@@ -68,7 +68,7 @@ public class CardRewardPresenter : IDisposable
             return;
         view.Close();
         view.SetRewardState(false, true);
-        Debug.Log($"[카드 보상] {reward.Candidates[index].DisplayName} 추가 / 보유 덱 {deck.CardIds.Count}장");
+        GameLogger.Log($"[카드 보상] {reward.Candidates[index].DisplayName} 추가 / 보유 덱 {deck.CardIds.Count}장");
     }
 
     //전투 결과와 화면 이벤트 구독 해제

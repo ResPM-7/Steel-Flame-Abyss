@@ -32,7 +32,7 @@ public class CardRewardView : MonoBehaviour
     {
         if (!ValidateReferences())
         {
-            Debug.LogError("[카드 보상] 패널과 버튼 및 카드 슬롯 세 개를 연결해 주세요", this);
+            GameLogger.LogError("[카드 보상] 패널과 버튼 및 카드 슬롯 세 개를 연결해 주세요", this);
             return;
         }
         Close();

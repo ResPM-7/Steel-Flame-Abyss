@@ -9,6 +9,9 @@ public class MapPopupManager : MonoBehaviour
     [SerializeField] private CampPanelView campPrefab;
     [SerializeField] private EventPanelView eventPrefab;
     [SerializeField] private CardListPanelView deckPrefab;
+    [SerializeField] private Canvas commonHudCanvas;
+    private bool hudHiddenForDeck;
+    private bool previousHudEnabled;
     private ShopPanelView shop;
     private CampPanelView camp;
     private EventPanelView eventView;
@@ -79,6 +82,7 @@ public class MapPopupManager : MonoBehaviour
         {
             GetOrCreate(ref deck, deckPrefab);
             deck.Inject(cards, provider, null, pool);
+            deck.VisibilityChanged += OnDeckVisibilityChanged;
         }
         deck.transform.SetAsLastSibling();
         deck.ShowOwnedDeck();
@@ -90,6 +94,24 @@ public class MapPopupManager : MonoBehaviour
         if (deck != null) deck.Close();
     }
 
+    //덱 표시 중 공통 HUD 숨김과 닫기 시 기존 상태 복원
+    private void OnDeckVisibilityChanged(bool visible)
+    {
+        if (commonHudCanvas == null) return;
+        if (visible)
+        {
+            if (hudHiddenForDeck) return;
+            previousHudEnabled = commonHudCanvas.enabled;
+            hudHiddenForDeck = true;
+            commonHudCanvas.enabled = false;
+        }
+        else if (hudHiddenForDeck)
+        {
+            commonHudCanvas.enabled = previousHudEnabled;
+            hudHiddenForDeck = false;
+        }
+    }
+
     //생성 없이 열린 팝업 비활성화
     public void CloseAll()
     {
@@ -99,9 +121,11 @@ public class MapPopupManager : MonoBehaviour
         if (eventView != null) eventView.gameObject.SetActive(false);
     }
 
-    //씬 해제 시 상점 모델 이벤트 구독 해제
+    //씬 해제 시 덱과 상점 이벤트 구독 해제
     private void OnDestroy()
     {
+        if (deck != null) deck.VisibilityChanged -= OnDeckVisibilityChanged;
+        OnDeckVisibilityChanged(false);
         shopPresenter?.Dispose();
     }
 }

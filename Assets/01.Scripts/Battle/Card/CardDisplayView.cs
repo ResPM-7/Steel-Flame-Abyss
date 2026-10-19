@@ -31,7 +31,7 @@ public class CardDisplayView : MonoBehaviour
         descriptionText.text = description;
         if (!CacheOutline())
         {
-            Debug.LogError("[카드 표시] 카드 배경의 Outline을 연결해 주세요", this);
+            GameLogger.LogError("[카드 표시] 카드 배경의 Outline을 연결해 주세요", this);
             return;
         }
         outline.enabled = true;
@@ -43,7 +43,7 @@ public class CardDisplayView : MonoBehaviour
     {
         if (rarityColors == null)
         {
-            Debug.LogWarning("[카드 표시] 공통 CardRarityColors 에셋을 연결해 주세요", this);
+            GameLogger.LogWarning("[카드 표시] 공통 CardRarityColors 에셋을 연결해 주세요", this);
             return;
         }
         outline.effectColor = rarityColors.GetColor(rarity);
