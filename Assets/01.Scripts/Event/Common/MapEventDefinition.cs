@@ -4,6 +4,11 @@ using UnityEngine;
 //이벤트별 설정과 방문 상태 생성 계약
 public abstract class MapEventDefinition : ScriptableObject
 {
+    [SerializeField, Min(1)] private int eventId = 1;
+    [SerializeField] private string displayName = "새 이벤트";
+    public int EventId => eventId;
+    public string DisplayName => displayName;
+
     //주입된 게임 데이터로 독립 이벤트 방문 생성
     public abstract MapEventVisit CreateVisit(RunProgressModel run, CoinModel coins, OwnedDeckModel deck, Func<float> random);
 }

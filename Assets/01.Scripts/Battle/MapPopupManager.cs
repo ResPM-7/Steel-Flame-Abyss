@@ -9,6 +9,7 @@ public class MapPopupManager : MonoBehaviour
     [SerializeField] private CampPanelView campPrefab;
     [SerializeField] private EventPanelView eventPrefab;
     [SerializeField] private MapEventDefinition defaultEvent;
+    [SerializeField] private EventDatabase eventDatabase;
     [SerializeField] private CardListPanelView deckPrefab;
     [SerializeField] private Canvas commonHudCanvas;
     private bool hudHiddenForDeck;
@@ -69,11 +70,19 @@ public class MapPopupManager : MonoBehaviour
         GetOrCreate(ref camp, campPrefab).Open(run.Health, completed);
     }
 
-    //이벤트 화면 재사용과 지점별 방문 규칙 연결
-    public void OpenEvent(int nodeIndex, Action completed, MapEventDefinition definition = null)
+    //이벤트 ID의 데이터베이스 등록 여부 확인
+    public bool HasEvent(int eventId)
     {
+        return eventDatabase != null && eventDatabase.TryGetEvent(eventId, out _);
+    }
+
+    //이벤트 ID 조회와 지점별 방문 규칙 및 화면 연결
+    public void OpenEvent(int nodeIndex, Action completed, int eventId)
+    {
+        if (eventDatabase == null) throw new InvalidOperationException("이벤트 데이터베이스를 연결해 주세요");
+        var selectedEvent = eventDatabase.GetEvent(eventId);
         CloseAll();
-        var visit = run.GetEventVisit(nodeIndex, definition != null ? definition : defaultEvent, coins, cards);
+        var visit = run.GetEventVisit(nodeIndex, selectedEvent, coins, cards);
         GetOrCreate(ref eventView, eventPrefab).Open(nodeIndex, completed, visit);
     }
 

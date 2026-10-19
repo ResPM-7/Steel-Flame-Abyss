@@ -7,8 +7,9 @@ public enum MapNodeType { Battle, Event, Boss, Camp, Shop }
 public class MapNodeView : MonoBehaviour
 {
     [SerializeField] private MapNodeType nodeType;
-    [SerializeField] private int enemyId = 60001;
-    [SerializeField] private MapEventDefinition eventDefinition;
+    [UnityEngine.Serialization.FormerlySerializedAs("enemyId")]
+    [Tooltip("Battle와 Boss는 적 ID / Event는 이벤트 ID / Camp와 Shop은 사용하지 않음")]
+    [SerializeField] private int value = 60001;
     [SerializeField] private UnityEngine.UI.Button button;
     [SerializeField] private UnityEngine.UI.Image icon;
     [SerializeField] private Color availableColor = Color.white;
@@ -19,8 +20,7 @@ public class MapNodeView : MonoBehaviour
     private int index;
 
     public MapNodeType NodeType => nodeType;
-    public int EnemyId => enemyId;
-    public MapEventDefinition EventDefinition => eventDefinition;
+    public int Value => value;
     public bool IsConfigured => button != null && icon != null;
 
     //지점 순번과 선택 콜백 연결

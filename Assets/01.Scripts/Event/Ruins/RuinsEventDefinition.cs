@@ -13,12 +13,8 @@ public class RuinsEventDefinition : MapEventDefinition
     }
 
     [SerializeField, Min(1)] private int rewardCoins = 100;
-    [SerializeField] private Attempt[] attempts =
-    {
-        new Attempt { successPercent = 20, failureDamage = 5 },
-        new Attempt { successPercent = 30, failureDamage = 10 },
-        new Attempt { successPercent = 40, failureDamage = 20 }
-    };
+    [SerializeField, Range(1, 100)] private int retrySuccessIncrease = 10;
+    [SerializeField] private Attempt[] attempts;
 
     //원본 설정 변경 없는 유적 방문 상태 생성
     public override MapEventVisit CreateVisit(RunProgressModel run, CoinModel coins, OwnedDeckModel deck, Func<float> random)
@@ -30,7 +26,7 @@ public class RuinsEventDefinition : MapEventDefinition
         foreach (var attempt in attempts)
             if (attempt.successPercent < 0 || attempt.successPercent > 100 || attempt.failureDamage < 0)
                 throw new InvalidOperationException("유적 확률과 피해 범위를 확인해 주세요");
-        return new RuinsEventVisit(run, coins, random, (Attempt[])attempts.Clone(), rewardCoins);
+        return new RuinsEventVisit(run, coins, random, (Attempt[])attempts.Clone(), rewardCoins, Mathf.Clamp(retrySuccessIncrease, 1, 100));
     }
 }
 
@@ -42,6 +38,7 @@ public class RuinsEventVisit : MapEventVisit
     private readonly Func<float> random;
     private readonly RuinsEventDefinition.Attempt[] attempts;
     private readonly int reward;
+    private readonly int retrySuccessIncrease;
     private int attemptIndex;
     private bool succeeded;
     private bool processing;
@@ -51,29 +48,40 @@ public class RuinsEventVisit : MapEventVisit
     {
         get
         {
-            if (succeeded || attemptIndex >= attempts.Length || HasLeft) return result;
-            var next = attempts[attemptIndex];
+            if (succeeded || HasLeft) return result;
+            var next = GetAttempt();
             return $"{result}\n\n{attemptIndex + 1}차 탐사\n성공 확률 {next.successPercent}%\n실패 시 HP -{next.failureDamage}\n성공 보상 {reward}코인" +
                 (run.Health.CurrentHealth <= next.failureDamage ? "\n체력이 부족하여 탐사할 수 없습니다" : "");
         }
     }
 
     //유적 방문의 게임 상태와 확률 공급자 및 설정 보관
-    public RuinsEventVisit(RunProgressModel run, CoinModel coins, Func<float> random, RuinsEventDefinition.Attempt[] attempts, int reward)
+    public RuinsEventVisit(RunProgressModel run, CoinModel coins, Func<float> random, RuinsEventDefinition.Attempt[] attempts, int reward, int retrySuccessIncrease = 10)
     {
         this.run = run;
         this.coins = coins;
         this.random = random;
         this.attempts = attempts;
         this.reward = reward;
+        this.retrySuccessIncrease = retrySuccessIncrease;
+    }
+
+    //설정 단계 이후 마지막 피해 유지와 성공 확률 상한 적용
+    private RuinsEventDefinition.Attempt GetAttempt()
+    {
+        if (attemptIndex < attempts.Length) return attempts[attemptIndex];
+        var next = attempts[attempts.Length - 1];
+        next.successPercent = (int)Math.Min(100L, next.successPercent +
+            (long)(attemptIndex - attempts.Length + 1) * retrySuccessIncrease);
+        return next;
     }
 
     //시도 결과에 따른 탐사 버튼 문구 조회
-    public override string GetChoiceLabel(int index) => succeeded ? "탐사 성공" : attemptIndex >= attempts.Length ? "탐사 종료" : attemptIndex == 0 ? "탐사하기" : "다시 탐사";
+    public override string GetChoiceLabel(int index) => succeeded ? "탐사 성공" : attemptIndex == 0 ? "탐사하기" : "다시 탐사";
 
     //종료와 체력 부족 및 중복 입력 차단
     public override bool CanChoose(int index) => index == 0 && !HasLeft && !processing && !succeeded &&
-        attemptIndex < attempts.Length && run.Health.CurrentHealth > attempts[attemptIndex].failureDamage && coins.Amount <= int.MaxValue - reward;
+        run.Health.CurrentHealth > GetAttempt().failureDamage && coins.Amount <= int.MaxValue - reward;
 
     //현재 시도 확률 판정과 일회 보상 또는 누적 체력 손실 적용
     public override void Choose(int index)
@@ -82,8 +90,9 @@ public class RuinsEventVisit : MapEventVisit
         processing = true;
         try
         {
-            var current = attempts[attemptIndex++];
-            if (random() < current.successPercent / 100f)
+            var current = GetAttempt();
+            attemptIndex++;
+            if (current.successPercent >= 100 || random() < current.successPercent / 100f)
             {
                 succeeded = true;
                 coins.TryAdd(reward);
@@ -93,7 +102,6 @@ public class RuinsEventVisit : MapEventVisit
             {
                 run.Health.LoseHealth(current.failureDamage);
                 result = $"탐사 실패! HP가 {current.failureDamage} 감소했습니다";
-                if (attemptIndex >= attempts.Length) result += "\n더 이상 탐사할 수 없습니다";
             }
         }
         finally { processing = false; }

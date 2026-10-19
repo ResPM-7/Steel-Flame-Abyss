@@ -83,7 +83,12 @@ public class GameFlowController : MonoBehaviour
         {
             if (node == null || !node.IsConfigured || !unique.Add(node)) return false;
             if ((node.NodeType == MapNodeType.Battle || node.NodeType == MapNodeType.Boss) &&
-                !dataProvider.TryGetEnemy(node.EnemyId, out _)) return false;
+                !dataProvider.TryGetEnemy(node.Value, out _)) return false;
+            if (node.NodeType == MapNodeType.Event && !popups.HasEvent(node.Value))
+            {
+                GameLogger.LogError($"[맵] {node.name}의 이벤트 ID {node.Value}를 데이터베이스에서 찾을 수 없습니다", node);
+                return false;
+            }
         }
         return true;
     }
@@ -112,9 +117,9 @@ public class GameFlowController : MonoBehaviour
         {
             State = GameFlowState.Event;
             SetPanels(false);
-            popups.OpenEvent(index, CompleteEvent, node.EventDefinition);
+            popups.OpenEvent(index, CompleteEvent, node.Value);
         }
-        else if (sceneLoader.EnterBattle(node.EnemyId))
+        else if (sceneLoader.EnterBattle(node.Value))
         {
             State = GameFlowState.Battle;
         }
