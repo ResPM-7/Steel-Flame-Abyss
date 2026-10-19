@@ -1200,26 +1200,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1302569758288411133, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1499844865270366242, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
     - target: {fileID: 4352947184706902971, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4291683221099495346}
-    - target: {fileID: 4462344081249760422, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6511004024865263451, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
     - target: {fileID: 7019514974701107444, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: m_Name
       value: Canvas_Dynamic
@@ -1304,10 +1288,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8087829518455257579, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 7680863695719945081, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4291683221099495346}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
