@@ -25,7 +25,7 @@ public class MapPopupManager : MonoBehaviour
     public bool IsConfigured => popupRoot != null && shopPrefab != null && shopPrefab.IsConfigured &&
         campPrefab != null && campPrefab.IsConfigured && eventPrefab != null && eventPrefab.IsConfigured && deckPrefab != null;
 
-    //생성 없이 팝업에 필요한 세션 의존성 보관
+    //팝업 세션 의존성 보관과 카드 풀 사전 준비
     public void Inject(RunProgressModel progress, CoinModel coinModel, OwnedDeckModel ownedDeck,
         IGameDataProvider data, ObjectPoolManager objectPool)
     {
@@ -35,6 +35,7 @@ public class MapPopupManager : MonoBehaviour
         cards = ownedDeck ?? throw new ArgumentNullException(nameof(ownedDeck));
         provider = data ?? throw new ArgumentNullException(nameof(data));
         pool = objectPool != null ? objectPool : throw new ArgumentNullException(nameof(objectPool));
+        if (deckPrefab != null) _ = deckPrefab.PreparePoolAsync(pool);
     }
 
     //요청한 화면 최초 생성과 이후 동일 인스턴스 반환

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -46,6 +47,25 @@ public class CardListPanelView : MonoBehaviour
         drawSource = deck != null ? new DrawCardListSource(deck) : null;
         discardSource = deck != null ? new DiscardCardListSource(deck) : null;
         if (deck != null) deck.Changed += RefreshVisible;
+        _ = PreparePoolAsync(pool);
+    }
+
+    //화면 생성 없이 설정된 카드 풀의 사전 로딩과 초기 생성
+    public async Task<bool> PreparePoolAsync(ObjectPoolManager objectPool)
+    {
+        if (objectPool == null) return false;
+        try
+        {
+            bool ready = await objectPool.EnsurePoolReadyAsync(poolName);
+            if (!ready && objectPool != null)
+                GameLogger.LogWarning($"[카드 목록] {poolName} 사전 준비 실패 목록을 열 때 다시 시도합니다", objectPool);
+            return ready;
+        }
+        catch (System.Exception exception)
+        {
+            if (objectPool != null) GameLogger.LogException(exception, objectPool);
+            return false;
+        }
     }
 
     //전체 보유 덱 목록 열기
