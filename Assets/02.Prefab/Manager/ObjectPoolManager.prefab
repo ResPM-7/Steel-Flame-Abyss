@@ -49,7 +49,7 @@ MonoBehaviour:
   canvasPools:
   - poolName: ViewCardList
     targetCanvas: {fileID: 0}
-    poolSize: 10
+    poolSize: 12
     addressablePrefab:
       m_AssetGUID: 8fcd0d7e953af7140aa7f0aaf00f1c88
       m_SubObjectName: 
