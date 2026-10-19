@@ -112,7 +112,7 @@ public class GameFlowController : MonoBehaviour
         {
             State = GameFlowState.Event;
             SetPanels(false);
-            popups.OpenEvent(index, CompleteEvent);
+            popups.OpenEvent(index, CompleteEvent, node.EventDefinition);
         }
         else if (sceneLoader.EnterBattle(node.EnemyId))
         {

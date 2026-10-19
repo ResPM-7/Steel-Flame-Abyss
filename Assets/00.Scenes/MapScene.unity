@@ -1158,6 +1158,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
+      propertyPath: defaultEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
+    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: commonHudCanvas
       value: 
       objectReference: {fileID: 149632298}
@@ -1200,17 +1204,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 668370308071789484, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_Color.b
-      value: 0.5566038
-      objectReference: {fileID: 0}
-    - target: {fileID: 668370308071789484, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_Color.g
-      value: 0.5566038
-      objectReference: {fileID: 0}
-    - target: {fileID: 668370308071789484, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_Color.r
-      value: 0.5566038
+    - target: {fileID: 888925646115166278, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4352947184706902971, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

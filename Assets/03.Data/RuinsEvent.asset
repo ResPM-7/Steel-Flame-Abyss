@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7329e3dd9a9bb344ab39d32ea567d97, type: 3}
+  m_Name: RuinsEvent
+  m_EditorClassIdentifier: Assembly-CSharp::RuinsEventDefinition
+  rewardCoins: 100
+  attempts:
+  - successPercent: 20
+    failureDamage: 5
+  - successPercent: 30
+    failureDamage: 10
+  - successPercent: 40
+    failureDamage: 20

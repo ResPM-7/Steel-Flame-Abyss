@@ -8,6 +8,7 @@ public class MapNodeView : MonoBehaviour
 {
     [SerializeField] private MapNodeType nodeType;
     [SerializeField] private int enemyId = 60001;
+    [SerializeField] private MapEventDefinition eventDefinition;
     [SerializeField] private UnityEngine.UI.Button button;
     [SerializeField] private UnityEngine.UI.Image icon;
     [SerializeField] private Color availableColor = Color.white;
@@ -19,6 +20,7 @@ public class MapNodeView : MonoBehaviour
 
     public MapNodeType NodeType => nodeType;
     public int EnemyId => enemyId;
+    public MapEventDefinition EventDefinition => eventDefinition;
     public bool IsConfigured => button != null && icon != null;
 
     //지점 순번과 선택 콜백 연결

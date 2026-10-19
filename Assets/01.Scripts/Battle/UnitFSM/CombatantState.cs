@@ -48,6 +48,16 @@ public class CombatantState
         return healthDamage;
     }
 
+    //방어도를 무시한 이벤트 체력 손실 적용
+    public int LoseHealth(int amount)
+    {
+        if (amount <= 0 || !IsAlive) return 0;
+        int lost = Math.Min(CurrentHealth, amount);
+        CurrentHealth -= lost;
+        Changed?.Invoke();
+        return lost;
+    }
+
     //실제로 회복된 체력을 반환
     public int Heal(int amount)
     {
