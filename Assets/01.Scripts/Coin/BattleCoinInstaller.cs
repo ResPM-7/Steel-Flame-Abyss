@@ -16,8 +16,8 @@ public class BattleCoinInstaller : CoinInstaller
     protected override bool ValidateBindings()
     {
         if (!base.ValidateBindings()) return false;
-        if (participants != null && rewardButton != null) return true;
-        GameLogger.LogError("[전투 코인] Participants와 Reward Button을 연결해 주세요", this);
+        if (participants != null) return true;
+        GameLogger.LogError("[전투 코인] Participants를 연결해 주세요", this);
         return false;
     }
 
@@ -25,6 +25,16 @@ public class BattleCoinInstaller : CoinInstaller
     protected override void BindAdditional()
     {
         participants.ResultChanged += RefreshReward;
+        if (rewardButton != null) rewardButton.onClick.AddListener(ClaimReward);
+        RefreshReward(participants.Result);
+    }
+
+    //동적 승리 팝업의 코인 보상 화면 연결
+    public void BindRewardView(UnityEngine.UI.Button button, TMP_Text text)
+    {
+        if (rewardButton != null) rewardButton.onClick.RemoveListener(ClaimReward);
+        rewardButton = button;
+        rewardText = text;
         rewardButton.onClick.AddListener(ClaimReward);
         RefreshReward(participants.Result);
     }
@@ -44,7 +54,7 @@ public class BattleCoinInstaller : CoinInstaller
             int amount = min + (int)(random.NextDouble() * ((long)max - min + 1));
             reward = new CoinReward(amount);
         }
-        rewardButton.interactable = result == BattleResult.Victory && reward != null &&
+        if (rewardButton != null) rewardButton.interactable = result == BattleResult.Victory && reward != null &&
             !reward.IsClaimed && reward.Amount > 0;
         if (rewardText != null)
             rewardText.text = reward == null ? "Coin" :

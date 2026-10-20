@@ -25,7 +25,7 @@ public class BattleSceneController : MonoBehaviour
     private void Start()
     {
         if (run == null || loader == null || dataProvider == null || participants == null ||
-            deckManager == null || nextButton == null)
+            deckManager == null)
         {
             GameLogger.LogError("[전투 씬] 세션과 데이터 및 참가자와 덱 및 다음 버튼을 연결해 주세요", this);
             return;
@@ -36,17 +36,25 @@ public class BattleSceneController : MonoBehaviour
             run.SetBattle(testEnemyId);
         }
         participants.ResultChanged += OnResult;
-        nextButton.onClick.AddListener(ContinueAfterReward);
-        nextButton.interactable = false;
+        if (nextButton != null) BindNextButton(nextButton);
         if (!participants.Initialize(run.PlayerId, run.PendingEnemyId, false, run.Health.CurrentHealth) ||
             !deckManager.BeginBattle())
             GameLogger.LogError("[전투 씬] 전투 초기화 실패 데이터와 시작 덱을 확인해 주세요", this);
     }
 
+    //동적 승리 팝업의 맵 복귀 버튼 연결
+    public void BindNextButton(UnityEngine.UI.Button button)
+    {
+        if (nextButton != null) nextButton.onClick.RemoveListener(ContinueAfterReward);
+        nextButton = button;
+        nextButton.onClick.AddListener(ContinueAfterReward);
+        nextButton.interactable = participants.Result == BattleResult.Victory;
+    }
+
     //전투 종료 체력 저장과 패배 진행 차단
     private void OnResult(BattleResult result)
     {
-        nextButton.interactable = result == BattleResult.Victory;
+        if (nextButton != null) nextButton.interactable = result == BattleResult.Victory;
         if (result != BattleResult.Victory && result != BattleResult.Defeat) return;
         run.CaptureHealth(participants.Player.Stats);
         if (result == BattleResult.Defeat) run.Map?.Fail();
@@ -57,7 +65,7 @@ public class BattleSceneController : MonoBehaviour
     {
         if (loader == null || loader.IsLoading || participants.Result != BattleResult.Victory) return;
         run.CaptureHealth(participants.Player.Stats);
-        if (loader.ReturnToMap()) nextButton.interactable = false;
+        if (loader.ReturnToMap() && nextButton != null) nextButton.interactable = false;
     }
 
     //전투 결과와 다음 버튼 구독 해제

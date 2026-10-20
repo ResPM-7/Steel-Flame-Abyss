@@ -10,12 +10,10 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private BattleParticipants participants;
     [SerializeField] private BattleTurnController turnController;
     [SerializeField] private BattleResultView resultView;
-    [SerializeField] private CardRewardView cardRewardView;
-    [SerializeField] private CardListPanelView cardListPanelView;
+    [SerializeField] private BattlePopupManager popups;
     [SerializeField] private ObjectPoolManager objectPoolManager;
 
     private CardPlayController cardPlayController;
-    private CardRewardPresenter cardRewardPresenter;
 
 #if UNITY_EDITOR
     //통합 에디터 치트창에 전투와 세션 의존성 주입
@@ -34,22 +32,8 @@ public class BattleInstaller : MonoBehaviour
             return;
 
         deckManager.InjectOwnedDeck(ownedDeck);
-        if (cardListPanelView != null)
-            cardListPanelView.Inject(ownedDeck, dataProvider, deckManager, objectPoolManager);
-        cardRewardPresenter?.Dispose();
-        cardRewardPresenter = null;
-        if (cardRewardView == null || !cardRewardView.ValidateReferences())
-        {
-            GameLogger.LogError("[카드 보상] Card Reward View와 화면 연결을 확인해 주세요", this);
-            return;
-        }
-        cardRewardPresenter = new CardRewardPresenter(dataProvider, participants, ownedDeck, cardRewardView);
-    }
-
-    //씬 종료 시 카드 보상 이벤트 구독 해제
-    private void OnDestroy()
-    {
-        cardRewardPresenter?.Dispose();
+        if (popups != null)
+            popups.Inject(ownedDeck, dataProvider, deckManager, participants, objectPoolManager);
     }
 
     //전투 구성 요소에 필요한 의존성 주입

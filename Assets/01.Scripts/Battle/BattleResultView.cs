@@ -4,8 +4,7 @@ using UnityEngine.UI;
 //전투 결과에 따른 승리와 패배 패널 표시
 public class BattleResultView : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private GameObject winPanel;
+    [SerializeField] private BattlePopupManager popups;
     [SerializeField] private Button endTurnButton;
 
     private BattleParticipants participants;
@@ -46,15 +45,7 @@ public class BattleResultView : MonoBehaviour
     //승패 패널 표시와 턴 종료 버튼 상태 갱신
     private void RefreshResult(BattleResult result)
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(result == BattleResult.Defeat);
-        if (winPanel != null)
-            winPanel.SetActive(result == BattleResult.Victory);
-
-        GameObject visiblePanel = result == BattleResult.Defeat ? gameOverPanel :
-            result == BattleResult.Victory ? winPanel : null;
-        if (visiblePanel != null)
-            visiblePanel.transform.SetAsLastSibling();
+        if (popups != null) popups.ShowResult(result);
         if (endTurnButton != null)
             endTurnButton.interactable = result == BattleResult.Ongoing;
     }
