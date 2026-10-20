@@ -7,12 +7,14 @@ public class BattlePopupManager : MonoBehaviour
     [SerializeField] private CardListPanelView deckPrefab;
     [SerializeField] private BattleWinPopupView winPrefab;
     [SerializeField] private BattleDefeatPopupView defeatPrefab;
+    [SerializeField] private BattleClearPopupView clearPrefab;
     [SerializeField] private BattleCoinInstaller coinInstaller;
     [SerializeField] private BattleSceneController sceneController;
     [SerializeField] private SceneMenuActions menu;
     private CardListPanelView deckView;
     private BattleWinPopupView winView;
     private BattleDefeatPopupView defeatView;
+    private BattleClearPopupView clearView;
     private OwnedDeckModel ownedDeck;
     private IGameDataProvider data;
     private BattleDeckManager battleDeck;
@@ -68,8 +70,20 @@ public class BattlePopupManager : MonoBehaviour
         if (deckView != null) deckView.Close();
         if (winView != null) winView.gameObject.SetActive(false);
         if (defeatView != null) defeatView.gameObject.SetActive(false);
+        if (clearView != null) clearView.gameObject.SetActive(false);
         if (result == BattleResult.Victory)
         {
+            if (sceneController.IsFinalBossBattle)
+            {
+                if (clearView == null)
+                {
+                    clearView = Create(clearPrefab);
+                    clearView.Inject(menu);
+                }
+                clearView.transform.SetAsLastSibling();
+                clearView.gameObject.SetActive(true);
+                return;
+            }
             if (winView == null)
             {
                 winView = Create(winPrefab);

@@ -55,14 +55,14 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
 #endif
     }
 
-    //전투 대상 저장과 비동기 전투 씬 이동
-    public bool EnterBattle(int enemyId)
+    //전투 대상과 보스 여부 저장 및 비동기 씬 이동
+    public bool EnterBattle(int enemyId, bool isFinalBoss = false)
     {
-        if (IsLoading || run.Health == null || !run.Health.IsAlive || run.HasPendingBattle ||
+        if (IsLoading || run.IsCleared || run.Health == null || !run.Health.IsAlive || run.HasPendingBattle ||
             run.Map == null || !run.Map.IsVisiting || !sceneLoader.CanLoad(sceneLoader.BattleScenePath) ||
             !sceneLoader.CanLoad(sceneLoader.MapScenePath))
             return false;
-        run.SetBattle(enemyId);
+        run.SetBattle(enemyId, isFinalBoss);
         if (sceneLoader.TryLoadScene(sceneLoader.BattleScenePath)) return true;
         run.ClearBattle();
         return false;
@@ -71,7 +71,7 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     //승리 후 다음 지점 개방과 맵 씬 이동
     public bool ReturnToMap()
     {
-        if (IsLoading || !run.HasPendingBattle || run.Health == null || !run.Health.IsAlive ||
+        if (IsLoading || run.IsCleared || run.IsFinalBossBattle || !run.HasPendingBattle || run.Health == null || !run.Health.IsAlive ||
             (run.Map != null && (!run.Map.IsVisiting || run.Map.IsFailed)) || !sceneLoader.CanLoad(sceneLoader.MapScenePath))
             return false;
         if (!sceneLoader.TryLoadScene(sceneLoader.MapScenePath)) return false;

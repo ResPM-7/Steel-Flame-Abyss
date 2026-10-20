@@ -322,6 +322,7 @@ MonoBehaviour:
   nextButton: {fileID: 0}
   testPlayerId: 50001
   testEnemyId: 60001
+  testFinalBoss: 0
 --- !u!4 &587055151
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,37 +1225,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 640479612925646840, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 640479612925646840, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1384252661}
-    - target: {fileID: 640479612925646840, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BattlePopupManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 640479612925646840, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2409068702284836088, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+    - target: {fileID: 1436436253377469085, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2409068702284836088, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1384252661}
-    - target: {fileID: 2409068702284836088, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BattlePopupManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2409068702284836088, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3641447946761519901, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1340,20 +1321,12 @@ PrefabInstance:
       value: Canvas_Dynamic
       objectReference: {fileID: 0}
     - target: {fileID: 5120870649545177249, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5120870649545177249, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1384252661}
-    - target: {fileID: 5120870649545177249, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BattlePopupManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5120870649545177249, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: 
+    - target: {fileID: 7105852483039473311, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

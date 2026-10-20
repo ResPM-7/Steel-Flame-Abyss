@@ -119,7 +119,7 @@ public class GameFlowController : MonoBehaviour
             SetPanels(false);
             popups.OpenEvent(index, CompleteEvent, node.Value);
         }
-        else if (sceneLoader.EnterBattle(node.Value))
+        else if (sceneLoader.EnterBattle(node.Value, node.NodeType == MapNodeType.Boss))
         {
             State = GameFlowState.Battle;
         }

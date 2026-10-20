@@ -133,6 +133,7 @@ MonoBehaviour:
   deckPrefab: {fileID: 8970351010973283664, guid: 1c76d6c25501e3e4a9b4de4464f25de7, type: 3}
   winPrefab: {fileID: 731083226850140598, guid: 032d7697e719e1e4b8acdd094c788bbc, type: 3}
   defeatPrefab: {fileID: 2412147972852767392, guid: 30876628bd56d5340bd47fd1f98322ae, type: 3}
+  clearPrefab: {fileID: 4888487993125304914, guid: 5093b3b0aa4516c4daeeeae7feddaaff, type: 3}
   coinInstaller: {fileID: 0}
   sceneController: {fileID: 0}
   menu: {fileID: 0}

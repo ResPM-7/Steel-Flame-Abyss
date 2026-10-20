@@ -11,6 +11,8 @@ public class BattleSceneController : MonoBehaviour
     [Header("배틀 씬 직접 실행 테스트")]
     [SerializeField] private int testPlayerId = 50001;
     [SerializeField] private int testEnemyId = 60001;
+    [SerializeField] private bool testFinalBoss;
+    public bool IsFinalBossBattle { get; private set; }
     private RunProgressModel run;
     private IRunSceneLoader loader;
 
@@ -33,8 +35,9 @@ public class BattleSceneController : MonoBehaviour
         if (!run.HasPendingBattle)
         {
             run.PreparePlayer(dataProvider.GetCharacter(testPlayerId));
-            run.SetBattle(testEnemyId);
+            run.SetBattle(testEnemyId, testFinalBoss);
         }
+        IsFinalBossBattle = run.IsFinalBossBattle;
         participants.ResultChanged += OnResult;
         if (nextButton != null) BindNextButton(nextButton);
         if (!participants.Initialize(run.PlayerId, run.PendingEnemyId, false, run.Health.CurrentHealth) ||
@@ -51,19 +54,20 @@ public class BattleSceneController : MonoBehaviour
         nextButton.interactable = participants.Result == BattleResult.Victory;
     }
 
-    //전투 종료 체력 저장과 패배 진행 차단
+    //전투 종료 체력 저장과 보스 클리어 및 패배 처리
     private void OnResult(BattleResult result)
     {
         if (nextButton != null) nextButton.interactable = result == BattleResult.Victory;
         if (result != BattleResult.Victory && result != BattleResult.Defeat) return;
         run.CaptureHealth(participants.Player.Stats);
         if (result == BattleResult.Defeat) run.Map?.Fail();
+        else if (IsFinalBossBattle) run.CompleteFinalBoss();
     }
 
     //승리 보상 종료 확인과 중복 맵 이동 차단
     public void ContinueAfterReward()
     {
-        if (loader == null || loader.IsLoading || participants.Result != BattleResult.Victory) return;
+        if (IsFinalBossBattle || loader == null || loader.IsLoading || participants.Result != BattleResult.Victory) return;
         run.CaptureHealth(participants.Player.Stats);
         if (loader.ReturnToMap() && nextButton != null) nextButton.interactable = false;
     }
