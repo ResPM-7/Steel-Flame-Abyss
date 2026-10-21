@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 //유물 아이콘 표시와 포인터 진입·이탈 전달
-public sealed class RelicIconView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class RelicIconView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private UnityEngine.UI.Image icon;
     [SerializeField] private TMP_Text fallbackLabel;
@@ -14,7 +14,6 @@ public sealed class RelicIconView : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         data = value;
         owner = panel;
-        //현재는 이미지 대신 흰 네모와 유물 이름만 표시
         icon.sprite = null;
         icon.color = Color.white;
         fallbackLabel.text = value.DisplayName;

@@ -10,12 +10,15 @@ public class RelicData : GameDataEntry
     [SerializeField] private RelicTrigger trigger;
     [SerializeField] private List<EffectSpec> effects = new();
     [SerializeField] private Sprite icon;
+    [Tooltip("보유·표시는 유지하고 전투 효과만 활성화")]
+    [SerializeField] private bool effectsEnabled = true;
 
     public DataRarity Rarity => rarity;
     public string Description => description;
     public RelicTrigger Trigger => trigger;
     public IReadOnlyList<EffectSpec> Effects => effects;
     public Sprite Icon => icon;
+    public bool EffectsEnabled => effectsEnabled;
 
 #if UNITY_EDITOR
     //검증이 끝난 유물 시트 한 행을 이 서브에셋에 반영

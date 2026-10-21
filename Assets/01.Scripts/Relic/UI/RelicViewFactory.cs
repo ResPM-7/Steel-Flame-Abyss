@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 //유물 데이터 조회와 풀에서 빌린 표시 오브젝트의 설정 및 반환 담당
-public sealed class RelicViewFactory
+public class RelicViewFactory
 {
     private readonly ObjectPoolManager pool;
     private readonly IGameDataProvider data;

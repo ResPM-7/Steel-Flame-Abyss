@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 //아이콘 아래에 유물 설명을 표시하고 화면 경계 안으로 보정
-public sealed class RelicTooltipView : MonoBehaviour
+public class RelicTooltipView : MonoBehaviour
 {
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text rarityText;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 //런 동안 보유한 유물 ID를 중복 없이 유지
-public sealed class OwnedRelicModel
+public class OwnedRelicModel
 {
     private readonly List<int> ids = new List<int>();
     private readonly IReadOnlyList<int> readOnlyIds;

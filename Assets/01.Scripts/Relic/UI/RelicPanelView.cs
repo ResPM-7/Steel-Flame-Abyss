@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //씬별 유물 아이콘을 보유 데이터와 연결하고 툴팁 하나를 재사용
-public sealed class RelicPanelView : MonoBehaviour
+public class RelicPanelView : MonoBehaviour
 {
     [SerializeField] private GameDataProvider data;
     [SerializeField] private ObjectPoolManager objectPool;
