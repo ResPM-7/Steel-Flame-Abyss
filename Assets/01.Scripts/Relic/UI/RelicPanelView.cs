@@ -5,16 +5,13 @@ using UnityEngine;
 //씬별 유물 아이콘을 보유 데이터와 연결하고 툴팁 하나를 재사용
 public class RelicPanelView : MonoBehaviour
 {
-    [SerializeField] private GameDataProvider data;
-    [SerializeField] private ObjectPoolManager objectPool;
-    [SerializeField] private string iconPoolName = "RelicIcon";
+    [SerializeField] private RelicViewFactory factory;
     [SerializeField] private RelicTooltipView tooltipPrefab;
     [SerializeField] private RectTransform tooltipRoot;
     private readonly List<RelicIconView> icons = new List<RelicIconView>();
     private OwnedRelicModel model;
     private RelicTooltipView tooltip;
     private RelicIconView hovered;
-    private RelicViewFactory factory;
     private int refreshVersion;
 
     public void Inject(OwnedRelicModel value)
@@ -22,9 +19,8 @@ public class RelicPanelView : MonoBehaviour
         if (value == null) throw new ArgumentNullException(nameof(value));
         if (model != null) model.Changed -= Refresh;
         ReturnIcons();
-        if (objectPool == null || data == null)
-            throw new InvalidOperationException("유물 패널의 데이터 공급자와 오브젝트 풀을 연결해 주세요");
-        factory = new RelicViewFactory(objectPool, data, iconPoolName);
+        if (factory == null || !factory.IsConfigured)
+            throw new InvalidOperationException("유물 패널의 팩토리와 팩토리의 데이터 공급자 및 풀을 연결해 주세요");
         model = value;
         if (isActiveAndEnabled) model.Changed += Refresh;
         Refresh();
@@ -48,13 +44,13 @@ public class RelicPanelView : MonoBehaviour
             if (this == null || version != refreshVersion || !isActiveAndEnabled) return;
             if (!ready)
             {
-                GameLogger.LogError($"[유물] {iconPoolName} 풀 준비 실패", this);
+                GameLogger.LogError($"[유물] {factory.PoolName} 풀 준비 실패", this);
                 return;
             }
             int count = 0;
             foreach (int id in model.RelicIds)
             {
-                if (!data.TryGetRelic(id, out RelicData relic)) continue;
+                if (!factory.TryGetRelic(id, out RelicData relic)) continue;
                 if (count == icons.Count)
                 {
                     RelicIconView view = factory.Create(id, transform, this);
@@ -80,7 +76,8 @@ public class RelicPanelView : MonoBehaviour
     private void ReturnIcons()
     {
         ++refreshVersion;
-        foreach (RelicIconView icon in icons) factory?.Release(icon);
+        if (factory != null)
+            foreach (RelicIconView icon in icons) factory.Release(icon);
         icons.Clear();
     }
 

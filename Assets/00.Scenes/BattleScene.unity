@@ -495,6 +495,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a73fc2f5cbee94aa3fd4f0ecf931a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+--- !u!1 &869885496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869885498}
+  - component: {fileID: 869885497}
+  m_Layer: 0
+  m_Name: RelicViewFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &869885497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869885496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322bd65162477d24787ffd7c91cb21de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelicViewFactory
+  pool: {fileID: 834022212}
+  data: {fileID: 1208521812}
+  poolName: RelicIcon
+--- !u!4 &869885498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869885496}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1118476882 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7031225271917335692, guid: 78d9e5ad8c397e64ca8b0b9586eb5562, type: 3}
@@ -1466,9 +1513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6126c7c637600e2408155efae4f8888b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RelicPanelView
-  data: {fileID: 1208521812}
-  objectPool: {fileID: 834022212}
-  iconPoolName: RelicIcon
+  factory: {fileID: 869885497}
   tooltipPrefab: {fileID: 7265075070187780350, guid: 8f7bc00ddc69fc34e8a60c58525b5dd0, type: 3}
   tooltipRoot: {fileID: 3825453867723116072}
 --- !u!224 &3825453867723116075 stripped
@@ -1724,6 +1769,7 @@ SceneRoots:
   - {fileID: 6143887482782700218}
   - {fileID: 1723303131874550123}
   - {fileID: 8741124786579297160}
+  - {fileID: 869885498}
   - {fileID: 5775866884647245976}
   - {fileID: 810999599}
   - {fileID: 2935485987447433656}

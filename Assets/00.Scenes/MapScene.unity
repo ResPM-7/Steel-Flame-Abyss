@@ -996,11 +996,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b534510088b792f4e8eafd966350d7f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinView
+--- !u!1 &4924191622622889058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5441955465272285698}
+  - component: {fileID: 8160306652611559520}
+  m_Layer: 0
+  m_Name: RelicViewFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!224 &5217015714264259144 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6556848082030925693, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
   m_PrefabInstance: {fileID: 6059383455695235687}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5441955465272285698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924191622622889058}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6059383455695235687
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1132,6 +1164,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc508e802c45469fb5df3e905b9e089b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthView
+--- !u!114 &8160306652611559520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924191622622889058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322bd65162477d24787ffd7c91cb21de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelicViewFactory
+  pool: {fileID: 834022212}
+  data: {fileID: 1208521812}
+  poolName: RelicIcon
 --- !u!1001 &8576531962738312486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1148,6 +1195,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 1208521812}
+    - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 8160306652611559520}
     - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: objectPool
       value: 
@@ -1346,6 +1397,7 @@ SceneRoots:
   - {fileID: 301910338}
   - {fileID: 434038947216064972}
   - {fileID: 8741124786579297160}
+  - {fileID: 5441955465272285698}
   - {fileID: 810999599}
   - {fileID: 2935485987447433656}
   - {fileID: 3397662981657304075}

@@ -3,26 +3,29 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 //유물 데이터 조회와 풀에서 빌린 표시 오브젝트의 설정 및 반환 담당
-public class RelicViewFactory
+public class RelicViewFactory : MonoBehaviour
 {
-    private readonly ObjectPoolManager pool;
-    private readonly IGameDataProvider data;
-    private readonly string poolName;
+    [SerializeField] private ObjectPoolManager pool;
+    [SerializeField] private GameDataProvider data;
+    [SerializeField] private string poolName = "RelicIcon";
+    public string PoolName => poolName;
+    public bool IsConfigured => pool != null && data != null && !string.IsNullOrWhiteSpace(poolName);
 
-    public RelicViewFactory(ObjectPoolManager pool, IGameDataProvider data, string poolName)
+    //유물 데이터 조회
+    public bool TryGetRelic(int id, out RelicData relic)
     {
-        this.pool = pool != null ? pool : throw new ArgumentNullException(nameof(pool));
-        this.data = data ?? throw new ArgumentNullException(nameof(data));
-        this.poolName = !string.IsNullOrWhiteSpace(poolName) ? poolName : throw new ArgumentException(nameof(poolName));
+        relic = null;
+        return data != null && data.TryGetRelic(id, out relic);
     }
 
-    public Task<bool> PrepareAsync() => pool != null
+    //연결된 풀의 비동기 사전 준비
+    public Task<bool> PrepareAsync() => IsConfigured
         ? pool.EnsurePoolReadyAsync(poolName) : Task.FromResult(false);
 
     //로드 완료된 풀에서 표시 객체를 빌려 부모와 유물 정보를 연결
     public RelicIconView Create(int relicId, Transform parent, RelicPanelView owner)
     {
-        if (pool == null || !data.TryGetRelic(relicId, out RelicData relic)) return null;
+        if (!IsConfigured || !TryGetRelic(relicId, out RelicData relic)) return null;
         GameObject instance = pool.GetObject(poolName);
         if (instance == null) return null;
         if (!instance.TryGetComponent(out RelicIconView view))
