@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: abe30bc14c36a8140bfdc63875480f4a
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: c822e76f4558be54cb299b4852401ba0
+    m_Address: Assets/02.Prefab/Canvas/Relic/RelicIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b35d253f13b4e0346aed385d804d586a, type: 2}
   m_SchemaSet:

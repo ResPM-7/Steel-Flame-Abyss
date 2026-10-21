@@ -56,3 +56,12 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - poolName: RelicIcon
+    targetCanvas: {fileID: 0}
+    poolSize: 4
+    addressablePrefab:
+      m_AssetGUID: 6aa109de82bcd43458ca3d0943efc4d4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Pool_Relics_Local
   m_GUID: c7a6bf51d1aae5b43ab63d60c665b08f
   m_SerializeEntries:
-  - m_GUID: c822e76f4558be54cb299b4852401ba0
-    m_Address: Assets/02.Prefab/Canvas/Relic/RelicIcon.prefab
+  - m_GUID: 6aa109de82bcd43458ca3d0943efc4d4
+    m_Address: Assets/02.Prefab/ObjectPool/RelicIcon.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

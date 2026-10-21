@@ -1192,17 +1192,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4291683221099495346}
     - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 1208521812}
-    - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: factory
       value: 
       objectReference: {fileID: 8160306652611559520}
-    - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: objectPool
-      value: 
-      objectReference: {fileID: 834022212}
     - target: {fileID: 7019514974701107444, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: m_Name
       value: Canvas_Dynamic
@@ -1306,18 +1298,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[1].poolName
-      value: RelicIcon
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[1].poolSize
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: canvasPools.Array.data[0].targetCanvas
       value: 
       objectReference: {fileID: 5217015714264259144}
@@ -1325,10 +1305,6 @@ PrefabInstance:
       propertyPath: canvasPools.Array.data[1].targetCanvas
       value: 
       objectReference: {fileID: 8576531962738312490}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[1].addressablePrefab.m_AssetGUID
-      value: c822e76f4558be54cb299b4852401ba0
-      objectReference: {fileID: 0}
     - target: {fileID: 5874745398514059078, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager
