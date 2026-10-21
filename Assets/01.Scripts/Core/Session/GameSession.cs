@@ -8,6 +8,8 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     private readonly CoinModel coins = new CoinModel();
     private readonly OwnedDeckModel ownedDeck = new OwnedDeckModel();
     private readonly RunProgressModel run = new RunProgressModel();
+    private readonly OwnedRelicModel ownedRelics = new OwnedRelicModel();
+    public OwnedRelicModel OwnedRelics => ownedRelics;
     private SceneMenuActions sceneLoader;
     public bool IsLoading => sceneLoader != null && sceneLoader.IsLoading;
 
@@ -49,6 +51,8 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
                 flow.InjectRun(run, coins, ownedDeck, this);
             foreach (BattleSceneController battle in root.GetComponentsInChildren<BattleSceneController>(true))
                 battle.Inject(run, this);
+            foreach (RelicPanelView relicPanel in root.GetComponentsInChildren<RelicPanelView>(true))
+                relicPanel.Inject(ownedRelics);
         }
 #if UNITY_EDITOR
         InjectEditorCheats(scene);
@@ -97,6 +101,10 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
         if (installer != null) installer.InjectEditorCheats(panel, coins, ownedDeck);
         else if (flow != null) panel.Inject(flow.Data, null, null, coins, ownedDeck);
         panel.InjectRunHealth(() => run.Health);
+        GameDataProvider relicData = null;
+        foreach (GameObject root in scene.GetRootGameObjects())
+            if (relicData == null) relicData = root.GetComponentInChildren<GameDataProvider>(true);
+        panel.InjectRelicGrant(id => ownedRelics.TryAdd(id, relicData));
     }
 #endif
 
@@ -105,6 +113,7 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     {
         coins.Reset();
         ownedDeck.Reset();
+        ownedRelics.Reset();
         run.Reset();
     }
 
