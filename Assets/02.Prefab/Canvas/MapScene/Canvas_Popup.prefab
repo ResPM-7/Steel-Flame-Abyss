@@ -118,4 +118,7 @@ MonoBehaviour:
   shopPrefab: {fileID: 8620331942681480136, guid: f536c2acdcf03424cbd70a81bfb8d2e5, type: 3}
   campPrefab: {fileID: 4652986571930428012, guid: 943835583e2bb5844ab64b9730758c88, type: 3}
   eventPrefab: {fileID: 6754270122478344078, guid: d95868429eb4a7947b692c9f651ea223, type: 3}
+  defaultEvent: {fileID: 11400000, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
+  eventDatabase: {fileID: -3273855691364875213, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
   deckPrefab: {fileID: 4390597565296369372, guid: 09970e7cb504e9543824dc9ea5063b01, type: 3}
+  commonHudCanvas: {fileID: 0}

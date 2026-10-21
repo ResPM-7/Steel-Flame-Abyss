@@ -1122,14 +1122,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
-      propertyPath: defaultEvent
-      value: 
-      objectReference: {fileID: 11400000, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
-    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
-      propertyPath: eventDatabase
-      value: 
-      objectReference: {fileID: -3273855691364875213, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
-    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: commonHudCanvas
       value: 
       objectReference: {fileID: 149632298}

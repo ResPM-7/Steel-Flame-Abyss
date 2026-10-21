@@ -1271,11 +1271,11 @@ MonoBehaviour:
   noRelicsText: {fileID: 1229937852385180670}
   relicOfferCount: 1
   relicPrices:
-    starter: 100
-    common: 100
-    uncommon: 150
-    rare: 250
-    special: 350
+    starter: 75
+    common: 75
+    uncommon: 75
+    rare: 75
+    special: 75
 --- !u!1 &4806336032779086598
 GameObject:
   m_ObjectHideFlags: 0
