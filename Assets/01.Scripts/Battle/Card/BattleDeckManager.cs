@@ -48,6 +48,7 @@ public interface IBattleDeckManager
 //현재 전투의 카드 더미와 손패 상태를 관리
 public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
 {
+    public event Action BattleStarted;
     [Header("임시 테스트 덱")]
     [SerializeField] private int[] testDeckIds =
     {
@@ -72,7 +73,11 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
     public bool BeginBattle()
     {
         if (ownedDeck == null)
-            return ResetTestDeck();
+        {
+            if (!ResetTestDeck()) return false;
+            BattleStarted?.Invoke();
+            return true;
+        }
         if (!ownedDeck.IsInitialized && (testDeckIds == null || testDeckIds.Length == 0))
         {
             GameLogger.LogError("[덱] 시작 카드 ID를 한 장 이상 등록해 주세요", this);
@@ -83,6 +88,7 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
             return false;
         ownedDeck.InitializeOnce(ids);
         DrawCards(initialHandCount);
+        BattleStarted?.Invoke();
         return true;
     }
 

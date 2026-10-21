@@ -46,7 +46,10 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
             foreach (CoinInstaller installer in root.GetComponentsInChildren<CoinInstaller>(true))
                 installer.Inject(coins);
             foreach (BattleInstaller installer in root.GetComponentsInChildren<BattleInstaller>(true))
+            {
                 installer.InjectOwnedDeck(ownedDeck);
+                installer.InjectOwnedRelics(ownedRelics);
+            }
             foreach (GameFlowController flow in root.GetComponentsInChildren<GameFlowController>(true))
                 flow.InjectRun(run, coins, ownedDeck, this);
             foreach (BattleSceneController battle in root.GetComponentsInChildren<BattleSceneController>(true))

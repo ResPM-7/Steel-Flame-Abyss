@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Pool_Relics_Local
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Pool_Relics_Local
+  m_GUID: c7a6bf51d1aae5b43ab63d60c665b08f
+  m_SerializeEntries:
+  - m_GUID: c822e76f4558be54cb299b4852401ba0
+    m_Address: Assets/02.Prefab/Canvas/Relic/RelicIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b35d253f13b4e0346aed385d804d586a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a46f34f6f7dc7f54791f128241c75306, type: 2}
+    - {fileID: 11400000, guid: 9c70c06c702d5004d88d1aeb177f1b90, type: 2}

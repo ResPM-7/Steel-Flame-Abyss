@@ -9,6 +9,10 @@ public class BattleTurnController : MonoBehaviour
     private BattleParticipants participants;
     private bool isResolvingTurn;
     private bool initializeOnStart = true;
+    private BattleRelicEffects relicEffects;
+
+    //플레이어 턴 시작에 실행할 유물 효과 주입
+    public void InjectRelics(BattleRelicEffects effects) => relicEffects = effects;
 
     //맵 선택 전 자동 덱 시작 해제
     public void UseMapFlow()
@@ -73,6 +77,7 @@ public class BattleTurnController : MonoBehaviour
         participants.Player.ResetEnergy();
         participants.Enemy.PlanNextAction();
         int drawnCount = deckManager.DrawCards(cardsPerTurn);
+        relicEffects?.Apply(RelicTrigger.TurnStart);
         GameLogger.Log($"[턴] 적 행동 완료 / 내 턴 시작 / 새 손패 {drawnCount}장", this);
     }
 

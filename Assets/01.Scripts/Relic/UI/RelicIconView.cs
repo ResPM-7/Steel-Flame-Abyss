@@ -26,6 +26,15 @@ public sealed class RelicIconView : MonoBehaviour, IPointerEnterHandler, IPointe
         if (data != null) owner.ShowTooltip(this, data);
     }
 
+    //풀 반환 전에 이전 유물과 패널 참조 제거
+    public void Unbind()
+    {
+        owner?.HideTooltip(this);
+        owner = null;
+        data = null;
+        fallbackLabel.text = string.Empty;
+    }
+
     public void OnPointerExit(PointerEventData eventData) => owner?.HideTooltip(this);
     private void OnDisable() => owner?.HideTooltip(this);
 }

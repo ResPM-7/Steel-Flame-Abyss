@@ -1323,9 +1323,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RelicPanelView
   data: {fileID: 1208521812}
-  iconPrefab: {fileID: 5249091978296071240, guid: c822e76f4558be54cb299b4852401ba0, type: 3}
+  objectPool: {fileID: 834022212}
+  iconPoolName: RelicIcon
   tooltipPrefab: {fileID: 7265075070187780350, guid: 8f7bc00ddc69fc34e8a60c58525b5dd0, type: 3}
   tooltipRoot: {fileID: 8576531962738312487}
+--- !u!224 &8576531962738312490 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2511593355574549151, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+  m_PrefabInstance: {fileID: 8576531962738312486}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8741124786579297160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1335,9 +1341,29 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[1].poolName
+      value: RelicIcon
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[1].poolSize
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: canvasPools.Array.data[0].targetCanvas
       value: 
       objectReference: {fileID: 5217015714264259144}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[1].targetCanvas
+      value: 
+      objectReference: {fileID: 8576531962738312490}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[1].addressablePrefab.m_AssetGUID
+      value: c822e76f4558be54cb299b4852401ba0
+      objectReference: {fileID: 0}
     - target: {fileID: 5874745398514059078, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager

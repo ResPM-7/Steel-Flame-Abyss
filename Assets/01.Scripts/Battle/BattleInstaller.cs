@@ -14,6 +14,28 @@ public class BattleInstaller : MonoBehaviour
     [SerializeField] private ObjectPoolManager objectPoolManager;
 
     private CardPlayController cardPlayController;
+    private BattleRelicEffects relicEffects;
+
+    //세션의 보유 유물과 전투 발동 시점 연결
+    public void InjectOwnedRelics(OwnedRelicModel ownedRelics)
+    {
+        relicEffects = new BattleRelicEffects(ownedRelics, dataProvider, participants, handController);
+        deckManager.BattleStarted -= ApplyStartingRelics;
+        deckManager.BattleStarted += ApplyStartingRelics;
+        turnController.InjectRelics(relicEffects);
+    }
+
+    //기본 손패와 참가자 생성 후 전투 시작 및 첫 턴 유물 적용
+    private void ApplyStartingRelics()
+    {
+        relicEffects.Apply(RelicTrigger.BattleStart);
+        relicEffects.Apply(RelicTrigger.TurnStart);
+    }
+
+    private void OnDestroy()
+    {
+        if (deckManager != null) deckManager.BattleStarted -= ApplyStartingRelics;
+    }
 
 #if UNITY_EDITOR
     //통합 에디터 치트창에 전투와 세션 의존성 주입

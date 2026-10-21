@@ -6,18 +6,25 @@ using UnityEngine;
 public sealed class RelicPanelView : MonoBehaviour
 {
     [SerializeField] private GameDataProvider data;
-    [SerializeField] private RelicIconView iconPrefab;
+    [SerializeField] private ObjectPoolManager objectPool;
+    [SerializeField] private string iconPoolName = "RelicIcon";
     [SerializeField] private RelicTooltipView tooltipPrefab;
     [SerializeField] private RectTransform tooltipRoot;
     private readonly List<RelicIconView> icons = new List<RelicIconView>();
     private OwnedRelicModel model;
     private RelicTooltipView tooltip;
     private RelicIconView hovered;
+    private RelicViewFactory factory;
+    private int refreshVersion;
 
     public void Inject(OwnedRelicModel value)
     {
         if (value == null) throw new ArgumentNullException(nameof(value));
         if (model != null) model.Changed -= Refresh;
+        ReturnIcons();
+        if (objectPool == null || data == null)
+            throw new InvalidOperationException("유물 패널의 데이터 공급자와 오브젝트 풀을 연결해 주세요");
+        factory = new RelicViewFactory(objectPool, data, iconPoolName);
         model = value;
         if (isActiveAndEnabled) model.Changed += Refresh;
         Refresh();
@@ -30,20 +37,51 @@ public sealed class RelicPanelView : MonoBehaviour
         Refresh();
     }
 
-    private void Refresh()
+    private async void Refresh()
     {
+        int version = ++refreshVersion;
         HideTooltip();
-        if (model == null || data == null || iconPrefab == null) return;
-        int count = 0;
-        foreach (int id in model.RelicIds)
+        if (model == null || factory == null || !isActiveAndEnabled) return;
+        try
         {
-            if (!data.TryGetRelic(id, out RelicData relic)) continue;
-            if (count == icons.Count) icons.Add(Instantiate(iconPrefab, transform, false));
-            icons[count].Bind(relic, this);
-            icons[count].gameObject.SetActive(true);
-            count++;
+            bool ready = await factory.PrepareAsync();
+            if (this == null || version != refreshVersion || !isActiveAndEnabled) return;
+            if (!ready)
+            {
+                GameLogger.LogError($"[유물] {iconPoolName} 풀 준비 실패", this);
+                return;
+            }
+            int count = 0;
+            foreach (int id in model.RelicIds)
+            {
+                if (!data.TryGetRelic(id, out RelicData relic)) continue;
+                if (count == icons.Count)
+                {
+                    RelicIconView view = factory.Create(id, transform, this);
+                    if (view == null) continue;
+                    icons.Add(view);
+                }
+                else icons[count].Bind(relic, this);
+                count++;
+            }
+            for (int i = icons.Count - 1; i >= count; i--)
+            {
+                factory.Release(icons[i]);
+                icons.RemoveAt(i);
+            }
         }
-        for (int i = count; i < icons.Count; i++) icons[i].gameObject.SetActive(false);
+        catch (Exception error)
+        {
+            if (this != null && version == refreshVersion)
+                GameLogger.LogError($"[유물] 표시 실패: {error.Message}", this);
+        }
+    }
+
+    private void ReturnIcons()
+    {
+        ++refreshVersion;
+        foreach (RelicIconView icon in icons) factory?.Release(icon);
+        icons.Clear();
     }
 
     public void ShowTooltip(RelicIconView source, RelicData relic)
@@ -65,11 +103,13 @@ public sealed class RelicPanelView : MonoBehaviour
     {
         if (model != null) model.Changed -= Refresh;
         HideTooltip();
+        ReturnIcons();
     }
 
     private void OnDestroy()
     {
         if (model != null) model.Changed -= Refresh;
+        ReturnIcons();
         if (tooltip != null) Destroy(tooltip.gameObject);
     }
 }
