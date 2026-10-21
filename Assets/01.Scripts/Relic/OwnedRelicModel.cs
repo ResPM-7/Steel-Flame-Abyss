@@ -11,6 +11,9 @@ public class OwnedRelicModel
 
     public OwnedRelicModel() => readOnlyIds = ids.AsReadOnly();
 
+    //유물 보유 여부 조회
+    public bool Contains(int id) => ids.Contains(id);
+
     //데이터베이스에 존재하는 유물만 한 번 지급
     public bool TryAdd(int id, IGameDataProvider data)
     {

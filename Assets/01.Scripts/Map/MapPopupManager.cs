@@ -21,6 +21,7 @@ public class MapPopupManager : MonoBehaviour
     private ShopPresenter shopPresenter;
     private CoinModel coins;
     private OwnedDeckModel cards;
+    private OwnedRelicModel relics;
     private RunProgressModel run;
     private IGameDataProvider provider;
     private ObjectPoolManager pool;
@@ -29,12 +30,13 @@ public class MapPopupManager : MonoBehaviour
 
     //팝업 세션 의존성 보관과 카드 풀 사전 준비
     public void Inject(RunProgressModel progress, CoinModel coinModel, OwnedDeckModel ownedDeck,
-        IGameDataProvider data, ObjectPoolManager objectPool)
+        IGameDataProvider data, ObjectPoolManager objectPool, OwnedRelicModel ownedRelics)
     {
         if (run != null) throw new InvalidOperationException("팝업 관리자는 씬에서 한 번만 주입해 주세요");
         run = progress ?? throw new ArgumentNullException(nameof(progress));
         coins = coinModel ?? throw new ArgumentNullException(nameof(coinModel));
         cards = ownedDeck ?? throw new ArgumentNullException(nameof(ownedDeck));
+        relics = ownedRelics ?? throw new ArgumentNullException(nameof(ownedRelics));
         provider = data ?? throw new ArgumentNullException(nameof(data));
         pool = objectPool != null ? objectPool : throw new ArgumentNullException(nameof(objectPool));
         if (deckPrefab != null) _ = deckPrefab.PreparePoolAsync(pool);
@@ -58,7 +60,7 @@ public class MapPopupManager : MonoBehaviour
     {
         CloseAll();
         GetOrCreate(ref shop, shopPrefab);
-        if (shopPresenter == null) shopPresenter = new ShopPresenter(coins, cards, shop);
+        if (shopPresenter == null) shopPresenter = new ShopPresenter(coins, cards, shop, relics, provider, run);
         shopPresenter.Open(nodeIndex, provider.Database.Cards,
             provider.GetCharacter(run.PlayerId).Class, completed);
     }

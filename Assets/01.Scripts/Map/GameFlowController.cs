@@ -29,12 +29,12 @@ public class GameFlowController : MonoBehaviour
     public IGameDataProvider Data => dataProvider;
 
     //세션의 진행과 코인 및 보유 덱과 씬 이동 기능 주입
-    public void InjectRun(RunProgressModel model, CoinModel coins, OwnedDeckModel cards, IRunSceneLoader loader)
+    public void InjectRun(RunProgressModel model, CoinModel coins, OwnedDeckModel cards, IRunSceneLoader loader, OwnedRelicModel relics)
     {
         run = model;
         ownedDeck = cards;
         sceneLoader = loader;
-        if (popups != null) popups.Inject(model, coins, cards, dataProvider, objectPoolManager);
+        if (popups != null) popups.Inject(model, coins, cards, dataProvider, objectPoolManager, relics);
     }
 
     //보유 덱과 체력 준비 및 기존 맵 진행 복원

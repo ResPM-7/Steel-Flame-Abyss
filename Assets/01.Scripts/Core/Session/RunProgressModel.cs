@@ -3,6 +3,18 @@ using System;
 //씬과 분리된 체력과 맵 진행 및 전투 진입 정보 보관
 public class RunProgressModel
 {
+    private readonly System.Collections.Generic.Dictionary<int, ShopModel> shopVisits = new System.Collections.Generic.Dictionary<int, ShopModel>();
+
+    //씬 이동과 무관한 상점 상품 및 품절 상태 유지
+    public ShopModel GetShopVisit(int nodeIndex, Func<ShopModel> create)
+    {
+        if (!shopVisits.TryGetValue(nodeIndex, out ShopModel shop))
+        {
+            shop = create();
+            shopVisits.Add(nodeIndex, shop);
+        }
+        return shop;
+    }
     private readonly System.Collections.Generic.Dictionary<int, MapEventVisit> eventVisits = new System.Collections.Generic.Dictionary<int, MapEventVisit>();
 
     //맵 지점별 이벤트 상태 생성과 기존 방문 재사용
@@ -85,6 +97,7 @@ public class RunProgressModel
     public void Reset()
     {
         eventVisits.Clear();
+        shopVisits.Clear();
         PlayerId = 0;
         Health = null;
         Map = null;

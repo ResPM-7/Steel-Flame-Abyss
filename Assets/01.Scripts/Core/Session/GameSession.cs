@@ -51,7 +51,7 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
                 installer.InjectOwnedRelics(ownedRelics);
             }
             foreach (GameFlowController flow in root.GetComponentsInChildren<GameFlowController>(true))
-                flow.InjectRun(run, coins, ownedDeck, this);
+                flow.InjectRun(run, coins, ownedDeck, this, ownedRelics);
             foreach (BattleSceneController battle in root.GetComponentsInChildren<BattleSceneController>(true))
                 battle.Inject(run, this);
             foreach (RelicPanelView relicPanel in root.GetComponentsInChildren<RelicPanelView>(true))

@@ -9,6 +9,58 @@ public class ShopModel
     private bool purchasing;
     public IReadOnlyList<CardData> Cards => cards.AsReadOnly();
     public int Price { get; }
+    private readonly List<RelicOffer> relics = new List<RelicOffer>();
+    private bool relicsInitialized;
+    public IReadOnlyList<RelicOffer> Relics => relics.AsReadOnly();
+
+    //유물 상품의 데이터와 확정 가격 및 품절 상태
+    public class RelicOffer
+    {
+        public RelicData Data { get; }
+        public int Price { get; }
+        public bool Sold { get; internal set; }
+        public RelicOffer(RelicData data, int price) { Data = data; Price = price; }
+    }
+
+    //첫 방문의 미보유 활성 유물 추첨과 가격 고정
+    public void InitializeRelics(IEnumerable<RelicData> source, OwnedRelicModel owned,
+        Random random, RelicShopPrices prices, int count)
+    {
+        if (relicsInitialized) return;
+        if (source == null || owned == null || random == null || prices == null) throw new ArgumentNullException();
+        var pool = new List<RelicData>();
+        var ids = new HashSet<int>();
+        foreach (RelicData relic in source)
+            if (relic != null && relic.Id > 0 && relic.EffectsEnabled && !owned.Contains(relic.Id) && ids.Add(relic.Id))
+                pool.Add(relic);
+        while (pool.Count > 0 && relics.Count < count)
+        {
+            int index = random.Next(pool.Count);
+            relics.Add(new RelicOffer(pool[index], prices.GetPrice(pool[index].Rarity)));
+            pool.RemoveAt(index);
+        }
+        relicsInitialized = true;
+    }
+
+    //코인과 보유 상태 재확인 후 유물 구매 및 실패 환불
+    public bool TryBuyRelic(int index, CoinModel coins, OwnedRelicModel owned, IGameDataProvider data)
+    {
+        if (purchasing || coins == null || owned == null || data == null || index < 0 || index >= relics.Count) return false;
+        RelicOffer offer = relics[index];
+        if (offer.Sold || offer.Data == null || !offer.Data.EffectsEnabled || owned.Contains(offer.Data.Id) ||
+            coins.Amount < offer.Price || !data.TryGetRelic(offer.Data.Id, out _)) return false;
+        purchasing = true;
+        offer.Sold = true;
+        try
+        {
+            if (!coins.TrySpend(offer.Price)) { offer.Sold = false; return false; }
+            if (owned.TryAdd(offer.Data.Id, data)) return true;
+            offer.Sold = false;
+            coins.TryAdd(offer.Price);
+            return false;
+        }
+        finally { purchasing = false; }
+    }
 
     //캐릭터와 공용 카드에서 중복 없는 상품 세 장 추첨
     public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, int price)
