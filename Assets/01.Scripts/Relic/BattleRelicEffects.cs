@@ -21,6 +21,11 @@ public class BattleRelicEffects
         registry.Register(EffectType.Block, TargetType.Self, amount => participants.Player.Stats.GainBlock(amount));
         registry.Register(EffectType.Draw, TargetType.Self, amount => hand.DrawCards(amount));
         registry.Register(EffectType.GainEnergy, TargetType.Self, amount => participants.Player.GainEnergy(amount));
+        //카드와 같은 전투 상태 함수로 화상 부여
+        registry.Register(EffectType.Burn, TargetType.Self, amount => participants.Player.Stats.ApplyBurn(amount));
+        registry.Register(EffectType.Burn, TargetType.SingleEnemy, amount => participants.Enemy.Stats.ApplyBurn(amount));
+        registry.Register(EffectType.Burn, TargetType.AllEnemies, amount => participants.Enemy.Stats.ApplyBurn(amount));
+        registry.Register(EffectType.Burn, TargetType.RandomEnemy, amount => participants.Enemy.Stats.ApplyBurn(amount));
     }
 
     //보유 유물의 활성화 여부와 발동 시점으로 효과 실행

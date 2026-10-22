@@ -54,6 +54,7 @@ public class CardEffectResolver
             case EffectType.Strength:
             case EffectType.Weak:
             case EffectType.Vulnerable:
+            case EffectType.Burn:
                 return effect.Target != TargetType.None;
 
             case EffectType.Draw:
@@ -93,6 +94,9 @@ public class CardEffectResolver
                 break;
             case EffectType.Vulnerable:
                 target?.ApplyVulnerable(effect.Amount);
+                break;
+            case EffectType.Burn:
+                target?.ApplyBurn(effect.Amount);
                 break;
         }
     }

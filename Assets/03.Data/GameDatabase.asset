@@ -25,7 +25,7 @@ MonoBehaviour:
     secondaryAmount: 0
     duration: 0
   icon: {fileID: 0}
-  effectsEnabled: 0
+  effectsEnabled: 1
 --- !u!114 &-8034073419062296371
 MonoBehaviour:
   m_ObjectHideFlags: 0

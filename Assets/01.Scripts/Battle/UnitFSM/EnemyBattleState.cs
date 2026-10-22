@@ -100,6 +100,9 @@ public class EnemyBattleState
                 case EffectType.Vulnerable:
                     target.ApplyVulnerable(effect.Amount);
                     break;
+                case EffectType.Burn:
+                    target.ApplyBurn(effect.Amount);
+                    break;
                 default:
                     GameLogger.LogWarning($"[적 행동] 지원하지 않는 효과 {effect.Type}");
                     break;

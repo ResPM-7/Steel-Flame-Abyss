@@ -53,6 +53,10 @@ public class BattleTurnController : MonoBehaviour
         try
         {
             deckManager.DiscardAll();
+            //플레이어 화상으로 패배하면 적 행동 중단
+            participants.Player.Stats.ResolveBurnAtTurnEnd();
+            if (!participants.IsBattleActive) return;
+
             participants.Enemy.Stats.ClearBlock();
             participants.Enemy.ExecutePlannedAction(participants.Player.Stats);
 
@@ -61,6 +65,10 @@ public class BattleTurnController : MonoBehaviour
                 GameLogger.Log("[턴] 전투 종료 / 다음 턴 진행 중단", this);
                 return;
             }
+
+            //적 행동 이후 화상으로 승리하면 다음 턴 중단
+            participants.Enemy.Stats.ResolveBurnAtTurnEnd();
+            if (!participants.IsBattleActive) return;
 
             StartPlayerTurn();
         }

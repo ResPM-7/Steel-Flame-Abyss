@@ -13,6 +13,7 @@ public class CombatantState
     public int Strength { get; private set; }
     public int Weak { get; private set; }
     public int Vulnerable { get; private set; }
+    public int Burn { get; private set; }
 
     public bool IsAlive => CurrentHealth > 0;
     public int MissingHealth => MaxHealth - CurrentHealth;
@@ -48,12 +49,31 @@ public class CombatantState
         return healthDamage;
     }
 
-    //방어도를 무시한 이벤트 체력 손실 적용
+    //방어도를 무시한 체력 손실 적용
     public int LoseHealth(int amount)
     {
         if (amount <= 0 || !IsAlive) return 0;
         int lost = Math.Min(CurrentHealth, amount);
         CurrentHealth -= lost;
+        Changed?.Invoke();
+        return lost;
+    }
+
+    //살아 있는 대상에게 화상 중첩 추가
+    public void ApplyBurn(int amount)
+    {
+        if (amount <= 0 || !IsAlive) return;
+        Burn = (int)Math.Min(int.MaxValue, (long)Burn + amount);
+        Changed?.Invoke();
+    }
+
+    //대상 턴 종료 시 방어 무시 피해와 화상 1 감소 후 상태 알림
+    public int ResolveBurnAtTurnEnd()
+    {
+        if (Burn <= 0 || !IsAlive) return 0;
+        int lost = Math.Min(CurrentHealth, Burn);
+        CurrentHealth -= lost;
+        Burn--;
         Changed?.Invoke();
         return lost;
     }

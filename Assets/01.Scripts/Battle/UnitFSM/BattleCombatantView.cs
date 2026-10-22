@@ -65,6 +65,7 @@ public class BattleCombatantView : MonoBehaviour
 
         if (state.Weak > 0) statusLabel.text += $"   약화 {state.Weak}";
         if (state.Vulnerable > 0) statusLabel.text += $"   취약 {state.Vulnerable}";
+        if (state.Burn > 0) statusLabel.text += $"   화상 {state.Burn}";
         portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
         detailLabel.text = state.IsAlive ? detail : "전투 불능";
     }
