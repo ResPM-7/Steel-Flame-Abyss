@@ -18,8 +18,6 @@ public class GameFlowController : MonoBehaviour
     [Tooltip("진행할 지점 순서로 연결")]
     [SerializeField] private MapNodeView[] nodes;
     [SerializeField] private int playerId = 50001;
-    [Tooltip("비어 있으면 캐릭터 SO의 시작 덱 사용")]
-    [SerializeField] private int[] startingDeckIds;
 
     private RunProgressModel run;
     private OwnedDeckModel ownedDeck;
@@ -48,9 +46,8 @@ public class GameFlowController : MonoBehaviour
         CharacterData character = dataProvider.GetCharacter(playerId);
         if (!ownedDeck.IsInitialized)
         {
-            IEnumerable<int> ids = startingDeckIds != null && startingDeckIds.Length > 0
-                ? startingDeckIds : character.StartingDeckIds;
-            var validated = new List<int>(ids);
+            //선택한 캐릭터 SO의 시작 덱 복사
+            var validated = new List<int>(character.StartingDeckIds);
             if (validated.Count == 0 || validated.Exists(id => !dataProvider.TryGetCard(id, out _)))
             {
                 GameLogger.LogError("[맵] 시작 덱 카드 ID를 확인해 주세요", this);

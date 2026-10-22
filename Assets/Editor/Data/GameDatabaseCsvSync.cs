@@ -535,7 +535,10 @@ internal static class GameDatabaseCsvSync
         {
             var asset = GetOrCreate<CharacterData>(database, existing, row.Id);
             asset.EditorSetIdentity(row.Id, row.Name);
-            asset.EditorApply(row.Class, row.MaxHealth, row.StartingEnergy, row.StartingDeck,
+            //시작 덱 열이 없는 시트는 기존 SO 편집값 유지
+            var startingDeck = row.DeriveCardLists && asset.StartingDeckIds.Count > 0
+                ? asset.StartingDeckIds.ToList() : row.StartingDeck;
+            asset.EditorApply(row.Class, row.MaxHealth, row.StartingEnergy, startingDeck,
                 row.CardPool, row.ResourceName);
             retained.Add(asset);
             EditorUtility.SetDirty(asset);
