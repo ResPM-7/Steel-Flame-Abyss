@@ -215,12 +215,18 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C shield  \uC5BB\uC2B5\uB2C8\uB2E4."
+  description: "\uBC29\uC5B4\uB3C4\uB97C shield\uB97C \uC5BB\uACE0 \uD654\uC0C1 burn\uC744
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 1
     target: 0
-    amount: 5
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 21
+    target: 0
+    amount: 1
     secondaryAmount: 0
     duration: 0
   upgradedEffects: []
