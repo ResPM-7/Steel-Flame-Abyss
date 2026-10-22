@@ -77,11 +77,9 @@ internal static class GameDatabaseSheetUpload
         return payload;
     }
 
-    //카드 정보와 상점 가격의 시트 업로드 필드 구성
+    //카드 정보와 효과의 시트 업로드 필드 구성
     private static UploadRow CardRow(CardData card)
     {
-        if (card.ShopPrice < 0)
-            throw new InvalidOperationException($"카드 {card.Id}의 shopPrice 값은 음수일 수 없습니다.");
         var row = NewRow(card);
         Add(row, "cardId", card.Id.ToString(CultureInfo.InvariantCulture));
         Add(row, "cardName", card.DisplayName);
@@ -89,7 +87,6 @@ internal static class GameDatabaseSheetUpload
         Add(row, "cardType", card.CardType.ToString());
         Add(row, "rarity", card.Rarity.ToString());
         Add(row, "cost", card.Cost.ToString(CultureInfo.InvariantCulture));
-        Add(row, "shopPrice", card.ShopPrice.ToString(CultureInfo.InvariantCulture));
         Add(row, "target", card.Effects.Count > 0 ? card.Effects[0].Target.ToString() : string.Empty);
         Add(row, "effect1", card.Effects.Count > 0 ? LegacyEffect(card.Effects[0].Type) : "None");
         Add(row, "value1", card.Effects.Count > 0 ? card.Effects[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");

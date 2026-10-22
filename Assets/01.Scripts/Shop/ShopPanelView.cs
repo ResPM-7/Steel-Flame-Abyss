@@ -7,13 +7,15 @@ public class ShopPanelView : MonoBehaviour
 {
     [SerializeField] private ShopCardItemView[] items;
     [SerializeField] private UnityEngine.UI.Button mapButton;
-    [SerializeField] private int cardPrice = 50;
+    [SerializeField] private CardShopPrices cardPrices = new CardShopPrices();
+
     [Header("유물 상품")]
     [SerializeField] private RectTransform relicRoot;
     [SerializeField] private ShopRelicItemView relicItemPrefab;
     [SerializeField] private RelicTooltipView relicTooltipPrefab;
     [SerializeField] private TMPro.TMP_Text noRelicsText;
-    [Range(1, 3)] [SerializeField] private int relicOfferCount = 1;
+    [SerializeField][Range(1, 3)] private int relicOfferCount = 1;
+
     [SerializeField] private RelicShopPrices relicPrices = new RelicShopPrices();
     private readonly List<ShopRelicItemView> relicItems = new List<ShopRelicItemView>();
     private RelicTooltipView relicTooltip;
@@ -21,7 +23,8 @@ public class ShopPanelView : MonoBehaviour
     public RelicShopPrices RelicPrices => relicPrices;
     public int RelicOfferCount => Mathf.Clamp(relicOfferCount, 1, 3);
     public event Action<int> RelicBuyRequested;
-    public int CardPrice => Mathf.Max(1, cardPrice);
+    //상품 생성 시 카드 등급별 가격 조회
+    public int GetCardPrice(DataRarity rarity) => cardPrices.GetPrice(rarity);
     public event Action<int> BuyRequested;
     public event Action LeaveRequested;
     public bool IsConfigured => mapButton != null && items != null && items.Length == 3 &&
@@ -59,7 +62,10 @@ public class ShopPanelView : MonoBehaviour
     public void Refresh(ShopModel model, int coins, OwnedRelicModel owned)
     {
         for (int i = 0; i < model.Cards.Count; i++)
-            items[i].SetPurchaseState(model.Price, model.IsSold(i), coins >= model.Price);
+        {
+            int price = model.GetCardPrice(i);
+            items[i].SetPurchaseState(price, model.IsSold(i), coins >= price);
+        }
         for (int i = 0; i < model.Relics.Count; i++)
             relicItems[i].Refresh(model.Relics[i], coins, owned.Contains(model.Relics[i].Data.Id));
     }

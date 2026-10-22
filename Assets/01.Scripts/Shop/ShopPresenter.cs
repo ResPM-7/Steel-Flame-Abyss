@@ -37,7 +37,7 @@ public class ShopPresenter : IDisposable
     {
         current = run.GetShopVisit(nodeIndex, () =>
         {
-            var model = new ShopModel(cards, owner, random, view.CardPrice);
+            var model = new ShopModel(cards, owner, random, view.GetCardPrice);
             model.InitializeRelics(data.Database.Relics, relics, random, view.RelicPrices, view.RelicOfferCount);
             return model;
         });

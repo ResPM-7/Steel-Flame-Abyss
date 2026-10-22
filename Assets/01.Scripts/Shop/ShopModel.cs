@@ -8,7 +8,10 @@ public class ShopModel
     private readonly HashSet<int> sold = new HashSet<int>();
     private bool purchasing;
     public IReadOnlyList<CardData> Cards => cards.AsReadOnly();
-    public int Price { get; }
+    private readonly List<int> cardPrices = new List<int>();
+
+    //첫 방문에 확정된 카드 상품 가격 조회
+    public int GetCardPrice(int index) => cardPrices[index];
     private readonly List<RelicOffer> relics = new List<RelicOffer>();
     private bool relicsInitialized;
     public IReadOnlyList<RelicOffer> Relics => relics.AsReadOnly();
@@ -62,14 +65,22 @@ public class ShopModel
         finally { purchasing = false; }
     }
 
-    //캐릭터와 공용 카드에서 중복 없는 상품 세 장 추첨
+    //고정 가격을 사용하는 호출의 호환 연결
     public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, int price)
+        : this(source, owner, random, ConstantPrice(price)) { }
+
+    //고정 가격 검증과 조회 함수 생성
+    private static Func<DataRarity, int> ConstantPrice(int price)
     {
-        if (source == null || random == null)
+        if (price <= 0) throw new ArgumentOutOfRangeException(nameof(price));
+        return _ => price;
+    }
+
+    //캐릭터와 공용 카드 추첨 후 등급별 가격 고정
+    public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, Func<DataRarity, int> getPrice)
+    {
+        if (source == null || random == null || getPrice == null)
             throw new ArgumentNullException();
-        if (price <= 0)
-            throw new ArgumentOutOfRangeException(nameof(price));
-        Price = price;
         var pool = new List<CardData>();
         var ids = new HashSet<int>();
         foreach (CardData card in source)
@@ -79,7 +90,10 @@ public class ShopModel
         while (pool.Count > 0 && cards.Count < 3)
         {
             int index = random.Next(pool.Count);
+            int price = getPrice(pool[index].Rarity);
+            if (price <= 0) throw new ArgumentOutOfRangeException(nameof(getPrice));
             cards.Add(pool[index]);
+            cardPrices.Add(price);
             pool.RemoveAt(index);
         }
     }
@@ -91,13 +105,13 @@ public class ShopModel
     public bool TryBuy(int index, CoinModel coins, OwnedDeckModel deck)
     {
         if (purchasing || coins == null || deck == null || !deck.IsInitialized ||
-            index < 0 || index >= cards.Count || sold.Contains(index) || coins.Amount < Price)
+            index < 0 || index >= cards.Count || sold.Contains(index) || coins.Amount < cardPrices[index])
             return false;
         purchasing = true;
         sold.Add(index);
         try
         {
-            if (!coins.TrySpend(Price))
+            if (!coins.TrySpend(cardPrices[index]))
             {
                 sold.Remove(index);
                 return false;
