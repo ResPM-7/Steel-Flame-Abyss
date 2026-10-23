@@ -18,6 +18,7 @@ public class BattleCombatantView : MonoBehaviour
     private CombatantState state;
     private string detail = string.Empty;
     private Color aliveColor;
+    private BattleStatusBarView statusBar;
     public CombatantState State => state;
 
     //전투 상태와 표시 데이터 연결 및 초상화 대상 감지 활성화
@@ -52,6 +53,7 @@ public class BattleCombatantView : MonoBehaviour
     private void OnDisable()
     {
         if (state != null) state.Changed -= Refresh;
+        if (statusBar != null) statusBar.HideTooltip();
     }
 
     //체력 능력치 생존 여부를 UI에 반영
@@ -63,10 +65,9 @@ public class BattleCombatantView : MonoBehaviour
         healthLabel.text = $"HP {state.CurrentHealth} / {state.MaxHealth}";
         statusLabel.text = $"방어 {state.Block}   힘 {state.Strength}";
 
-        if (state.Weak > 0) statusLabel.text += $"   약화 {state.Weak}";
-        if (state.Vulnerable > 0) statusLabel.text += $"   취약 {state.Vulnerable}";
-        if (state.Burn > 0) statusLabel.text += $"   화상 {state.Burn}";
-        if (state.BurnRetaliation > 0) statusLabel.text += $"   화상 반격 {state.BurnRetaliation}";
+        //기존 능력치 아래에 상태 아이콘 생성 후 재사용
+        if (statusBar == null) statusBar = BattleStatusBarView.Create(statusLabel);
+        statusBar.Refresh(state);
         portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
         detailLabel.text = state.IsAlive ? detail : "전투 불능";
     }
