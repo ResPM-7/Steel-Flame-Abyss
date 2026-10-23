@@ -14,6 +14,33 @@ public class CombatantState
     public int Weak { get; private set; }
     public int Vulnerable { get; private set; }
     public int Burn { get; private set; }
+    private readonly BurnRetaliationEffect burnRetaliation = new BurnRetaliationEffect();
+    public int BurnRetaliation => burnRetaliation.Amount;
+
+    //살아 있는 대상에게 화상 반격 부여
+    public void ApplyBurnRetaliation(int amount)
+    {
+        if (amount <= 0 || !IsAlive) return;
+        burnRetaliation.Add(amount);
+        Changed?.Invoke();
+    }
+
+    //자기 턴 시작 시 반격 상태 초기화
+    public void ClearBurnRetaliation()
+    {
+        if (BurnRetaliation == 0) return;
+        burnRetaliation.Clear();
+        Changed?.Invoke();
+    }
+
+    //직접 공격 피해 처리 후 생존 시 반격 실행
+    public int TakeAttackDamage(int amount, CombatantState attacker)
+    {
+        if (amount <= 0 || !IsAlive) return 0;
+        int lost = TakeDamage(amount);
+        burnRetaliation.OnAttacked(this, attacker);
+        return lost;
+    }
 
     public bool IsAlive => CurrentHealth > 0;
     public int MissingHealth => MaxHealth - CurrentHealth;

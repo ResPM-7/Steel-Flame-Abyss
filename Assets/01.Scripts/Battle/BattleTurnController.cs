@@ -58,6 +58,7 @@ public class BattleTurnController : MonoBehaviour
             if (!participants.IsBattleActive) return;
 
             participants.Enemy.Stats.ClearBlock();
+            participants.Enemy.Stats.ClearBurnRetaliation();
             participants.Enemy.ExecutePlannedAction(participants.Player.Stats);
 
             if (!participants.IsBattleActive)
@@ -82,6 +83,7 @@ public class BattleTurnController : MonoBehaviour
     private void StartPlayerTurn()
     {
         participants.Player.Stats.ClearBlock();
+        participants.Player.Stats.ClearBurnRetaliation();
         participants.Player.ResetEnergy();
         participants.Enemy.PlanNextAction();
         int drawnCount = deckManager.DrawCards(cardsPerTurn);

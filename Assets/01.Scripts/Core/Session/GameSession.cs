@@ -43,6 +43,8 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
         }
         foreach (GameObject root in scene.GetRootGameObjects())
         {
+            foreach (TitleCharacterSelectView selection in root.GetComponentsInChildren<TitleCharacterSelectView>(true))
+                selection.Inject(this);
             foreach (CoinInstaller installer in root.GetComponentsInChildren<CoinInstaller>(true))
                 installer.Inject(coins);
             foreach (BattleInstaller installer in root.GetComponentsInChildren<BattleInstaller>(true))
@@ -60,6 +62,27 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
 #if UNITY_EDITOR
         InjectEditorCheats(scene);
 #endif
+    }
+
+    //캐릭터와 시작 덱 검증 후 새 런 준비 및 맵 이동
+    public bool TryStartNewGame(CharacterData character, GameDatabase database)
+    {
+        if (IsLoading || sceneLoader == null || character == null || database == null ||
+            !database.TryGetCharacter(character.Id, out var registered) || registered != character ||
+            character.MaxHealth <= 0 || character.StartingDeckIds.Count == 0) return false;
+        var deck = new System.Collections.Generic.List<int>(character.StartingDeckIds);
+        foreach (int id in deck)
+        {
+            if (database.TryGetCard(id, out _)) continue;
+            GameLogger.LogError($"[캐릭터 선택] {character.DisplayName} 시작 덱의 카드 {id} 확인", this);
+            return false;
+        }
+        return sceneLoader.TryLoadScene(sceneLoader.MapScenePath, () =>
+        {
+            ResetRun();
+            run.PreparePlayer(character);
+            ownedDeck.InitializeOnce(deck);
+        });
     }
 
     //전투 대상과 보스 여부 저장 및 비동기 씬 이동

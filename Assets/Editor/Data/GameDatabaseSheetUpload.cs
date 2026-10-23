@@ -92,6 +92,10 @@ internal static class GameDatabaseSheetUpload
         Add(row, "value1", card.Effects.Count > 0 ? card.Effects[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");
         Add(row, "effect2", card.Effects.Count > 1 ? LegacyEffect(card.Effects[1].Type) : "None");
         Add(row, "value2", card.Effects.Count > 1 ? card.Effects[1].Amount.ToString(CultureInfo.InvariantCulture) : "0");
+        //강화 효과 수치를 기획 시트 열에 반영
+        var upgraded = card.UpgradedEffects.Count > 0 ? card.UpgradedEffects : card.Effects;
+        Add(row, "upgradeValue1", upgraded.Count > 0 ? upgraded[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");
+        Add(row, "upgradeValue2", upgraded.Count > 1 ? upgraded[1].Amount.ToString(CultureInfo.InvariantCulture) : "0");
 
         Add(row, "Character", card.Owner.ToString());
         Add(row, "Type", card.CardType.ToString());

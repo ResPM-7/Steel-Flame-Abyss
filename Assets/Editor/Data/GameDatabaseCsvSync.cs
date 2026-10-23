@@ -259,6 +259,13 @@ internal static class GameDatabaseCsvSync
             var effects = new List<EffectSpec>();
             AddTotalCardEffect(effects, table, row, "effect1", "value1", target);
             AddTotalCardEffect(effects, table, row, "effect2", "value2", target);
+            //강화 수치 열이 있으면 효과 순서를 유지한 강화 목록 생성
+            var upgradedEffects = new List<EffectSpec>();
+            if (table.Has("upgradeValue1", "upgradeValue2"))
+            {
+                AddTotalCardEffect(upgradedEffects, table, row, "effect1", "upgradeValue1", target);
+                AddTotalCardEffect(upgradedEffects, table, row, "effect2", "upgradeValue2", target);
+            }
 
             result.Add(new CardRow
             {
@@ -271,7 +278,7 @@ internal static class GameDatabaseCsvSync
                 Description = table.Has("description") ? table.Get(row, "description") : string.Empty,
                 UpgradedDescription = string.Empty,
                 Effects = effects,
-                UpgradedEffects = new List<EffectSpec>(),
+                UpgradedEffects = upgradedEffects,
                 Keywords = new List<string>()
             });
         }

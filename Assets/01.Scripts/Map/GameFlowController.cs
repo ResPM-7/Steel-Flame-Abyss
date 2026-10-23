@@ -25,6 +25,8 @@ public class GameFlowController : MonoBehaviour
     private bool initialized;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
     public IGameDataProvider Data => dataProvider;
+    //타이틀 선택 우선 적용과 맵 단독 실행 기본값
+    private int ActivePlayerId => run != null && run.PlayerId > 0 ? run.PlayerId : playerId;
 
     //세션의 진행과 코인 및 보유 덱과 씬 이동 기능 주입
     public void InjectRun(RunProgressModel model, CoinModel coins, OwnedDeckModel cards, IRunSceneLoader loader, OwnedRelicModel relics)
@@ -43,7 +45,7 @@ public class GameFlowController : MonoBehaviour
             GameLogger.LogError("[맵] 데이터 공급자와 풀 및 패널과 지점 목록을 연결해 주세요", this);
             return;
         }
-        CharacterData character = dataProvider.GetCharacter(playerId);
+        CharacterData character = dataProvider.GetCharacter(ActivePlayerId);
         if (!ownedDeck.IsInitialized)
         {
             //선택한 캐릭터 SO의 시작 덱 복사
@@ -73,7 +75,7 @@ public class GameFlowController : MonoBehaviour
         if (dataProvider == null || !dataProvider.IsReady || run == null || ownedDeck == null ||
             sceneLoader == null || objectPoolManager == null || mapPanel == null || popups == null || !popups.IsConfigured ||
             mapScroll == null || mapScroll.content == null || mapTitle == null ||
-            nodes == null || nodes.Length == 0 || !dataProvider.TryGetCharacter(playerId, out _))
+            nodes == null || nodes.Length == 0 || !dataProvider.TryGetCharacter(ActivePlayerId, out _))
             return false;
         var unique = new HashSet<MapNodeView>();
         foreach (MapNodeView node in nodes)

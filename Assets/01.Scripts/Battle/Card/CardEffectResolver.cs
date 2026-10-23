@@ -55,6 +55,7 @@ public class CardEffectResolver
             case EffectType.Weak:
             case EffectType.Vulnerable:
             case EffectType.Burn:
+            case EffectType.BurnRetaliation:
                 return effect.Target != TargetType.None;
 
             case EffectType.Draw:
@@ -75,7 +76,7 @@ public class CardEffectResolver
         switch (effect.Type)
         {
             case EffectType.Damage:
-                target?.TakeDamage(CalculateDamage(card, effect));
+                target?.TakeAttackDamage(CalculateDamage(card, effect), participants.Player.Stats);
                 break;
             case EffectType.Block:
                 target?.GainBlock(effect.Amount);
@@ -97,6 +98,9 @@ public class CardEffectResolver
                 break;
             case EffectType.Burn:
                 target?.ApplyBurn(effect.Amount);
+                break;
+            case EffectType.BurnRetaliation:
+                target?.ApplyBurnRetaliation(effect.Amount);
                 break;
         }
     }

@@ -44,7 +44,10 @@ public class CardPlayController
                 match => match.Value == baseDamage ? damage : match.Value);
         }
 
-        return effectTextPattern.Replace(description, match => GetEffectText(card, match));
+        description = effectTextPattern.Replace(description, match => GetEffectText(card, match));
+        return CardDescriptionFormatter.FormatEffectSlots(description, card.Effects,
+            effect => effect.Type == EffectType.Damage
+                ? effectResolver.CalculateDamage(card, effect) : effect.Amount);
     }
 
     //설명 키워드에 해당하는 효과 수치 반환

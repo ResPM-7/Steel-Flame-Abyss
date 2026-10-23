@@ -38,6 +38,7 @@ public enum EffectType
     Burn = 21,           //화상
     Ignite = 22,         //화상즉시 대미지
     Overheat = 23,       //과열부여
+    BurnRetaliation = 24, //공격받을 때 화상 반격
 
     //흑마법사 능력
     MindFracture = 31,          //정신분열부여

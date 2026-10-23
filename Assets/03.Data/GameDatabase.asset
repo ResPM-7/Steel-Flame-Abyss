@@ -69,8 +69,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
-    \uD654\uC0C1 burn\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uD654\uC0C1 {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 0
@@ -83,7 +83,17 @@ MonoBehaviour:
     amount: 2
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 7
+    secondaryAmount: 0
+    duration: 0
+  - type: 21
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &-5752501738432402752
@@ -151,7 +161,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
-  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 burn\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 21
@@ -159,7 +169,12 @@ MonoBehaviour:
     amount: 3
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 21
+    target: 2
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &-1246789902702565287
@@ -180,8 +195,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
-    \uC815\uC2E0\uBD84\uC5F4 3\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uC815\uC2E0\uBD84\uC5F4 {f2}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 0
@@ -194,7 +209,17 @@ MonoBehaviour:
     amount: 3
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  - type: 31
+    target: 1
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &-841411431289117930
@@ -215,8 +240,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C shield\uB97C \uC5BB\uACE0 \uD654\uC0C1 burn\uC744
-    \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1}\uB97C \uC5BB\uACE0 \uC801\uC774 \uACF5\uACA9\uD55C\uB2E4\uBA74
+    \uD654\uC0C1 {f2}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 1
@@ -224,12 +249,22 @@ MonoBehaviour:
     amount: 4
     secondaryAmount: 0
     duration: 0
-  - type: 21
+  - type: 24
     target: 0
-    amount: 1
+    amount: 2
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 1
+    target: 0
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
+  - type: 24
+    target: 0
+    amount: 0
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &11400000
@@ -306,7 +341,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C shield \uC5BB\uC2B5\uB2C8\uB2E4."
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 1
@@ -314,7 +349,12 @@ MonoBehaviour:
     amount: 5
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 1
+    target: 0
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &1209620363538409710
@@ -335,7 +375,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uD798\uC744 power \uC5BB\uC2B5\uB2C8\uB2E4."
+  description: "\uD798\uC744 {f1} \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 2
@@ -343,7 +383,12 @@ MonoBehaviour:
     amount: 2
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 2
+    target: 0
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &3457554619012350319
@@ -451,7 +496,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 2
-  description: "\uB300\uC0C1\uC758 \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744 2\uBC30\uB85C
+  description: "\uB300\uC0C1\uC758 \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744 {f1}\uBC30\uB85C
     \uB9CC\uB4ED\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -460,7 +505,12 @@ MonoBehaviour:
     amount: 2
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 32
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &6536689892119778697
@@ -506,7 +556,7 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C damage\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 0
@@ -514,7 +564,12 @@ MonoBehaviour:
     amount: 6
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 9
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &7049939704652520354
@@ -535,7 +590,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
-  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 mindFracture\uC744
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 {f1}\uC744
     \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -544,7 +599,12 @@ MonoBehaviour:
     amount: 6
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 31
+    target: 1
+    amount: 9
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}
 --- !u!114 &7863753474886238170
@@ -586,7 +646,7 @@ MonoBehaviour:
   cardType: 1
   rarity: 2
   cost: 1
-  description: "\uCE74\uB4DC\uB97C draw\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
+  description: "\uCE74\uB4DC\uB97C {f1}\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 101
@@ -594,6 +654,11 @@ MonoBehaviour:
     amount: 2
     secondaryAmount: 0
     duration: 0
-  upgradedEffects: []
+  upgradedEffects:
+  - type: 101
+    target: 0
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
   keywords: []
   artwork: {fileID: 0}

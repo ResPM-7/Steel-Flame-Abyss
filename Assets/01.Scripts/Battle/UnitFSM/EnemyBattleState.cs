@@ -86,7 +86,7 @@ public class EnemyBattleState
                     int damage = effect.Amount;
                     if (target != Stats)
                         damage += Stats.Strength;
-                    target.TakeDamage(Math.Max(0, damage));
+                    target.TakeAttackDamage(Math.Max(0, damage), Stats);
                     break;
                 case EffectType.Block:
                     target.GainBlock(effect.Amount);
@@ -102,6 +102,9 @@ public class EnemyBattleState
                     break;
                 case EffectType.Burn:
                     target.ApplyBurn(effect.Amount);
+                    break;
+                case EffectType.BurnRetaliation:
+                    target.ApplyBurnRetaliation(effect.Amount);
                     break;
                 default:
                     GameLogger.LogWarning($"[적 행동] 지원하지 않는 효과 {effect.Type}");
