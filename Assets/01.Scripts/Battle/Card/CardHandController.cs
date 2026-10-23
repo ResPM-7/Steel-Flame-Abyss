@@ -58,16 +58,6 @@ public class CardHandController : MonoBehaviour
             cardPlayController.DescriptionsChanged -= RefreshDescriptions;
     }
 
-    //전투 덱 관리자에 테스트 덱 초기화 요청
-    public void ResetTestDeck()
-    {
-        if (!Application.isPlaying || !ValidateReferences())
-            return;
-
-        if (deckManager.ResetTestDeck())
-            LogState("테스트 덱 초기화");
-    }
-
     //손패 빈자리만큼 카드를 뽑고 표시를 갱신
     public void DrawCards(int count)
     {

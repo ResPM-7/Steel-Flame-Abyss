@@ -1555,6 +1555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleDeckManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2976299564856195350, guid: 78d9e5ad8c397e64ca8b0b9586eb5562, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8421097358084647669, guid: 78d9e5ad8c397e64ca8b0b9586eb5562, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

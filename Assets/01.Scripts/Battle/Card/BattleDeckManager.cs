@@ -20,9 +20,6 @@ public interface IBattleDeckManager
     //카드 ID로 전투 덱 생성
     bool InitializeDeck(IEnumerable<int> cardIds);
 
-    //테스트 카드 ID로 전투 덱과 초기 손패 생성
-    bool ResetTestDeck();
-
     //보유 덱으로 전투 덱과 초기 손패 생성
     bool BeginBattle();
 
@@ -49,12 +46,7 @@ public interface IBattleDeckManager
 public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
 {
     public event Action BattleStarted;
-    [Header("임시 테스트 덱")]
-    [SerializeField] private int[] testDeckIds =
-    {
-        10001, 10001, 10001, 10001, 10001,
-        10002, 10002, 10002, 10002, 10002, 10003, 10003
-    };
+    [Header("전투 시작 손패")]
     [SerializeField] private int initialHandCount = 3;
 
     private IGameDataProvider dataProvider;
@@ -69,24 +61,16 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
         ownedDeck = model;
     }
 
-    //첫 시작 덱 또는 누적 보유 덱으로 전투 준비
+    //세션에서 준비된 보유 덱으로 전투 시작
     public bool BeginBattle()
     {
-        if (ownedDeck == null)
+        if (ownedDeck == null || !ownedDeck.IsInitialized)
         {
-            if (!ResetTestDeck()) return false;
-            BattleStarted?.Invoke();
-            return true;
-        }
-        if (!ownedDeck.IsInitialized && (testDeckIds == null || testDeckIds.Length == 0))
-        {
-            GameLogger.LogError("[덱] 시작 카드 ID를 한 장 이상 등록해 주세요", this);
+            GameLogger.LogError("[덱] 보유 덱이 준비되지 않았습니다. 타이틀 또는 맵에서 게임을 시작해 주세요", this);
             return false;
         }
-        IEnumerable<int> ids = ownedDeck.IsInitialized ? ownedDeck.CardIds : testDeckIds;
-        if (ids == null || !InitializeDeck(ids))
+        if (!InitializeDeck(ownedDeck.CardIds))
             return false;
-        ownedDeck.InitializeOnce(ids);
         DrawCards(initialHandCount);
         BattleStarted?.Invoke();
         return true;
@@ -156,22 +140,6 @@ public class BattleDeckManager : MonoBehaviour, IBattleDeckManager
 
         deck = new DeckState(cards);
         Changed?.Invoke();
-        return true;
-    }
-
-    //테스트 카드 ID로 전투 덱과 초기 손패 생성
-    public bool ResetTestDeck()
-    {
-        if (testDeckIds == null || testDeckIds.Length == 0)
-        {
-            GameLogger.LogError("[덱] 테스트 카드 ID를 한 장 이상 등록해 주세요", this);
-            return false;
-        }
-
-        if (!InitializeDeck(testDeckIds))
-            return false;
-
-        DrawCards(initialHandCount);
         return true;
     }
 

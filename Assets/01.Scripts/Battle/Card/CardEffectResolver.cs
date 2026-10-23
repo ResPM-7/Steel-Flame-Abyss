@@ -1,137 +1,51 @@
-using UnityEngine;
+using System;
 
-//카드 효과 데이터를 플레이어와 적의 전투 상태에 적용
+//등록된 처리기로 카드 효과 검증과 순차 실행
 public class CardEffectResolver
 {
     private readonly IBattleDeckManager deckManager;
     private readonly BattleParticipants participants;
+    private readonly CardEffectRegistry registry;
 
-    //카드 효과 처리에 필요한 전투 객체 저장
-    public CardEffectResolver(IBattleDeckManager manager, BattleParticipants battleParticipants)
+    //전투 의존성과 기본 또는 사용자 정의 처리기 구성 주입
+    public CardEffectResolver(IBattleDeckManager manager, BattleParticipants battleParticipants,
+        CardEffectRegistry effectRegistry = null)
     {
-        if (manager == null)
-            throw new System.ArgumentNullException(nameof(manager));
-        if (battleParticipants == null)
-            throw new System.ArgumentNullException(nameof(battleParticipants));
-
-        deckManager = manager;
-        participants = battleParticipants;
+        deckManager = manager ?? throw new ArgumentNullException(nameof(manager));
+        participants = battleParticipants ?? throw new ArgumentNullException(nameof(battleParticipants));
+        registry = effectRegistry ?? CardEffectRegistry.CreateDefault();
     }
 
-    //카드의 모든 효과가 현재 구현된 효과인지 확인
+    //에너지 소비 전 카드 전체 효과 지원 여부 확인
     public bool CanResolve(CardInstance card)
     {
-        if (card == null || card.Effects == null || card.Effects.Count == 0)
-            return false;
+        if (card == null || card.Effects == null || card.Effects.Count == 0) return false;
+        return CanResolve(new CardEffectContext(card, deckManager, participants));
+    }
 
-        for (int index = 0; index < card.Effects.Count; index++)
-        {
-            if (!CanResolveEffect(card.Effects[index]))
+    //실행에도 사용할 동일 처리기로 전체 효과 검증
+    private bool CanResolve(CardEffectContext context)
+    {
+        foreach (EffectSpec effect in context.Card.Effects)
+            if (!registry.TryGet(effect.Type, out var handler) || !handler.CanApply(effect, context))
                 return false;
-        }
-
         return true;
     }
 
-    //카드 정보와 대상 규칙에 따른 효과 순차 적용
+    //미지원 효과의 부분 실행 차단과 전투 종료 시 중단
     public void Resolve(CardInstance card)
     {
-        for (int index = 0; index < card.Effects.Count; index++)
+        if (card == null || card.Effects == null || card.Effects.Count == 0) return;
+        var context = new CardEffectContext(card, deckManager, participants);
+        if (!CanResolve(context)) return;
+        foreach (EffectSpec effect in card.Effects)
         {
-            if (!participants.IsBattleActive)
-                break;
-            ResolveEffect(card, card.Effects[index]);
+            if (!participants.IsBattleActive) break;
+            if (registry.TryGet(effect.Type, out var handler)) handler.Apply(effect, context);
         }
     }
 
-    //현재 지원하는 효과 종류와 대상 조합 확인
-    private static bool CanResolveEffect(EffectSpec effect)
-    {
-        switch (effect.Type)
-        {
-            case EffectType.Damage:
-            case EffectType.Block:
-            case EffectType.Strength:
-            case EffectType.Weak:
-            case EffectType.Vulnerable:
-            case EffectType.Burn:
-            case EffectType.BurnRetaliation:
-                return effect.Target != TargetType.None;
-
-            case EffectType.Draw:
-            case EffectType.GainEnergy:
-            case EffectType.Exhaust:
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
-    //카드 종류와 효과에 따른 전투 상태 변경
-    private void ResolveEffect(CardInstance card, EffectSpec effect)
-    {
-        CombatantState target = GetTargetState(effect.Target);
-
-        switch (effect.Type)
-        {
-            case EffectType.Damage:
-                target?.TakeAttackDamage(CalculateDamage(card, effect), participants.Player.Stats);
-                break;
-            case EffectType.Block:
-                target?.GainBlock(effect.Amount);
-                break;
-            case EffectType.Strength:
-                target?.GainStrength(effect.Amount);
-                break;
-            case EffectType.Draw:
-                deckManager.DrawCards(effect.Amount);
-                break;
-            case EffectType.GainEnergy:
-                participants.Player.GainEnergy(effect.Amount);
-                break;
-            case EffectType.Weak:
-                target?.ApplyWeak(effect.Amount);
-                break;
-            case EffectType.Vulnerable:
-                target?.ApplyVulnerable(effect.Amount);
-                break;
-            case EffectType.Burn:
-                target?.ApplyBurn(effect.Amount);
-                break;
-            case EffectType.BurnRetaliation:
-                target?.ApplyBurnRetaliation(effect.Amount);
-                break;
-        }
-    }
-
-    //적 대상 공격 카드의 기본 피해에 현재 힘 합산
-    public int CalculateDamage(CardInstance card, EffectSpec effect)
-    {
-        bool targetsEnemy = effect.Target == TargetType.SingleEnemy ||
-            effect.Target == TargetType.AllEnemies ||
-            effect.Target == TargetType.RandomEnemy;
-
-        int damage = effect.Amount;
-        if (card.Data.CardType == CardType.Attack && targetsEnemy && participants.Player != null)
-            damage += participants.Player.Stats.Strength;
-
-        return Mathf.Max(0, damage);
-    }
-
-    //효과 대상 종류를 현재 전투 상태로 변환
-    private CombatantState GetTargetState(TargetType targetType)
-    {
-        switch (targetType)
-        {
-            case TargetType.Self:
-                return participants.Player.Stats;
-            case TargetType.SingleEnemy:
-            case TargetType.AllEnemies:
-            case TargetType.RandomEnemy:
-                return participants.Enemy.Stats;
-            default:
-                return null;
-        }
-    }
+    //설명 미리보기와 실제 공격의 공통 피해 계산
+    public int CalculateDamage(CardInstance card, EffectSpec effect) =>
+        new CardEffectContext(card, deckManager, participants).CalculateDamage(effect);
 }

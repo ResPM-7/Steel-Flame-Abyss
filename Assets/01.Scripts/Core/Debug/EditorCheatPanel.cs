@@ -185,7 +185,6 @@ public class EditorCheatPanel : MonoBehaviour
         GUILayout.Label("보유 덱 추가는 다음 전투부터 적용 / 손패 추가는 현재 전투만 적용");
         bool ready = ActiveBattle && hand != null && hand.IsReady;
         GUILayout.BeginHorizontal();
-        ActionButton("덱 초기화", ready, () => hand.ResetTestDeck());
         ActionButton("1장 드로우", ready, () => hand.DrawCards(1));
         ActionButton("전체 버리기", ready, () => hand.DiscardAll());
         GUILayout.EndHorizontal();
