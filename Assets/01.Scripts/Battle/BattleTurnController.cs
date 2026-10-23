@@ -56,6 +56,7 @@ public class BattleTurnController : MonoBehaviour
             //플레이어 화상으로 패배하면 적 행동 중단
             participants.Player.Stats.ResolveBurnAtTurnEnd();
             if (!participants.IsBattleActive) return;
+            participants.Player.Stats.TickDebuffs();
 
             participants.Enemy.Stats.ClearBlock();
             participants.Enemy.Stats.ClearBurnRetaliation();
@@ -70,6 +71,7 @@ public class BattleTurnController : MonoBehaviour
             //적 행동 이후 화상으로 승리하면 다음 턴 중단
             participants.Enemy.Stats.ResolveBurnAtTurnEnd();
             if (!participants.IsBattleActive) return;
+            participants.Enemy.Stats.TickDebuffs();
 
             StartPlayerTurn();
         }

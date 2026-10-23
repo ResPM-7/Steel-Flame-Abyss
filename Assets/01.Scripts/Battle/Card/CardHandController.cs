@@ -124,7 +124,7 @@ public class CardHandController : MonoBehaviour
         handLayout.RefreshSpacing();
     }
 
-    //힘 변경에 따른 손패 설명 갱신
+    //힘과 약화 및 대상 상태 변경에 따른 손패 설명 갱신
     private void RefreshDescriptions()
     {
         if (slots == null)

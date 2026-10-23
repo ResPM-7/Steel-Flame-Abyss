@@ -37,9 +37,17 @@ public class CombatantState
     public int TakeAttackDamage(int amount, CombatantState attacker)
     {
         if (amount <= 0 || !IsAlive) return 0;
-        int lost = TakeDamage(amount);
+        int lost = TakeDamage(CalculateAttackDamage(amount, attacker));
         burnRetaliation.OnAttacked(this, attacker);
         return lost;
+    }
+
+    //힘 보정 이후 약화 차감과 취약 배율 적용, 소수점 버림
+    public int CalculateAttackDamage(int amount, CombatantState attacker)
+    {
+        long damage = Math.Max(0L, (long)amount - (attacker?.Weak ?? 0));
+        if (Vulnerable > 0) damage = damage * 3 / 2;
+        return (int)Math.Min(int.MaxValue, damage);
     }
 
     public bool IsAlive => CurrentHealth > 0;
@@ -146,12 +154,12 @@ public class CombatantState
         }
     }
 
-    //살아 있는 대상에게 약화 지속량을 추가
+    //살아 있는 대상에게 이번 턴 공격 감소량 누적
     public void ApplyWeak(int amount)
     {
         if (amount > 0 && IsAlive)
         {
-            Weak += amount;
+            Weak = (int)Math.Min(int.MaxValue, (long)Weak + amount);
             Changed?.Invoke();
         }
     }
@@ -161,16 +169,16 @@ public class CombatantState
     {
         if (amount > 0 && IsAlive)
         {
-            Vulnerable += amount;
+            Vulnerable = (int)Math.Min(int.MaxValue, (long)Vulnerable + amount);
             Changed?.Invoke();
         }
     }
 
-    //턴 종료 시 약화와 취약 지속량을 1씩 감소
+    //자신의 턴 종료 시 약화 전체 해제와 취약 남은 턴 1 감소
     public void TickDebuffs()
     {
         if (Weak == 0 && Vulnerable == 0) return;
-        Weak = Math.Max(0, Weak - 1);
+        Weak = 0;
         Vulnerable = Math.Max(0, Vulnerable - 1);
         Changed?.Invoke();
     }

@@ -20,7 +20,7 @@ public abstract class TargetedCardEffectHandler : ICardEffectHandler
 public class DamageEffectHandler : TargetedCardEffectHandler
 {
     protected override void ApplyToTarget(EffectSpec effect, CardEffectContext context, CombatantState target) =>
-        target.TakeAttackDamage(context.CalculateDamage(effect), context.Participants.Player.Stats);
+        target.TakeAttackDamage(context.CalculateBaseDamage(effect), context.Participants.Player.Stats);
 }
 
 //방어도 획득

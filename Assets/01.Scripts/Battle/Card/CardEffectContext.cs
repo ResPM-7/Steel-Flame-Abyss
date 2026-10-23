@@ -23,14 +23,21 @@ public class CardEffectContext
         _ => null
     };
 
-    //실제 실행과 설명에서 공통 사용하는 힘 보정 피해
-    public int CalculateDamage(EffectSpec effect)
+    //약화와 취약 적용 전 힘 보정 피해
+    public int CalculateBaseDamage(EffectSpec effect)
     {
         bool enemy = effect.Target == TargetType.SingleEnemy ||
             effect.Target == TargetType.AllEnemies || effect.Target == TargetType.RandomEnemy;
-        int damage = effect.Amount;
+        long damage = effect.Amount;
         if (Card.Data.CardType == CardType.Attack && enemy && Participants.Player != null)
             damage += Participants.Player.Stats.Strength;
-        return Mathf.Max(0, damage);
+        return (int)System.Math.Max(0L, System.Math.Min(int.MaxValue, damage));
+    }
+
+    //실제 피격 계산과 동일한 카드 설명용 피해
+    public int CalculateDamage(EffectSpec effect)
+    {
+        int damage = CalculateBaseDamage(effect);
+        return GetTarget(effect.Target)?.CalculateAttackDamage(damage, Participants.Player?.Stats) ?? damage;
     }
 }

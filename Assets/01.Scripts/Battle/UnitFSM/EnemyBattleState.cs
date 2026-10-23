@@ -83,10 +83,7 @@ public class EnemyBattleState
             switch (effect.Type)
             {
                 case EffectType.Damage:
-                    int damage = effect.Amount;
-                    if (target != Stats)
-                        damage += Stats.Strength;
-                    target.TakeAttackDamage(Math.Max(0, damage), Stats);
+                    target.TakeAttackDamage(GetBaseDamage(effect, target), Stats);
                     break;
                 case EffectType.Block:
                     target.GainBlock(effect.Amount);
@@ -113,6 +110,18 @@ public class EnemyBattleState
         }
 
         IntentChanged?.Invoke();
+    }
+
+    //상태 보정 전 적 공격 피해 계산
+    private int GetBaseDamage(EffectSpec effect, CombatantState target) =>
+        (int)Math.Max(0L, Math.Min(int.MaxValue, (long)effect.Amount + (target != Stats ? Stats.Strength : 0)));
+
+    //실제 피격 계산과 동일한 적 행동 예고 수치
+    public int GetPreviewAmount(EffectSpec effect, CombatantState player)
+    {
+        if (effect.Type != EffectType.Damage) return effect.Amount;
+        CombatantState target = effect.Target == TargetType.Self ? Stats : player;
+        return target.CalculateAttackDamage(GetBaseDamage(effect, target), Stats);
     }
 
     //효과가 있고 가중치가 유효한 선택 가능한 행동인지 확인

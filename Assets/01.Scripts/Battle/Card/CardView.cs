@@ -13,6 +13,7 @@ public class CardView : CardDisplayView
     private CanvasGroup canvasGroup;
     private float dragStartScreenY;
     private bool isDragging;
+    private BattleCombatantView previewTarget;
 
     public CardInstance Card { get; private set; }
     public override bool IsConfigured => base.IsConfigured && hoverTween != null;
@@ -40,6 +41,7 @@ public class CardView : CardDisplayView
             throw new System.ArgumentNullException(nameof(playController));
 
         Card = card;
+        previewTarget = null;
         cardPlayController = playController;
         hoverTween.SetDragReceiver(this);
         SetDisplay(card.Data, card.Cost, cardPlayController.GetDescription(card));
@@ -48,13 +50,13 @@ public class CardView : CardDisplayView
         hoverTween.gameObject.SetActive(true);
     }
 
-    //카드 위치를 유지하며 현재 힘을 설명에 반영
+    //현재 힘과 약화 및 드래그 대상의 취약을 설명에 반영
     public void RefreshDescription()
     {
         if (Card == null || cardPlayController == null || descriptionText == null)
             return;
 
-        descriptionText.text = cardPlayController.GetDescription(Card);
+        descriptionText.text = cardPlayController.GetDescription(Card, isDragging ? previewTarget : null);
     }
 
     //카드를 호버 레이어에 고정하고 드래그 시작 위치 저장
@@ -66,6 +68,7 @@ public class CardView : CardDisplayView
         dragStartScreenY = eventData.pressPosition.y;
         canvasGroup.blocksRaycasts = false;
         isDragging = true;
+        UpdatePreviewTarget(eventData);
     }
 
     //마우스 이동량만큼 카드 위치 변경
@@ -76,6 +79,16 @@ public class CardView : CardDisplayView
 
         float scaleFactor = rootCanvas != null ? rootCanvas.scaleFactor : 1f;
         hoverTween.MoveDuringDrag(eventData.delta, scaleFactor);
+        UpdatePreviewTarget(eventData);
+    }
+
+    //포인터 대상 변경 시에만 설명 수치 갱신
+    private void UpdatePreviewTarget(PointerEventData eventData)
+    {
+        BattleCombatantView target = GetDropTarget(eventData);
+        if (previewTarget == target) return;
+        previewTarget = target;
+        RefreshDescription();
     }
 
     //놓은 위치와 카드 대상 규칙으로 카드 사용 요청
@@ -85,13 +98,17 @@ public class CardView : CardDisplayView
             return;
 
         isDragging = false;
+        previewTarget = null;
         canvasGroup.blocksRaycasts = true;
 
         BattleCombatantView targetView = GetDropTarget(eventData);
         bool raisedEnough = eventData.position.y >= dragStartScreenY + playDragDistance;
         bool played = cardPlayController.TryPlayCard(Card, targetView, raisedEnough);
         if (!played)
+        {
             hoverTween.CancelDrag();
+            RefreshDescription();
+        }
     }
 
     //포인터 아래의 전투 참가자 UI 확인
@@ -107,6 +124,7 @@ public class CardView : CardDisplayView
     public void Hide()
     {
         isDragging = false;
+        previewTarget = null;
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;
         hoverTween.ReturnImmediately();

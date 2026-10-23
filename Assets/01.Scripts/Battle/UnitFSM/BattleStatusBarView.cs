@@ -33,8 +33,8 @@ public class BattleStatusBarView : MonoBehaviour
         bar.CreateTooltip(source.GetComponentInParent<Canvas>().rootCanvas);
         bar.items[0] = bar.CreateItem("화상", "턴 종료 시 수치만큼 방어도를 무시하고 체력 피해.\n발동 후 화상 수치 1 감소.", new Color(0.65f, 0.18f, 0.08f));
         bar.items[1] = bar.CreateItem("화상\n반격", "적의 공격을 받고 생존하면 공격자에게 수치만큼 화상 부여.\n방어도로 막아도 발동. 다음 자신의 턴 시작 시 해제.", new Color(0.48f, 0.24f, 0.08f));
-        bar.items[2] = bar.CreateItem("약화", "공격 피해가 약화 수치만큼 감소. 1턴 지속.\n※ 피해 계산 적용 예정", new Color(0.25f, 0.35f, 0.25f));
-        bar.items[3] = bar.CreateItem("취약", "받는 공격 피해 50% 증가.\n※ 피해 계산 적용 예정", new Color(0.38f, 0.22f, 0.48f));
+        bar.items[2] = bar.CreateItem("약화", "공격 피해가 약화 수치만큼 감소.\n자신의 턴 종료 시 전체 해제.", new Color(0.25f, 0.35f, 0.25f));
+        bar.items[3] = bar.CreateItem("취약", "받는 공격 피해 50% 증가. 소수점 버림.\n수치는 남은 턴. 자신의 턴 종료 시 1 감소.", new Color(0.38f, 0.22f, 0.48f));
         return bar;
     }
 

@@ -14,6 +14,7 @@ public class BattleParticipants : MonoBehaviour
     private int displayedStrength = -1;
 
     public event Action StrengthChanged;
+    public event Action DamagePreviewChanged;
     public event Action<BattleResult> ResultChanged;
     public BattleResult Result { get; private set; } = BattleResult.Ongoing;
     public bool IsBattleActive => IsReady && Result == BattleResult.Ongoing &&
@@ -143,6 +144,8 @@ public class BattleParticipants : MonoBehaviour
         Player.Stats.Changed += RefreshPlayer;
         Player.Stats.Changed += CheckBattleResult;
         Enemy.Stats.Changed += CheckBattleResult;
+        Player.Stats.Changed += RefreshDamagePreviews;
+        Enemy.Stats.Changed += RefreshDamagePreviews;
         Enemy.IntentChanged += RefreshEnemy;
         playerView.Bind(character.DisplayName, character.Portrait, Player.Stats);
         enemyView.Bind(enemy.DisplayName, enemy.Artwork, Enemy.Stats);
@@ -200,7 +203,15 @@ public class BattleParticipants : MonoBehaviour
             IntentType.Buff => "강화", IntentType.Debuff => "약화", _ => "특수"
         };
         enemyView.SetDetail($"다음 행동: {intent}\n" +
-            string.Join(" / ", action.Effects.Select(e => $"{e.Type} {e.Amount}")));
+            string.Join(" / ", action.Effects.Select(e => $"{e.Type} {Enemy.GetPreviewAmount(e, Player.Stats)}")));
+    }
+
+    //양쪽 상태 변경 시 손패 설명과 적 공격 예고 갱신
+    private void RefreshDamagePreviews()
+    {
+        if (!IsReady) return;
+        RefreshEnemy();
+        DamagePreviewChanged?.Invoke();
     }
 
     //컴포넌트 제거 시 모든 상태 변경 구독 해제
@@ -220,11 +231,13 @@ public class BattleParticipants : MonoBehaviour
             Player.Changed -= RefreshPlayer;
             Player.Stats.Changed -= RefreshPlayer;
             Player.Stats.Changed -= CheckBattleResult;
+            Player.Stats.Changed -= RefreshDamagePreviews;
         }
         if (Enemy != null)
         {
             Enemy.IntentChanged -= RefreshEnemy;
             Enemy.Stats.Changed -= CheckBattleResult;
+            Enemy.Stats.Changed -= RefreshDamagePreviews;
         }
     }
 

@@ -13,12 +13,12 @@ public class CardPlayController
 
     public event System.Action DescriptionsChanged
     {
-        add { participants.StrengthChanged += value; }
-        remove { participants.StrengthChanged -= value; }
+        add { participants.DamagePreviewChanged += value; }
+        remove { participants.DamagePreviewChanged -= value; }
     }
 
     //카드 설명의 효과 키워드를 현재 효과 수치로 변환
-    public string GetDescription(CardInstance card)
+    public string GetDescription(CardInstance card, BattleCombatantView previewTarget = null)
     {
         if (card == null)
             return string.Empty;
@@ -38,20 +38,36 @@ public class CardPlayController
 
         if (damageCount == 1)
         {
-            string damage = effectResolver.CalculateDamage(card, damageEffect).ToString();
+            string damage = GetPreviewDamage(card, damageEffect, previewTarget).ToString();
             string baseDamage = damageEffect.Amount.ToString();
             description = damageTextPattern.Replace(description,
                 match => match.Value == baseDamage ? damage : match.Value);
         }
 
-        description = effectTextPattern.Replace(description, match => GetEffectText(card, match));
+        description = effectTextPattern.Replace(description, match => GetEffectText(card, match, previewTarget));
         return CardDescriptionFormatter.FormatEffectSlots(description, card.Effects,
             effect => effect.Type == EffectType.Damage
-                ? effectResolver.CalculateDamage(card, effect) : effect.Amount);
+                ? GetPreviewDamage(card, effect, previewTarget) : effect.Amount);
+    }
+
+    //단일 적 카드의 드래그 대상에만 취약 보정 반영
+    private int GetPreviewDamage(CardInstance card, EffectSpec effect, BattleCombatantView previewTarget)
+    {
+        var context = new CardEffectContext(card, deckManager, participants);
+        if (effect.Target != TargetType.SingleEnemy)
+            return context.CalculateDamage(effect);
+
+        int damage = context.CalculateBaseDamage(effect);
+        CombatantState attacker = participants.Player?.Stats;
+        if (previewTarget != null && previewTarget == participants.EnemyView &&
+            participants.Enemy != null && participants.Enemy.Stats.IsAlive)
+            return participants.Enemy.Stats.CalculateAttackDamage(damage, attacker);
+
+        return System.Math.Max(0, damage - (attacker?.Weak ?? 0));
     }
 
     //설명 키워드에 해당하는 효과 수치 반환
-    private string GetEffectText(CardInstance card, Match match)
+    private string GetEffectText(CardInstance card, Match match, BattleCombatantView previewTarget)
     {
         EffectType effectType;
         switch (match.Groups["token"].Value)
@@ -82,7 +98,7 @@ public class CardPlayController
             }
 
             if (effectType == EffectType.Damage)
-                return effectResolver.CalculateDamage(card, effect).ToString();
+                return GetPreviewDamage(card, effect, previewTarget).ToString();
 
             return effect.Amount.ToString();
         }
