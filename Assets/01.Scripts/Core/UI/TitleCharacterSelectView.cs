@@ -11,7 +11,6 @@ public class TitleCharacterSelectView : MonoBehaviour
     {
         public UnityEngine.UI.Button button;
         public CharacterData character;
-        public bool available = true;
         [NonSerialized] public UnityAction listener;
     }
 
@@ -58,7 +57,7 @@ public class TitleCharacterSelectView : MonoBehaviour
     private void Select(Choice choice)
     {
         if (session == null || starting || session.IsLoading || !selectionPanel.activeInHierarchy ||
-            !choice.available || choice.character == null) return;
+             choice.character == null) return;
         starting = true;
         RefreshButtons();
         if (session.TryStartNewGame(choice.character, database)) return;
@@ -72,7 +71,7 @@ public class TitleCharacterSelectView : MonoBehaviour
         bool ready = session != null && !starting && !session.IsLoading;
         startButton.interactable = ready;
         foreach (var choice in choices)
-            choice.button.interactable = ready && choice.available && choice.character != null;
+            choice.button.interactable = ready && choice.character != null;
     }
 
     //씬 종료 시 등록한 버튼 콜백 해제

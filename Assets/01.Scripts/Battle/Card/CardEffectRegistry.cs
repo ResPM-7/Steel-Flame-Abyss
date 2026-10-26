@@ -27,6 +27,8 @@ public class CardEffectRegistry
         registry.Register(EffectType.Vulnerable, new VulnerableEffectHandler());
         registry.Register(EffectType.Burn, new BurnEffectHandler());
         registry.Register(EffectType.BurnRetaliation, new BurnRetaliationEffectHandler());
+        registry.Register(EffectType.MindFracture, new MindFractureEffectHandler());
+        registry.Register(EffectType.AmplifyMindFracture, new AmplifyMindFractureEffectHandler());
         registry.Register(EffectType.Draw, new DrawEffectHandler());
         registry.Register(EffectType.GainEnergy, new GainEnergyEffectHandler());
         registry.Register(EffectType.Exhaust, new ExhaustEffectHandler());

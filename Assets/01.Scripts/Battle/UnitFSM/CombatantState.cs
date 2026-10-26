@@ -14,6 +14,8 @@ public class CombatantState
     public int Weak { get; private set; }
     public int Vulnerable { get; private set; }
     public int Burn { get; private set; }
+    public int MindFracture { get; private set; }
+    public bool CanReceiveMindFracture { get; }
     private readonly BurnRetaliationEffect burnRetaliation = new BurnRetaliationEffect();
     public int BurnRetaliation => burnRetaliation.Amount;
 
@@ -60,12 +62,13 @@ public class CombatantState
     }
 
     //최대 체력과 현재 체력으로 전투 상태를 생성
-    public CombatantState(int maxHealth, int currentHealth)
+    public CombatantState(int maxHealth, int currentHealth, bool canReceiveMindFracture = false)
     {
         if (maxHealth <= 0)
             throw new ArgumentOutOfRangeException(nameof(maxHealth), "최대 체력은 1 이상이어야 합니다.");
 
         MaxHealth = maxHealth;
+        CanReceiveMindFracture = canReceiveMindFracture;
         CurrentHealth = Math.Max(0, Math.Min(currentHealth, maxHealth));
     }
 
@@ -92,6 +95,32 @@ public class CombatantState
         CurrentHealth -= lost;
         Changed?.Invoke();
         return lost;
+    }
+
+    //적 전용 정신분열 누적 후 즉시 처형 검사
+    public void ApplyMindFracture(int amount)
+    {
+        if (!CanReceiveMindFracture || !IsAlive || amount <= 0) return;
+        MindFracture = (int)Math.Min(int.MaxValue, (long)MindFracture + amount);
+        if (!TryExecuteMindFracture()) Changed?.Invoke();
+    }
+
+    //현재 정신분열 배수 증가 후 즉시 처형 검사
+    public void AmplifyMindFracture(int multiplier)
+    {
+        if (!CanReceiveMindFracture || !IsAlive || MindFracture <= 0 || multiplier <= 1) return;
+        MindFracture = (int)Math.Min(int.MaxValue, (long)MindFracture * multiplier);
+        if (!TryExecuteMindFracture()) Changed?.Invoke();
+    }
+
+    //현재 체력 이상이면 방어도와 반격을 무시한 처형 및 승패 알림
+    public bool TryExecuteMindFracture()
+    {
+        if (!CanReceiveMindFracture || !IsAlive || MindFracture <= 0 || MindFracture < CurrentHealth)
+            return false;
+        CurrentHealth = 0;
+        Changed?.Invoke();
+        return true;
     }
 
     //살아 있는 대상에게 화상 중첩 추가

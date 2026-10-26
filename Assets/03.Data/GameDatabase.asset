@@ -114,7 +114,7 @@ MonoBehaviour:
   maxHealth: 66
   startingEnergy: 3
   startingDeckIds: 214e0000214e0000214e0000224e0000224e0000224e0000234e0000234e0000
-  cardPoolIds: 214e0000224e0000234e00002a4e0000419c0000
+  cardPoolIds: 214e0000224e0000234e00002a4e0000419c0000429c0000439c0000
   resourceName: "\uACFC\uC5F4"
   portrait: {fileID: 0}
 --- !u!114 &-4994107017506138331
@@ -143,6 +143,119 @@ MonoBehaviour:
     duration: 0
   icon: {fileID: 0}
   effectsEnabled: 1
+--- !u!114 &-3076726178586581687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40003
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 40003
+  displayName: "\uBE48\uD2C8 \uD3EC\uCC29"
+  owner: 0
+  cardType: 1
+  rarity: 1
+  cost: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uCDE8\uC57D {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 105
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 105
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-1941972444394071981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10004
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10004
+  displayName: "\uB9DD\uCE58 \uB358\uC9C0\uAE30"
+  owner: 1
+  cardType: 0
+  rarity: 1
+  cost: 2
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uB370\uBBF8\uC9C0 {f1}\uC758 \uD53C\uD574\uB97C
+    \uC8FC\uACE0 \uCDE8\uC57D {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-1577703197552816408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40002
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 40002
+  displayName: "\uC704\uD611"
+  owner: 0
+  cardType: 1
+  rarity: 1
+  cost: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC57D\uD654 {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 104
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 104
+    target: 1
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-1246789902702565287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +362,7 @@ MonoBehaviour:
   - {fileID: 6923530557049175458}
   - {fileID: 960357282857903389}
   - {fileID: 1209620363538409710}
+  - {fileID: -1941972444394071981}
   - {fileID: -7525678505189942033}
   - {fileID: -841411431289117930}
   - {fileID: 2035420301826485214}
@@ -257,6 +371,8 @@ MonoBehaviour:
   - {fileID: 7049939704652520354}
   - {fileID: 6126127775062050035}
   - {fileID: 8219795776332101764}
+  - {fileID: -1577703197552816408}
+  - {fileID: -3076726178586581687}
   characters:
   - {fileID: 7863753474886238170}
   - {fileID: -5752501738432402752}
@@ -287,7 +403,7 @@ MonoBehaviour:
   maxHealth: 70
   startingEnergy: 3
   startingDeckIds: 3175000032750000
-  cardPoolIds: 317500003275000033750000419c0000
+  cardPoolIds: 317500003275000033750000419c0000429c0000439c0000
   resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
   portrait: {fileID: 0}
 --- !u!114 &960357282857903389
@@ -670,8 +786,8 @@ MonoBehaviour:
   characterClass: 1
   maxHealth: 80
   startingEnergy: 3
-  startingDeckIds: 112700001127000011270000112700001127000012270000122700001227000012270000122700001327000013270000
-  cardPoolIds: 112700001227000013270000419c0000
+  startingDeckIds: 112700001127000011270000122700001227000012270000132700001427000014270000
+  cardPoolIds: 11270000122700001327000014270000419c0000429c0000439c0000
   resourceName: "\uBD84\uB178"
   portrait: {fileID: 0}
 --- !u!114 &8219795776332101764

@@ -22,7 +22,7 @@ public class EnemyBattleState
         //최댓값 포함과 int 오버플로 방지
         var health = data.MinHealth + (int)(random.NextDouble() *
             ((long)data.MaxHealth - data.MinHealth + 1));
-        Stats = new CombatantState(health);
+        Stats = new CombatantState(health, health, canReceiveMindFracture: true);
         PlanNextAction();
     }
 

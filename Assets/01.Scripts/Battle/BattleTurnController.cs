@@ -53,8 +53,9 @@ public class BattleTurnController : MonoBehaviour
         //1. 플레이어 손패 버림
         //2. 플레이어에게 걸린 화상 피해 적용
         //3. 몬스터에게 걸린 화상 피해 적용
-        //4. 몬스터 공격·행동 실행
-        //5. 다음 플레이어 턴 시작
+        //4. 몬스터 정신분열 처형 검사
+        //5. 몬스터 공격·행동 실행
+        //6. 다음 플레이어 턴 시작
 
         try
         {
@@ -63,8 +64,12 @@ public class BattleTurnController : MonoBehaviour
             participants.Player.Stats.ResolveBurnAtTurnEnd();
             if (!participants.IsBattleActive) return;
 
-            //적 행동 이후 화상으로 승리하면 다음 턴 중단
+            //적 행동 전 화상으로 승리하면 턴 진행 중단
             participants.Enemy.Stats.ResolveBurnAtTurnEnd();
+            if (!participants.IsBattleActive) return;
+
+            //화상으로 감소한 적 체력 기준 처형 검사
+            participants.Enemy.Stats.TryExecuteMindFracture();
             if (!participants.IsBattleActive) return;
 
             participants.Player.Stats.TickDebuffs();
