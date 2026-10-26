@@ -19,10 +19,11 @@ public class BattleCombatantView : MonoBehaviour
     private string detail = string.Empty;
     private Color aliveColor;
     private BattleStatusBarView statusBar;
+    private BattleUnitPortraitView unitPortrait;
     public CombatantState State => state;
 
     //전투 상태와 표시 데이터 연결 및 초상화 대상 감지 활성화
-    public void Bind(string displayName, Sprite sprite, CombatantState value)
+    public void Bind(string displayName, Sprite sprite, CombatantState value, GameObject battlePrefab = null, bool faceLeft = false)
     {
         if (state != null) state.Changed -= Refresh;
 
@@ -30,6 +31,10 @@ public class BattleCombatantView : MonoBehaviour
         nameLabel.text = displayName;
         portrait.sprite = sprite;
         aliveColor = sprite != null ? Color.white : placeholderColor;
+
+        //전투 표시 객체 한 번 생성, 재연결 시 기존 객체 정리
+        if (unitPortrait == null) unitPortrait = gameObject.AddComponent<BattleUnitPortraitView>();
+        unitPortrait.Bind(portrait, battlePrefab, state, faceLeft);
 
         if (state != null && isActiveAndEnabled) state.Changed += Refresh;
         Refresh();
@@ -68,7 +73,8 @@ public class BattleCombatantView : MonoBehaviour
         //기존 능력치 아래에 상태 아이콘 생성 후 재사용
         if (statusBar == null) statusBar = BattleStatusBarView.Create(statusLabel);
         statusBar.Refresh(state);
-        portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
+        if (unitPortrait == null || !unitPortrait.HasVisual)
+            portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
         detailLabel.text = state.IsAlive ? detail : "전투 불능";
     }
 }

@@ -39,6 +39,7 @@ public class BattleParticipants : MonoBehaviour
 
     [SerializeField] private BattleCombatantView playerView;
     [SerializeField] private BattleCombatantView enemyView;
+    [SerializeField] private EnemyViewFactory enemyFactory;
     [SerializeField] private TMP_Text playerEnergyStatus;
     [SerializeField] private TMP_Text deckCountText;
 
@@ -110,7 +111,7 @@ public class BattleParticipants : MonoBehaviour
     public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false, int? currentHealth = null)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
-            enemyView == null || playerEnergyStatus == null || deckManager == null ||
+            (enemyFactory != null ? !enemyFactory.IsConfigured : enemyView == null) || playerEnergyStatus == null || deckManager == null ||
             deckCountText == null)
         {
             GameLogger.LogError("[전투] BattleParticipants의 데이터 및 UI 연결을 확인해 주세요.", this);
@@ -136,6 +137,13 @@ public class BattleParticipants : MonoBehaviour
             nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - Player.Stats.CurrentHealth));
         }
         var nextEnemy = new EnemyBattleState(enemy, new System.Random());
+        //동적 전투 UI 생성 후 실제 카드 대상 참조 교체
+        if (enemyFactory != null)
+        {
+            enemyFactory.Clear();
+            enemyView = enemyFactory.Create(enemy, nextEnemy.Stats);
+            if (enemyView == null) return false;
+        }
         UnsubscribeParticipantEvents();
         Player = nextPlayer;
         Enemy = nextEnemy;
@@ -147,8 +155,9 @@ public class BattleParticipants : MonoBehaviour
         Player.Stats.Changed += RefreshDamagePreviews;
         Enemy.Stats.Changed += RefreshDamagePreviews;
         Enemy.IntentChanged += RefreshEnemy;
-        playerView.Bind(character.DisplayName, character.Portrait, Player.Stats);
-        enemyView.Bind(enemy.DisplayName, enemy.Artwork, Enemy.Stats);
+        playerView.Bind(character.DisplayName, character.Portrait, Player.Stats, character.BattlePrefab);
+        if (enemyFactory == null)
+            enemyView.Bind(enemy.DisplayName, enemy.Artwork, Enemy.Stats, enemy.BattlePrefab, true);
         RefreshPlayer();
         RefreshEnemy();
         ResultChanged?.Invoke(Result);

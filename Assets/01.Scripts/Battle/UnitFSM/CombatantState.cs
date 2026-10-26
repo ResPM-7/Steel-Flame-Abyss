@@ -6,6 +6,9 @@ public class CombatantState
 {
     //체력 방어도 능력치가 변경된 직후 알림
     public event Action Changed;
+    //공격과 실제 피해 발생 시 공통 연출 알림
+    public event Action AttackPerformed;
+    public event Action Damaged;
 
     public int MaxHealth { get; }
     public int CurrentHealth { get; private set; }
@@ -39,6 +42,7 @@ public class CombatantState
     public int TakeAttackDamage(int amount, CombatantState attacker)
     {
         if (amount <= 0 || !IsAlive) return 0;
+        attacker?.AttackPerformed?.Invoke();
         int lost = TakeDamage(CalculateAttackDamage(amount, attacker));
         burnRetaliation.OnAttacked(this, attacker);
         return lost;
@@ -84,6 +88,7 @@ public class CombatantState
         int healthDamage = Math.Min(CurrentHealth, amount - blockedDamage);
         CurrentHealth -= healthDamage;
         Changed?.Invoke();
+        Damaged?.Invoke();
         return healthDamage;
     }
 
@@ -94,6 +99,7 @@ public class CombatantState
         int lost = Math.Min(CurrentHealth, amount);
         CurrentHealth -= lost;
         Changed?.Invoke();
+        Damaged?.Invoke();
         return lost;
     }
 
@@ -139,6 +145,7 @@ public class CombatantState
         CurrentHealth -= lost;
         Burn--;
         Changed?.Invoke();
+        Damaged?.Invoke();
         return lost;
     }
 

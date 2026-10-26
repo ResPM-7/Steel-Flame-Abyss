@@ -11,6 +11,8 @@ public class EnemyData : GameDataEntry
     [Min(0)] [SerializeField] private int maxGold;
     [SerializeField] private List<EnemyActionSpec> actions = new();
     [SerializeField] private Sprite artwork;
+    [Tooltip("전투 시작 시 한 번 생성할 공통 애니메이션 프리팹")]
+    [SerializeField] private GameObject battlePrefab;
 
     public EnemyTier Tier => tier;
     public int MinHealth => minHealth;
@@ -19,6 +21,7 @@ public class EnemyData : GameDataEntry
     public int MaxGold => maxGold;
     public IReadOnlyList<EnemyActionSpec> Actions => actions;
     public Sprite Artwork => artwork;
+    public GameObject BattlePrefab => battlePrefab;
 
 #if UNITY_EDITOR
     //검증이 끝난 적 시트 한 행을 이 서브에셋에 반영

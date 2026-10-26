@@ -117,6 +117,7 @@ MonoBehaviour:
   cardPoolIds: 214e0000224e0000234e00002a4e0000419c0000429c0000439c0000
   resourceName: "\uACFC\uC5F4"
   portrait: {fileID: 0}
+  battlePrefab: {fileID: 0}
 --- !u!114 &-4994107017506138331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,6 +407,7 @@ MonoBehaviour:
   cardPoolIds: 317500003275000033750000419c0000429c0000439c0000
   resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
   portrait: {fileID: 0}
+  battlePrefab: {fileID: 0}
 --- !u!114 &960357282857903389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -558,6 +560,7 @@ MonoBehaviour:
       secondaryAmount: 0
       duration: 0
   artwork: {fileID: 0}
+  battlePrefab: {fileID: 4553075792530485228, guid: 69b859dea3264394935cad294ca531fa, type: 3}
 --- !u!114 &4394696580758261533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,6 +609,7 @@ MonoBehaviour:
       secondaryAmount: 0
       duration: 2
   artwork: {fileID: 0}
+  battlePrefab: {fileID: 0}
 --- !u!114 &4574230653417062746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,6 +794,7 @@ MonoBehaviour:
   cardPoolIds: 11270000122700001327000014270000419c0000429c0000439c0000
   resourceName: "\uBD84\uB178"
   portrait: {fileID: 0}
+  battlePrefab: {fileID: 0}
 --- !u!114 &8219795776332101764
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -191,3 +191,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f651af9ebb383499e63b72904b8a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleUnitAnimationView
+  portraitScale: 3

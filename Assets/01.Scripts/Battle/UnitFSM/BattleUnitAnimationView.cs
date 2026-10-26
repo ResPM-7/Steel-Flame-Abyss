@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class BattleUnitAnimationView : MonoBehaviour
 {
+    [Tooltip("투명 여백이 포함된 스프라이트의 UI 표시 배율")]
+    [Min(0.1f)] [SerializeField] private float portraitScale = 1f;
+    public float PortraitScale => portraitScale;
     private Animator animator;
     private static readonly int Idle = Animator.StringToHash("Idle");
     private static readonly int Die = Animator.StringToHash("Die");
