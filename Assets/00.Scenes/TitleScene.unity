@@ -1027,7 +1027,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1002950900}
   m_OnClick:
     m_PersistentCalls:
@@ -1733,13 +1733,10 @@ MonoBehaviour:
   choices:
   - button: {fileID: 955434470}
     character: {fileID: 7863753474886238170, guid: 4b7605a96c9ea7e4798a26fec39fe055, type: 2}
-    available: 1
   - button: {fileID: 943429211}
     character: {fileID: -5752501738432402752, guid: 4b7605a96c9ea7e4798a26fec39fe055, type: 2}
-    available: 1
   - button: {fileID: 1002950899}
     character: {fileID: 596276596265036108, guid: 4b7605a96c9ea7e4798a26fec39fe055, type: 2}
-    available: 0
 --- !u!114 &5785352805573207842
 MonoBehaviour:
   m_ObjectHideFlags: 0
