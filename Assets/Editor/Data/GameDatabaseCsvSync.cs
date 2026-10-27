@@ -299,25 +299,12 @@ internal static class GameDatabaseCsvSync
         effects.Add(new EffectSpec(effectType, target, NonNegativeInt(table, row, valueColumn)));
     }
 
+    //시트 효과 이름과 enum 이름 직접 연결 및 숫자·별칭 입력 차단
     private static bool TryMapProjectEffect(string raw, out EffectType type)
     {
-        var aliases = new Dictionary<string, EffectType>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["Damage"] = EffectType.Damage,
-            ["Block"] = EffectType.Block,
-            ["Draw"] = EffectType.Draw,
-            ["GainEnergy"] = EffectType.GainEnergy,
-            ["Exhaust"] = EffectType.Exhaust,
-            ["GainStrength"] = EffectType.Strength,
-            ["GainRage"] = EffectType.Rage,
-            ["ApplyBurn"] = EffectType.Burn,
-            ["Ignite"] = EffectType.Ignite,
-            ["GainOverheat"] = EffectType.Overheat,
-            ["ApplyMentalSplit"] = EffectType.MindFracture,
-            ["MultiplyMentalSplit"] = EffectType.AmplifyMindFracture,
-            ["ApplyHallucination"] = EffectType.NextMindFractureBonus
-        };
-        return Enum.TryParse(raw.Trim(), true, out type) || aliases.TryGetValue(raw.Trim(), out type);
+        string name = raw?.Trim();
+        return Enum.TryParse(name, true, out type) && Enum.IsDefined(typeof(EffectType), type) &&
+            string.Equals(name, type.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
     private static CharacterClass ParseProjectOwner(string raw, CsvTable table, int row)
@@ -715,7 +702,7 @@ internal static class GameDatabaseCsvSync
         {
             var parts = effectText.Split(':');
             if (parts.Length < 3 || parts.Length > 5 ||
-                !Enum.TryParse(parts[0].Trim(), true, out EffectType type) ||
+                !TryMapProjectEffect(parts[0], out EffectType type) ||
                 !Enum.TryParse(parts[1].Trim(), true, out TargetType target) ||
                 !int.TryParse(parts[2].Trim(), out var amount))
                 throw Error(table, row, $"{column} 효과 '{effectText}' 형식이 잘못되었습니다. Type:Target:Amount[:SecondaryAmount:Duration] 형식을 사용하세요.");

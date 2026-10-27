@@ -14,7 +14,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     public async UniTask PrepareSceneAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        await initialization.AttachExternalCancellation(cancellationToken);
+        await initialization.Task.AttachExternalCancellation(cancellationToken);
         if (!initialized) throw new System.InvalidOperationException("맵 초기화 실패");
         if (!await objectPoolManager.EnsurePoolReadyAsync("ViewCardList")
             .AsUniTask().AttachExternalCancellation(cancellationToken))
@@ -36,7 +36,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     private OwnedDeckModel ownedDeck;
     private IRunSceneLoader sceneLoader;
     private bool initialized;
-    private UniTask initialization;
+    private readonly UniTaskCompletionSource initialization = new UniTaskCompletionSource();
     public GameFlowState State { get; private set; } = GameFlowState.Map;
     public IGameDataProvider Data => dataProvider;
     //타이틀 선택 우선 적용과 맵 단독 실행 기본값
@@ -54,17 +54,27 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     //보유 덱과 체력 준비 및 기존 맵 진행 복원
     private void Start()
     {
-        //Start와 로딩 화면에서 같은 초기화 결과 공유
-        initialization = InitializeAsync(destroyCancellationToken).Preserve();
+        //초기화 단일 실행과 로딩 화면에 완료 신호 전달
         ObserveInitializationAsync().Forget();
     }
 
     //맵 단독 실행에서도 초기화 실패 기록
     private async UniTask ObserveInitializationAsync()
     {
-        try { await initialization; }
-        catch (System.OperationCanceledException) { }
-        catch (System.Exception error) { GameLogger.LogException(error, this); }
+        try
+        {
+            await InitializeAsync(destroyCancellationToken);
+            initialization.TrySetResult();
+        }
+        catch (System.OperationCanceledException)
+        {
+            initialization.TrySetCanceled();
+        }
+        catch (System.Exception error)
+        {
+            initialization.TrySetException(error);
+            GameLogger.LogException(error, this);
+        }
     }
 
     //노드 풀 로드와 배치 완료 이후 맵 입력 허용

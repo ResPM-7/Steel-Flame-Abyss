@@ -88,9 +88,9 @@ internal static class GameDatabaseSheetUpload
         Add(row, "rarity", card.Rarity.ToString());
         Add(row, "cost", card.Cost.ToString(CultureInfo.InvariantCulture));
         Add(row, "target", card.Effects.Count > 0 ? card.Effects[0].Target.ToString() : string.Empty);
-        Add(row, "effect1", card.Effects.Count > 0 ? LegacyEffect(card.Effects[0].Type) : "None");
+        Add(row, "effect1", card.Effects.Count > 0 ? card.Effects[0].Type.ToString() : "None");
         Add(row, "value1", card.Effects.Count > 0 ? card.Effects[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");
-        Add(row, "effect2", card.Effects.Count > 1 ? LegacyEffect(card.Effects[1].Type) : "None");
+        Add(row, "effect2", card.Effects.Count > 1 ? card.Effects[1].Type.ToString() : "None");
         Add(row, "value2", card.Effects.Count > 1 ? card.Effects[1].Amount.ToString(CultureInfo.InvariantCulture) : "0");
         //강화 효과 수치를 기획 시트 열에 반영
         var upgraded = card.UpgradedEffects.Count > 0 ? card.UpgradedEffects : card.Effects;
@@ -197,7 +197,7 @@ internal static class GameDatabaseSheetUpload
 
     private static void AddRelicEffect(UploadRow row, int slot, EffectSpec effect, bool hasEffect)
     {
-        Add(row, $"effect{slot}", hasEffect ? ProjectRelicEffect(effect.Type) : "None");
+        Add(row, $"effect{slot}", hasEffect ? effect.Type.ToString() : "None");
         Add(row, $"target{slot}", hasEffect ? effect.Target.ToString() : "None");
         Add(row, $"value{slot}", hasEffect
             ? effect.Amount.ToString(CultureInfo.InvariantCulture)
@@ -208,17 +208,6 @@ internal static class GameDatabaseSheetUpload
     {
         RelicTrigger.OnCardPlayed => "OnCardPlayed",
         _ => trigger.ToString()
-    };
-
-    private static string ProjectRelicEffect(EffectType type) => type switch
-    {
-        EffectType.Strength => "GainStrength",
-        EffectType.Rage => "GainRage",
-        EffectType.Overheat => "GainOverheat",
-        EffectType.MindFracture => "ApplyMentalSplit",
-        EffectType.AmplifyMindFracture => "MultiplyMentalSplit",
-        EffectType.NextMindFractureBonus => "ApplyHallucination",
-        _ => type.ToString()
     };
 
     private static UploadRow NewRow(GameDataEntry entry)
@@ -242,16 +231,6 @@ internal static class GameDatabaseSheetUpload
         CharacterClass.FireMage => "Flame",
         CharacterClass.Warlock => "Abyss",
         _ => "Public"
-    };
-
-    private static string LegacyEffect(EffectType type) => type switch
-    {
-        EffectType.Strength => "GainStrength",
-        EffectType.Rage => "GainRage",
-        EffectType.Burn => "ApplyBurn",
-        EffectType.MindFracture => "ApplyMentalSplit",
-        EffectType.AmplifyMindFracture => "MultiplyMentalSplit",
-        _ => type.ToString()
     };
 
     [Serializable]

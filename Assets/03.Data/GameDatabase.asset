@@ -211,25 +211,25 @@ MonoBehaviour:
     \uC8FC\uACE0, {f2}\uC758 \uC5D0\uB108\uC9C0\uB97C \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
-  - type: 0
+  - type: 107
     target: 0
     amount: 2
     secondaryAmount: 0
     duration: 0
   - type: 102
     target: 0
-    amount: 2
+    amount: 1
     secondaryAmount: 0
     duration: 0
   upgradedEffects:
-  - type: 0
+  - type: 107
     target: 0
     amount: 2
     secondaryAmount: 0
     duration: 0
   - type: 102
     target: 0
-    amount: 3
+    amount: 2
     secondaryAmount: 0
     duration: 0
   keywords: []

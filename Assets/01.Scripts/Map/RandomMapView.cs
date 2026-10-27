@@ -19,7 +19,7 @@ public class RandomMapView : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float campChance = 0.2f;
     [SerializeField, Min(0)] private int maxRandomCamps = 3;
     [SerializeField] private bool useFixedSeed;
-    [SerializeField] private int fixedSeed = 12345;
+    [SerializeField] private int fixedSeed;
     [Header("노드 콘텐츠 ID")]
     [SerializeField] private int[] battleEnemyIds = { 60001 };
     [SerializeField] private int[] eventIds = { 1 };

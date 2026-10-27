@@ -827,7 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f64a1fe238c5e44b1c728cddbedfe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardHoverTween
-  riseDistance: 400
+  riseDistance: 350
   hoverScale: 1.05
   duration: 0.2
   enterEase: 9

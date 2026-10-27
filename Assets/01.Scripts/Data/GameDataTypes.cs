@@ -51,6 +51,7 @@ public enum EffectType
     Weak = 104,               //약화(공격감소)
     Vulnerable = 105,         //취약(들어가는 데미지 증가)
     AttackDamageBonus = 106,  //공격카드 피해 증가
+    LoseHealth = 107,         //방어도와 공격 보정 무시 체력 소모
 
     GoldMultiplier = 199      //골드배율
 }

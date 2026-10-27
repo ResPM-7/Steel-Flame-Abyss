@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!224 &52088133 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7505374081463081316, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
 --- !u!223 &149632298 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 4462344081249760422, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
@@ -465,41 +460,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b37cb93f83410ba59a97bb19bc6aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameDataProvider
---- !u!1 &1231156578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1231156579}
-  m_Layer: 0
-  m_Name: GeneratedMap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1231156579
+--- !u!224 &1231156579 stripped
 RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5651348728753325416, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+  m_PrefabInstance: {fileID: 8576531962738312486}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1231156578}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 52088133}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &1339669568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,10 +1194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7505374081463081316, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1231156579}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
 --- !u!224 &8576531962738312490 stripped
@@ -1249,18 +1211,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[2].poolName
-      value: Node
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[2].poolSize
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: canvasPools.Array.data[0].targetCanvas
       value: 
       objectReference: {fileID: 5217015714264259144}
@@ -1272,10 +1222,6 @@ PrefabInstance:
       propertyPath: canvasPools.Array.data[2].targetCanvas
       value: 
       objectReference: {fileID: 1231156579}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[2].addressablePrefab.m_AssetGUID
-      value: 8dedd8e36fd0b574cbee51652f61f903
-      objectReference: {fileID: 0}
     - target: {fileID: 5874745398514059078, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager

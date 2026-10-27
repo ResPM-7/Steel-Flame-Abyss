@@ -66,11 +66,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67453ab4c232f148b52e7e3dce3f682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomMapView
+  generatedRoot: {fileID: 0}
+  nodePoolName: Node
   middleFloors: 4
   campChance: 0.2
   maxRandomCamps: 3
   useFixedSeed: 0
-  fixedSeed: 12345
+  fixedSeed: 0
   battleEnemyIds: 61ea0000
   eventIds: 01000000
   bossEnemyId: 60002

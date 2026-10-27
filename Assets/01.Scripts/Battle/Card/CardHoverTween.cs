@@ -32,6 +32,11 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private bool isDragging;
     private bool isReady;
     private CardView dragReceiver;
+    private static CardHoverTween activeDrag;
+
+    //도메인 재로드 생략 시 이전 드래그 참조 초기화
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetDragState() => activeDrag = null;
 
     //부모 변경 후에도 입력을 전달할 카드 슬롯 저장
     public void SetDragReceiver(CardView view)
@@ -89,7 +94,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //마우스가 카드에 들어오면 전용 레이어로 옮긴 뒤 위로 이동하고 확대
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isDragging)
+        if (isDragging || activeDrag != null)
             return;
 
         if (!isReady)
@@ -183,6 +188,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //카드를 원래 슬롯의 자식으로 되돌리고 로컬 Transform 값을 복구
     private void RestoreToSlot()
     {
+        ReleaseDrag();
         if (cardRect == null || cardSlot == null)
             return;
 
@@ -202,8 +208,13 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //호버 애니메이션을 멈추고 드래그 상태 시작
     public bool BeginDrag()
     {
-        if (!isReady)
+        if (!isReady || (activeDrag != null && activeDrag != this))
             return false;
+
+        activeDrag = this;
+        //다른 카드의 진행 중인 호버도 즉시 복귀
+        foreach (var other in hoverLayer.GetComponentsInChildren<CardHoverTween>())
+            if (other != this) other.ReturnImmediately();
 
         currentTween?.Kill();
         currentTween = null;
@@ -234,6 +245,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //실패한 카드 사용을 원래 슬롯으로 복귀
     public void CancelDrag()
     {
+        ReleaseDrag();
         if (!isReady)
             return;
 
@@ -245,6 +257,8 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //카드를 숨기기 전에 애니메이션을 멈추고 원래 슬롯으로 복구
     public void ReturnImmediately()
     {
+        ReleaseDrag();
+        isDragging = false;
         currentTween?.Kill();
         currentTween = null;
 
@@ -256,5 +270,11 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void OnDisable()
     {
         ReturnImmediately();
+    }
+
+    //자신이 보유한 드래그 잠금만 해제
+    private void ReleaseDrag()
+    {
+        if (activeDrag == this) activeDrag = null;
     }
 }

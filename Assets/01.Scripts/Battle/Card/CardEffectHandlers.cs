@@ -23,6 +23,14 @@ public class DamageEffectHandler : TargetedCardEffectHandler
         target.TakeAttackDamage(context.CalculateBaseDamage(effect), context.Participants.Player.Stats);
 }
 
+//방어도·힘·약화·취약과 무관한 체력 소모
+public class LoseHealthEffectHandler : TargetedCardEffectHandler
+{
+    //공격 판정 없이 대상 체력 직접 차감
+    protected override void ApplyToTarget(EffectSpec effect, CardEffectContext context, CombatantState target) =>
+        target.LoseHealth(effect.Amount);
+}
+
 //방어도 획득
 public class BlockEffectHandler : TargetedCardEffectHandler
 {

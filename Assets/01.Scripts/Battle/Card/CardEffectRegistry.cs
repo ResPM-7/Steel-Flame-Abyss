@@ -21,6 +21,7 @@ public class CardEffectRegistry
     {
         var registry = new CardEffectRegistry();
         registry.Register(EffectType.Damage, new DamageEffectHandler());
+        registry.Register(EffectType.LoseHealth, new LoseHealthEffectHandler());
         registry.Register(EffectType.Block, new BlockEffectHandler());
         registry.Register(EffectType.Strength, new StrengthEffectHandler());
         registry.Register(EffectType.Weak, new WeakEffectHandler());
