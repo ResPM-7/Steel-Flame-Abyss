@@ -20,16 +20,31 @@ public class SceneTransitionController : MonoBehaviour
     //요청 검증과 중복 전환 차단 및 데이터 준비
     public bool TryLoad(string path, Action beforeActivation, string titlePath)
     {
-        if (IsLoading || !Application.CanStreamedLevelBeLoaded(path)) return false;
+        if (IsLoading || !Application.CanStreamedLevelBeLoaded(path)) 
+            return false;
+
         IsLoading = true;
-        try { beforeActivation?.Invoke(); }
-        catch (Exception error) { IsLoading = false; GameLogger.LogException(error, this); return false; }
+
+        try 
+        { 
+            beforeActivation?.Invoke(); 
+        }
+        catch (Exception error) 
+        { 
+            IsLoading = false; GameLogger.LogException(error, this); 
+            return false; 
+        }
+
         BlocksGameplay = true;
         Time.timeScale = 1f;
-        if (screen == null) screen = LoadingScreenView.Create(transform);
+        if (screen == null) 
+            screen = LoadingScreenView.Create(transform);
+
         screen.Show("씬을 불러오는 중…");
+
         if (UnityEngine.EventSystems.EventSystem.current != null)
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+
         LoadAsync(path, titlePath, destroyCancellationToken).Forget();
         return true;
     }
