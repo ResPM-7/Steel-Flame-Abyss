@@ -55,11 +55,9 @@ public class RunProgressModel
     }
 
     //맵 최초 생성과 씬 복귀 시 기존 진행 유지
-    public void PrepareMap(int nodeCount)
+    public void PrepareMap(Func<MapGraphData> create)
     {
-        if (Map != null && Map.NodeCount != nodeCount)
-            throw new InvalidOperationException("맵 지점 수가 변경되었습니다 새 게임을 시작해 주세요");
-        if (Map == null) Map = new MapProgressModel(nodeCount);
+        if (Map == null) Map = new MapProgressModel(create());
     }
 
     //전투 대상과 최종 보스 여부 저장

@@ -18,10 +18,22 @@ public class MapNodeView : MonoBehaviour
 
     private Action<int> selected;
     private int index;
+    [SerializeField] private TMPro.TMP_Text label;
+
+    //생성 지점의 데이터와 UI 참조 연결
+    public void Configure(MapNodeData data)
+    {
+        if (!IsConfigured) throw new InvalidOperationException("Node 프리팹의 Button·Icon·Label 연결 필요");
+        Unbind();
+        nodeType = data.Type;
+        value = data.Value;
+        label.text = nodeType == MapNodeType.Battle ? "전투" : nodeType == MapNodeType.Event ? "이벤트" :
+            nodeType == MapNodeType.Shop ? "상점" : nodeType == MapNodeType.Camp ? "캠프" : "보스";
+    }
 
     public MapNodeType NodeType => nodeType;
     public int Value => value;
-    public bool IsConfigured => button != null && icon != null;
+    public bool IsConfigured => button != null && icon != null && label != null;
 
     //지점 순번과 선택 콜백 연결
     public void Bind(int nodeIndex, Action<int> onSelected)
@@ -37,6 +49,7 @@ public class MapNodeView : MonoBehaviour
     {
         button.interactable = available;
         icon.color = completed ? completedColor : available ? availableColor : lockedColor;
+        if (label != null) label.color = available || completed ? Color.white : new Color(0.75f, 0.78f, 0.82f);
     }
 
     //선택 지점 순번 전달
@@ -51,6 +64,18 @@ public class MapNodeView : MonoBehaviour
         if (button != null)
             button.onClick.RemoveListener(Select);
         selected = null;
+    }
+
+    //풀 반환 전 클릭 연결과 이전 지점 표시 초기화
+    public void ResetForPool()
+    {
+        Unbind();
+        index = -1;
+        value = 0;
+        nodeType = default;
+        if (button != null) button.interactable = false;
+        if (icon != null) icon.color = lockedColor;
+        if (label != null) { label.text = string.Empty; label.color = Color.white; }
     }
 
     //지점 제거 시 입력 구독 해제

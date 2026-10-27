@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &52088133 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7505374081463081316, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+  m_PrefabInstance: {fileID: 8576531962738312486}
+  m_PrefabAsset: {fileID: 0}
 --- !u!223 &149632298 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 4462344081249760422, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
@@ -449,17 +454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a73fc2f5cbee94aa3fd4f0ecf931a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
---- !u!114 &1087357394 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8604278206570362140, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
 --- !u!114 &1208521812 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6580073172880301890, guid: 3315ad85516db6c47a035f7ab809fd1c, type: 3}
@@ -471,6 +465,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b37cb93f83410ba59a97bb19bc6aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameDataProvider
+--- !u!1 &1231156578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1231156579}
+  m_Layer: 0
+  m_Name: GeneratedMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1231156579
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231156578}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 52088133}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &1339669568
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,10 +618,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2720681207457847207, guid: 9d820388169172e47ada8d7ba1688595, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 489
-      objectReference: {fileID: 0}
     - target: {fileID: 2750696665056948434, guid: 9d820388169172e47ada8d7ba1688595, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -759,17 +784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!114 &2822675948177941445 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3734987936219886734, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
 --- !u!1001 &2935485987447433656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -835,6 +849,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 224390510790807823, guid: dce490f85d2985242b965680f82626ab, type: 3}
+      propertyPath: generatedRoot
+      value: 
+      objectReference: {fileID: 1231156579}
     - target: {fileID: 3499489976440168522, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -888,61 +906,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 705816901603838352}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: campPanel
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: mapScroll
       value: 
       objectReference: {fileID: 6088915543586060218}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: shopPanel
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: eventPanel
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: dataProvider
       value: 
       objectReference: {fileID: 1208521812}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: cardListPanel
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: commonHealthView
       value: 
       objectReference: {fileID: 6375807139961087079}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: nodes.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: objectPoolManager
       value: 
       objectReference: {fileID: 834022212}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: 'nodes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2822675948177941445}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: 'nodes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1087357394}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: 'nodes.Array.data[2]'
-      value: 
-      objectReference: {fileID: 3804835330424072248}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: 'nodes.Array.data[3]'
-      value: 
-      objectReference: {fileID: 4107020316346790312}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: 'nodes.Array.data[4]'
-      value: 
-      objectReference: {fileID: 8760923444082575208}
     - target: {fileID: 5425657408461325272, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: m_Name
       value: GameFlowController
@@ -952,28 +930,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dce490f85d2985242b965680f82626ab, type: 3}
---- !u!114 &3804835330424072248 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6217926121419802193, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
---- !u!114 &4107020316346790312 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 523018497226710255, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
 --- !u!114 &4291683221099495346 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
@@ -1273,7 +1229,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7505374081463081316, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1231156579}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
 --- !u!224 &8576531962738312490 stripped
@@ -1290,6 +1249,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[2].poolName
+      value: Node
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[2].poolSize
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: canvasPools.Array.data[0].targetCanvas
       value: 
       objectReference: {fileID: 5217015714264259144}
@@ -1297,6 +1268,14 @@ PrefabInstance:
       propertyPath: canvasPools.Array.data[1].targetCanvas
       value: 
       objectReference: {fileID: 8576531962738312490}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[2].targetCanvas
+      value: 
+      objectReference: {fileID: 1231156579}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: canvasPools.Array.data[2].addressablePrefab.m_AssetGUID
+      value: 8dedd8e36fd0b574cbee51652f61f903
+      objectReference: {fileID: 0}
     - target: {fileID: 5874745398514059078, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager
@@ -1346,17 +1325,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
---- !u!114 &8760923444082575208 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3257281427605256127, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-  m_PrefabInstance: {fileID: 8576531962738312486}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b3ad6273b44713ab753067817d80c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

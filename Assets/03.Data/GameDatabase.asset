@@ -96,6 +96,51 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &-6792585572910564596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10010
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10010
+  displayName: "\uC5F0\uC18D\uBCA0\uAE30"
+  owner: 1
+  cardType: 0
+  rarity: 1
+  cost: 1
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0,
+    {f2}\uC758 \uD53C\uD574\uB97C \uD55C \uBC88 \uB354 \uC90D\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 0
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  - type: 0
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-5752501738432402752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +189,51 @@ MonoBehaviour:
     duration: 0
   icon: {fileID: 0}
   effectsEnabled: 1
+--- !u!114 &-4567537172980619206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10011
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10011
+  displayName: "\uD53C\uC758 \uB9F9\uC138"
+  owner: 1
+  cardType: 1
+  rarity: 2
+  cost: 0
+  description: "\uD50C\uB808\uC774\uC5B4 \uCCB4\uB825\uC744 {f1}\uC758 \uD53C\uD574\uB97C
+    \uC8FC\uACE0, {f2}\uC758 \uC5D0\uB108\uC9C0\uB97C \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 0
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-3076726178586581687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +454,8 @@ MonoBehaviour:
   - {fileID: 960357282857903389}
   - {fileID: 1209620363538409710}
   - {fileID: -1941972444394071981}
+  - {fileID: -6792585572910564596}
+  - {fileID: -4567537172980619206}
   - {fileID: -7525678505189942033}
   - {fileID: -841411431289117930}
   - {fileID: 2035420301826485214}
@@ -791,7 +883,7 @@ MonoBehaviour:
   maxHealth: 80
   startingEnergy: 3
   startingDeckIds: 112700001127000011270000122700001227000012270000132700001427000014270000
-  cardPoolIds: 11270000122700001327000014270000419c0000429c0000439c0000
+  cardPoolIds: 112700001227000013270000142700001a2700001b270000419c0000429c0000439c0000
   resourceName: "\uBD84\uB178"
   portrait: {fileID: 0}
   battlePrefab: {fileID: 0}

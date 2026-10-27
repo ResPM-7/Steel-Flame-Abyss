@@ -14,6 +14,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     public async UniTask PrepareSceneAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        await initialization.AttachExternalCancellation(cancellationToken);
         if (!initialized) throw new System.InvalidOperationException("맵 초기화 실패");
         if (!await objectPoolManager.EnsurePoolReadyAsync("ViewCardList")
             .AsUniTask().AttachExternalCancellation(cancellationToken))
@@ -26,14 +27,16 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
     [SerializeField] private TMP_Text mapTitle;
-    [Tooltip("진행할 지점 순서로 연결")]
-    [SerializeField] private MapNodeView[] nodes;
+    [SerializeField] private RandomMapView randomMap;
+    //실행 중 생성된 노드만 보관
+    private MapNodeView[] nodes;
     [SerializeField] private int playerId = 50001;
 
     private RunProgressModel run;
     private OwnedDeckModel ownedDeck;
     private IRunSceneLoader sceneLoader;
     private bool initialized;
+    private UniTask initialization;
     public GameFlowState State { get; private set; } = GameFlowState.Map;
     public IGameDataProvider Data => dataProvider;
     //타이틀 선택 우선 적용과 맵 단독 실행 기본값
@@ -51,10 +54,25 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     //보유 덱과 체력 준비 및 기존 맵 진행 복원
     private void Start()
     {
+        //Start와 로딩 화면에서 같은 초기화 결과 공유
+        initialization = InitializeAsync(destroyCancellationToken).Preserve();
+        ObserveInitializationAsync().Forget();
+    }
+
+    //맵 단독 실행에서도 초기화 실패 기록
+    private async UniTask ObserveInitializationAsync()
+    {
+        try { await initialization; }
+        catch (System.OperationCanceledException) { }
+        catch (System.Exception error) { GameLogger.LogException(error, this); }
+    }
+
+    //노드 풀 로드와 배치 완료 이후 맵 입력 허용
+    private async UniTask InitializeAsync(CancellationToken cancellationToken)
+    {
         if (!ValidateReferences())
         {
-            GameLogger.LogError("[맵] 데이터 공급자와 풀 및 패널과 지점 목록을 연결해 주세요", this);
-            return;
+            throw new System.InvalidOperationException("[맵] 데이터 공급자·풀·패널·Random Map View 연결과 콘텐츠 ID 확인 필요");
         }
         CharacterData character = dataProvider.GetCharacter(ActivePlayerId);
         if (!ownedDeck.IsInitialized)
@@ -63,13 +81,13 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
             var validated = new List<int>(character.StartingDeckIds);
             if (validated.Count == 0 || validated.Exists(id => !dataProvider.TryGetCard(id, out _)))
             {
-                GameLogger.LogError("[맵] 시작 덱 카드 ID를 확인해 주세요", this);
-                return;
+                throw new System.InvalidOperationException("[맵] 시작 덱 카드 ID 확인 필요");
             }
             ownedDeck.InitializeOnce(validated);
         }
         run.PreparePlayer(character);
-        run.PrepareMap(nodes.Length);
+        run.PrepareMap(randomMap.Generate);
+        nodes = await randomMap.BuildAsync(run.Map, mapScroll, objectPoolManager, cancellationToken);
         if (commonHealthView != null) commonHealthView.InjectHealth(run.Health);
         for (int i = 0; i < nodes.Length; i++) nodes[i].Bind(i, SelectNode);
         initialized = true;
@@ -85,22 +103,10 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     {
         if (dataProvider == null || !dataProvider.IsReady || run == null || ownedDeck == null ||
             sceneLoader == null || objectPoolManager == null || mapPanel == null || popups == null || !popups.IsConfigured ||
-            mapScroll == null || mapScroll.content == null || mapTitle == null ||
-            nodes == null || nodes.Length == 0 || !dataProvider.TryGetCharacter(ActivePlayerId, out _))
+            mapScroll == null || mapScroll.content == null || mapScroll.viewport == null || mapTitle == null || randomMap == null || !randomMap.IsConfigured ||
+            !dataProvider.TryGetCharacter(ActivePlayerId, out _))
             return false;
-        var unique = new HashSet<MapNodeView>();
-        foreach (MapNodeView node in nodes)
-        {
-            if (node == null || !node.IsConfigured || !unique.Add(node)) return false;
-            if ((node.NodeType == MapNodeType.Battle || node.NodeType == MapNodeType.Boss) &&
-                !dataProvider.TryGetEnemy(node.Value, out _)) return false;
-            if (node.NodeType == MapNodeType.Event && !popups.HasEvent(node.Value))
-            {
-                GameLogger.LogError($"[맵] {node.name}의 이벤트 ID {node.Value}를 데이터베이스에서 찾을 수 없습니다", node);
-                return false;
-            }
-        }
-        return true;
+        return randomMap.ValidateContent(dataProvider, popups.HasEvent);
     }
 
     //열린 지점 선택과 전투 씬 또는 비전투 패널 진입
@@ -173,7 +179,8 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
         SetPanels(true);
         mapTitle.text = run.Map.IsFailed ? "진행 종료" : run.Map.IsComplete ? "지도 완료" : "지도";
         for (int i = 0; i < nodes.Length; i++)
-            nodes[i].Refresh(run.Map.CanEnter(i), i < run.Map.NextIndex);
+            nodes[i].Refresh(run.Map.CanEnter(i), run.Map.IsCompleted(i));
+        randomMap.RefreshRoutes();
     }
 
     //맵 표시 전환과 생성된 팝업 닫기

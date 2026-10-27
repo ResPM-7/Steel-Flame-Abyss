@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3499489976440168522}
   - component: {fileID: 4137143289574801936}
+  - component: {fileID: 224390510790807823}
   m_Layer: 0
   m_Name: GameFlowController
   m_TagString: Untagged
@@ -47,17 +48,29 @@ MonoBehaviour:
   dataProvider: {fileID: 0}
   objectPoolManager: {fileID: 0}
   mapPanel: {fileID: 0}
-  eventPanel: {fileID: 0}
-  campPanel: {fileID: 0}
-  shopPanel: {fileID: 0}
+  popups: {fileID: 0}
   commonHealthView: {fileID: 0}
   mapScroll: {fileID: 0}
   mapTitle: {fileID: 0}
-  nodes:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  randomMap: {fileID: 224390510790807823}
   playerId: 50001
-  cardListPanel: {fileID: 0}
-  startingDeckIds: 112700001127000011270000112700001127000012270000122700001227000012270000122700001327000013270000
+--- !u!114 &224390510790807823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5425657408461325272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b67453ab4c232f148b52e7e3dce3f682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomMapView
+  middleFloors: 4
+  campChance: 0.2
+  maxRandomCamps: 3
+  useFixedSeed: 0
+  fixedSeed: 12345
+  battleEnemyIds: 61ea0000
+  eventIds: 01000000
+  bossEnemyId: 60002
