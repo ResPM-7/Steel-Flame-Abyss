@@ -8,10 +8,10 @@ public class SceneMenuActions : MonoBehaviour
     [UnityEngine.Serialization.FormerlySerializedAs("gameSceneIndex")]
     [SerializeField] private int mapSceneIndex = 1;
     [SerializeField] private int battleSceneIndex = 2;
-    private bool isLoading;
+    private SceneTransitionController transition;
     private System.Action startNewGame;
     private SceneMenuActions sharedLoader;
-    public bool IsLoading => sharedLoader != null ? sharedLoader.IsLoading : isLoading;
+    public bool IsLoading => sharedLoader != null ? sharedLoader.IsLoading : transition != null && transition.IsLoading;
     public string MapScenePath => SceneUtility.GetScenePathByBuildIndex(mapSceneIndex);
     public string BattleScenePath => SceneUtility.GetScenePathByBuildIndex(battleSceneIndex);
 
@@ -79,39 +79,9 @@ public class SceneMenuActions : MonoBehaviour
     {
         if (sharedLoader != null) return sharedLoader.TryLoadScene(path, beforeActivation);
         if (IsLoading || !CanLoad(path)) return false;
-        isLoading = true;
-        Time.timeScale = 1f;
-        AsyncOperation operation = null;
-        try
-        {
-            operation = SceneManager.LoadSceneAsync(path, LoadSceneMode.Single);
-            if (operation == null)
-            {
-                isLoading = false;
-                return false;
-            }
-            operation.allowSceneActivation = false;
-            operation.completed += OnSceneLoaded;
-            beforeActivation?.Invoke();
-            return true;
-        }
-        catch (System.Exception exception)
-        {
-            if (operation == null) isLoading = false;
-            GameLogger.LogException(exception, this);
-            return false;
-        }
-        finally
-        {
-            if (operation != null) operation.allowSceneActivation = true;
-        }
-    }
-
-    //씬 로드 완료 후 공통 입력 잠금 해제
-    private void OnSceneLoaded(AsyncOperation operation)
-    {
-        operation.completed -= OnSceneLoaded;
-        isLoading = false;
+        if (transition == null)
+            transition = GetComponent<SceneTransitionController>() ?? gameObject.AddComponent<SceneTransitionController>();
+        return transition.TryLoad(path, beforeActivation, SceneUtility.GetScenePathByBuildIndex(titleSceneIndex));
     }
 
     //실행 환경에 따른 게임 종료와 에디터 재생 중지

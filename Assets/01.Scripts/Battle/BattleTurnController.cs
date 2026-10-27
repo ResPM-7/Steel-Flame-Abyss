@@ -44,6 +44,7 @@ public class BattleTurnController : MonoBehaviour
     //손패 정리와 적 행동 실행 후 다음 플레이어 턴 시작
     public void EndPlayerTurn()
     {
+        if (SceneTransitionController.BlocksGameplay) return;
         if (isResolvingTurn || !ValidateReferences() || !deckManager.IsReady || !participants.IsReady)
             return;
         if (!participants.IsBattleActive)

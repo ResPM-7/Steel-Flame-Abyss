@@ -23,6 +23,17 @@ public class CardHandController : MonoBehaviour
 #endif
 
     public bool IsReady => deckManager != null && deckManager.IsReady;
+    //첫 손패 전체의 실제 표시 연결 확인
+    public bool IsDisplayReady
+    {
+        get
+        {
+            if (!IsReady || slots == null || handLayout == null || hoverLayer == null || HandCount > slots.Length) return false;
+            for (int i = 0; i < HandCount; i++)
+                if (slots[i] == null || !slots[i].IsConfigured || slots[i].Card != deckManager.Hand[i] || !slots[i].gameObject.activeInHierarchy) return false;
+            return true;
+        }
+    }
     public int HandCount => deckManager?.HandCount ?? 0;
     public int DrawCount => deckManager?.DrawCount ?? 0;
     public int DiscardCount => deckManager?.DiscardCount ?? 0;

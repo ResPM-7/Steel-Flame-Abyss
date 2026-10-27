@@ -1,9 +1,24 @@
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 //전투 구성 요소에 게임 데이터 공급자 연결
 [DefaultExecutionOrder(-100)]
-public class BattleInstaller : MonoBehaviour
+public class BattleInstaller : MonoBehaviour, IScenePreparation
 {
+    private bool startingRelicsApplied;
+
+    //첫 손패·유물·유닛 연결과 목록 카드 풀 준비 확인
+    public async UniTask PrepareSceneAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (participants == null || !participants.IsReady || handController == null ||
+            !handController.IsDisplayReady || !startingRelicsApplied)
+            throw new System.InvalidOperationException("전투 참가자 또는 첫 손패 준비 실패");
+        if (objectPoolManager == null || !await objectPoolManager.EnsurePoolReadyAsync("ViewCardList")
+            .AsUniTask().AttachExternalCancellation(cancellationToken))
+            throw new System.InvalidOperationException("전투 목록 카드 풀 준비 실패");
+    }
     [SerializeField] private GameDataProvider dataProvider;
     [SerializeField] private BattleDeckManager deckManager;
     [SerializeField] private CardHandController handController;
@@ -30,6 +45,7 @@ public class BattleInstaller : MonoBehaviour
     {
         relicEffects.Apply(RelicTrigger.BattleStart);
         relicEffects.Apply(RelicTrigger.TurnStart);
+        startingRelicsApplied = true;
     }
 
     private void OnDestroy()

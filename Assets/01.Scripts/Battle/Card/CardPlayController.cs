@@ -122,6 +122,7 @@ public class CardPlayController
     //카드 대상과 위치 및 에너지를 검사한 뒤 카드 사용
     public bool TryPlayCard(CardInstance card, BattleCombatantView targetView, bool raisedEnough)
     {
+        if (SceneTransitionController.BlocksGameplay) return false;
         if (!participants.IsBattleActive ||
             !deckManager.ContainsInHand(card))
             return false;

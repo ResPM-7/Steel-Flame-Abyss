@@ -1,13 +1,24 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 public enum GameFlowState { Map, Battle, Reward, Event, Defeat, Complete, Camp, Shop }
 
 //맵 씬의 지점 진행과 캠프 및 상점 화면 관리
 [DefaultExecutionOrder(100)]
-public class GameFlowController : MonoBehaviour
+public class GameFlowController : MonoBehaviour, IScenePreparation
 {
+    //맵 초기화와 목록 카드 풀 준비 완료 대기
+    public async UniTask PrepareSceneAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!initialized) throw new System.InvalidOperationException("맵 초기화 실패");
+        if (!await objectPoolManager.EnsurePoolReadyAsync("ViewCardList")
+            .AsUniTask().AttachExternalCancellation(cancellationToken))
+            throw new System.InvalidOperationException("목록 카드 풀 준비 실패");
+    }
     [SerializeField] private GameDataProvider dataProvider;
     [SerializeField] private ObjectPoolManager objectPoolManager;
     [SerializeField] private GameObject mapPanel;
