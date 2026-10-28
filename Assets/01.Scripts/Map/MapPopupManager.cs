@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 //맵 팝업의 최초 생성과 데이터 주입 및 씬 내 재사용
@@ -11,9 +12,9 @@ public class MapPopupManager : MonoBehaviour
     [SerializeField] private MapEventDefinition defaultEvent;
     [SerializeField] private EventDatabase eventDatabase;
     [SerializeField] private CardListPanelView deckPrefab;
-    [SerializeField] private Canvas commonHudCanvas;
+    [SerializeField] private Canvas[] commonHudCanvases = Array.Empty<Canvas>();
     private bool hudHiddenForDeck;
-    private bool previousHudEnabled;
+    private readonly Dictionary<GameObject, bool> previousHudStates = new Dictionary<GameObject, bool>();
     private ShopPanelView shop;
     private CampPanelView camp;
     private EventPanelView eventView;
@@ -108,21 +109,30 @@ public class MapPopupManager : MonoBehaviour
         if (deck != null) deck.Close();
     }
 
-    //덱 표시 중 공통 HUD 숨김과 닫기 시 기존 상태 복원
+    //덱 표시 중 모든 공통 HUD 숨김과 개별 활성 상태 복원
     private void OnDeckVisibilityChanged(bool visible)
     {
-        if (commonHudCanvas == null) return;
         if (visible)
         {
             if (hudHiddenForDeck) return;
-            previousHudEnabled = commonHudCanvas.enabled;
             hudHiddenForDeck = true;
-            commonHudCanvas.enabled = false;
+            previousHudStates.Clear();
+            if (commonHudCanvases == null) return;
+            foreach (Canvas canvas in commonHudCanvases)
+            {
+                if (canvas == null || previousHudStates.ContainsKey(canvas.gameObject)) continue;
+                GameObject hud = canvas.gameObject;
+                previousHudStates.Add(hud, hud.activeSelf);
+                //중첩 Canvas의 부모 렌더링과 숨은 HUD 입력까지 차단
+                hud.SetActive(false);
+            }
         }
         else if (hudHiddenForDeck)
         {
-            commonHudCanvas.enabled = previousHudEnabled;
             hudHiddenForDeck = false;
+            foreach (var state in previousHudStates)
+                if (state.Key != null) state.Key.SetActive(state.Value);
+            previousHudStates.Clear();
         }
     }
 

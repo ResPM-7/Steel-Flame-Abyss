@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -41,6 +42,18 @@ public class TitleCharacterSelectView : MonoBehaviour
     public void Inject(GameSession value)
     {
         session = value;
+        RefreshButtons();
+        RefreshAfterLoadingAsync(value).Forget();
+    }
+
+    //타이틀 복귀 로딩 완료 후 버튼 갱신, 씬 제거 시 대기 취소
+    private async UniTask RefreshAfterLoadingAsync(GameSession injectedSession)
+    {
+        if (injectedSession == null) return;
+        bool canceled = await UniTask.WaitUntil(
+            () => injectedSession == null || !injectedSession.IsLoading,
+            cancellationToken: destroyCancellationToken).SuppressCancellationThrow();
+        if (canceled || this == null || session != injectedSession || injectedSession == null) return;
         RefreshButtons();
     }
 

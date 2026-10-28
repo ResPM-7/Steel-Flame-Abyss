@@ -701,7 +701,7 @@ MonoBehaviour:
       secondaryAmount: 0
       duration: 2
   artwork: {fileID: 0}
-  battlePrefab: {fileID: 0}
+  battlePrefab: {fileID: 1439994459352874351, guid: f1031120801f4e1d97477949282446cb, type: 3}
 --- !u!114 &4574230653417062746
 MonoBehaviour:
   m_ObjectHideFlags: 0
