@@ -666,7 +666,7 @@ MonoBehaviour:
   m_Name: EnemyData_60002
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 60002
-  displayName: "\uC2EC\uC5F0\uC758 \uC218\uBB38\uC7A5"
+  displayName: "\uBE14\uB799 \uC624\uD06C"
   tier: 2
   minHealth: 160
   maxHealth: 180
