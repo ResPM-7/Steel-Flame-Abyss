@@ -1179,6 +1179,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_Overlay
       objectReference: {fileID: 0}
+    - target: {fileID: 3515498727789156502, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515498727789156502, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515498727789156502, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515498727789156502, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3917842493228733841, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1257,6 +1273,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3917842493228733841, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955179186577045336, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955179186577045336, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955179186577045336, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955179186577045336, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028427324075591196, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028427324075591196, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028427324075591196, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028427324075591196, guid: 1b7a694479bee444e84a583f6f96d061, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1364,10 +1412,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_Dynamic
       objectReference: {fileID: 0}
-    - target: {fileID: 5120870649545177249, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1384252661}
     - target: {fileID: 5261266350820100140, guid: fd3a2a90705cfa74d9575ead3297acfb, type: 3}
       propertyPath: factory
       value: 

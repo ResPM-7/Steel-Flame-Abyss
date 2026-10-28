@@ -2877,6 +2877,14 @@ MonoBehaviour:
   descriptionText: {fileID: 3510817075947669455}
   outline: {fileID: 8263449176615652540}
   rarityColors: {fileID: 11400000, guid: e0defc3e1e6025c4aad9d154bc69d95b, type: 2}
+  classFrame: {fileID: 0}
+  costBadge: {fileID: 0}
+  artworkWell: {fileID: 0}
+  typeText: {fileID: 0}
+  steelColor: {r: 0.38, g: 0.63, b: 0.82, a: 1}
+  flameColor: {r: 0.94, g: 0.43, b: 0.18, a: 1}
+  abyssColor: {r: 0.66, g: 0.42, b: 0.85, a: 1}
+  publicColor: {r: 0.72, g: 0.66, b: 0.44, a: 1}
   button: {fileID: 8875184794882018331}
 --- !u!1 &7548746590725463144
 GameObject:
@@ -3080,7 +3088,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8542653549661865833, guid: d75dd784b5a37d64e840856dd002cdc7, type: 3}
+  m_Sprite: {fileID: -85488583029258653, guid: 927b49486df88184c9a01be1b80c745f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3234,6 +3242,14 @@ MonoBehaviour:
   descriptionText: {fileID: 1115244034884691375}
   outline: {fileID: 3708174023041729571}
   rarityColors: {fileID: 11400000, guid: e0defc3e1e6025c4aad9d154bc69d95b, type: 2}
+  classFrame: {fileID: 0}
+  costBadge: {fileID: 0}
+  artworkWell: {fileID: 0}
+  typeText: {fileID: 0}
+  steelColor: {r: 0.38, g: 0.63, b: 0.82, a: 1}
+  flameColor: {r: 0.94, g: 0.43, b: 0.18, a: 1}
+  abyssColor: {r: 0.66, g: 0.42, b: 0.85, a: 1}
+  publicColor: {r: 0.72, g: 0.66, b: 0.44, a: 1}
   button: {fileID: 8700301282437166842}
 --- !u!1 &9042019979695857597
 GameObject:
@@ -3289,6 +3305,14 @@ MonoBehaviour:
   descriptionText: {fileID: 121116082636494075}
   outline: {fileID: 3077664856333202498}
   rarityColors: {fileID: 11400000, guid: e0defc3e1e6025c4aad9d154bc69d95b, type: 2}
+  classFrame: {fileID: 0}
+  costBadge: {fileID: 0}
+  artworkWell: {fileID: 0}
+  typeText: {fileID: 0}
+  steelColor: {r: 0.38, g: 0.63, b: 0.82, a: 1}
+  flameColor: {r: 0.94, g: 0.43, b: 0.18, a: 1}
+  abyssColor: {r: 0.66, g: 0.42, b: 0.85, a: 1}
+  publicColor: {r: 0.72, g: 0.66, b: 0.44, a: 1}
   button: {fileID: 6961985801851755157}
 --- !u!1 &9124973176484933524
 GameObject:
