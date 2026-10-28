@@ -138,9 +138,10 @@ MonoBehaviour:
   value: 60001
   button: {fileID: 3399643892828674639}
   icon: {fileID: 8012573232698118183}
-  availableColor: {r: 0.12, g: 0.52, b: 0.65, a: 1}
+  availableColor: {r: 1, g: 1, b: 1, a: 1}
   lockedColor: {r: 0.18, g: 0.21, b: 0.27, a: 1}
-  completedColor: {r: 0.18, g: 0.47, b: 0.29, a: 1}
+  completedColor: {r: 0.6037736, g: 0.5899988, b: 0.025631888, a: 1}
+  label: {fileID: 0}
 --- !u!1 &6600015884732771621
 GameObject:
   m_ObjectHideFlags: 0
