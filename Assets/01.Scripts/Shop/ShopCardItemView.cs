@@ -9,6 +9,11 @@ public class ShopCardItemView : CardDisplayView, IPointerEnterHandler, IPointerE
 {
     [SerializeField] private UnityEngine.UI.Button button;
     [SerializeField] private TMP_Text priceText;
+    [Header("카드 앞면과 뒷면")]
+    [Tooltip("슬롯 루트와 가격 텍스트를 제외한 앞면 자식 오브젝트")]
+    [SerializeField] private GameObject cardFront;
+    [Tooltip("앞면과 같은 위치에 배치한 뒷면 이미지 오브젝트")]
+    [SerializeField] private GameObject cardBack;
     [Range(1f, 1.2f)] [SerializeField] private float hoverScale = 1.06f;
     [Min(0.01f)] [SerializeField] private float hoverDuration = 0.15f;
     private Vector3 originalScale;
@@ -38,6 +43,8 @@ public class ShopCardItemView : CardDisplayView, IPointerEnterHandler, IPointerE
     {
         CacheScale();
         ResetScale();
+        sold = false;
+        RefreshCardFace();
         selected = onSelected;
         button.onClick.RemoveListener(Select);
         button.onClick.AddListener(Select);
@@ -49,10 +56,21 @@ public class ShopCardItemView : CardDisplayView, IPointerEnterHandler, IPointerE
     public void SetPurchaseState(int price, bool isSold, bool affordable)
     {
         sold = isSold;
+        RefreshCardFace();
         priceText.text = sold ? "품절" : $"{price} 코인";
         button.interactable = !sold && affordable;
         if (sold)
             ResetScale();
+    }
+
+    //품절 시 뒷면 표시, 미연결 상태에서는 기존 앞면 유지
+    private void RefreshCardFace()
+    {
+        if (cardFront == null || cardBack == null)
+            return;
+
+        cardFront.SetActive(!sold);
+        cardBack.SetActive(sold);
     }
 
     //카드 클릭의 구매 요청 전달
