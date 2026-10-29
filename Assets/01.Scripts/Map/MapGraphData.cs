@@ -44,9 +44,9 @@ public static class MapGenerator
 {
     //보스 직전 캠프 고정과 나머지 층 무작위 생성
     public static MapGraphData Generate(int seed, int middleFloors, float campChance, int maxCamps,
-        int[] enemyIds, int[] eventIds, int bossId)
+        int[] encounterIds, int[] eventIds, int bossEncounterId)
     {
-        if (enemyIds == null || enemyIds.Length == 0 || eventIds == null || eventIds.Length == 0 || bossId <= 0)
+        if (encounterIds == null || encounterIds.Length == 0 || eventIds == null || eventIds.Length == 0 || bossEncounterId <= 0)
             throw new ArgumentException("전투·이벤트·보스 ID 설정 필요");
         middleFloors = Math.Max(1, Math.Min(12, middleFloors));
         var random = new Random(seed);
@@ -106,9 +106,9 @@ public static class MapGenerator
                     type = roll < 50 ? MapNodeType.Battle : roll < 80 ? MapNodeType.Event : MapNodeType.Shop;
                 }
             }
-            int value = type == MapNodeType.Battle ? enemyIds[random.Next(enemyIds.Length)] :
+            int value = type == MapNodeType.Battle ? encounterIds[random.Next(encounterIds.Length)] :
                 type == MapNodeType.Event ? eventIds[random.Next(eventIds.Length)] :
-                type == MapNodeType.Boss ? bossId : 0;
+                type == MapNodeType.Boss ? bossEncounterId : 0;
             nodes.Add(new MapNodeData(id, floor, lanes[id], type, value, next[id]));
         }
         return new MapGraphData(seed, nodes);

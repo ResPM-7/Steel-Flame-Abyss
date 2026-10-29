@@ -10,7 +10,8 @@ public class BattleSceneController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button nextButton;
     [Header("배틀 씬 직접 실행 테스트")]
     [SerializeField] private int testPlayerId = 50001;
-    [SerializeField] private int testEnemyId = 60001;
+    [UnityEngine.Serialization.FormerlySerializedAs("testEnemyId")]
+    [SerializeField] private int testEncounterId = 90001;
     [SerializeField] private bool testFinalBoss;
     public bool IsFinalBossBattle { get; private set; }
     private RunProgressModel run;
@@ -35,12 +36,12 @@ public class BattleSceneController : MonoBehaviour
         if (!run.HasPendingBattle)
         {
             run.PreparePlayer(dataProvider.GetCharacter(testPlayerId));
-            run.SetBattle(testEnemyId, testFinalBoss);
+            run.SetBattle(testEncounterId, testFinalBoss);
         }
         IsFinalBossBattle = run.IsFinalBossBattle;
         participants.ResultChanged += OnResult;
         if (nextButton != null) BindNextButton(nextButton);
-        if (!participants.Initialize(run.PlayerId, run.PendingEnemyId, false, run.Health.CurrentHealth) ||
+        if (!participants.InitializeEncounter(run.PlayerId, run.PendingEncounterId, run.Health.CurrentHealth) ||
             !deckManager.BeginBattle())
             GameLogger.LogError("[전투 씬] 전투 초기화 실패 데이터와 시작 덱을 확인해 주세요", this);
     }

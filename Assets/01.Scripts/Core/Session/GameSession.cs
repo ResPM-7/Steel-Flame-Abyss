@@ -86,13 +86,13 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     }
 
     //전투 대상과 보스 여부 저장 및 비동기 씬 이동
-    public bool EnterBattle(int enemyId, bool isFinalBoss = false)
+    public bool EnterBattle(int encounterId, bool isFinalBoss = false)
     {
         if (IsLoading || run.IsCleared || run.Health == null || !run.Health.IsAlive || run.HasPendingBattle ||
             run.Map == null || !run.Map.IsVisiting || !sceneLoader.CanLoad(sceneLoader.BattleScenePath) ||
             !sceneLoader.CanLoad(sceneLoader.MapScenePath))
             return false;
-        run.SetBattle(enemyId, isFinalBoss);
+        run.SetBattle(encounterId, isFinalBoss);
         if (sceneLoader.TryLoadScene(sceneLoader.BattleScenePath)) return true;
         run.ClearBattle();
         return false;

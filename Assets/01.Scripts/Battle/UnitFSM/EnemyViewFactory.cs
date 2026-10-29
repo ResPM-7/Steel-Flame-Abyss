@@ -10,10 +10,14 @@ public class EnemyViewFactory : MonoBehaviour
     public bool IsConfigured => combatantPrefab != null && enemyPoints != null &&
         enemyPoints.Length > 0 && enemyPoints[0] != null;
 
+    //생성 전 지정 슬롯의 연결 확인
+    public bool CanCreateAt(int slot) => combatantPrefab != null && enemyPoints != null &&
+        slot >= 0 && slot < enemyPoints.Length && enemyPoints[slot] != null;
+
     //EnemyPoint1부터 다음 빈 지점에 적 생성 및 상태 연결
-    public BattleCombatantView Create(EnemyData data, CombatantState state)
+    public BattleCombatantView Create(EnemyData data, CombatantState state, int slot = -1)
     {
-        int index = spawned.Count;
+        int index = slot < 0 ? spawned.Count : slot;
         if (!IsConfigured || data == null || state == null || index >= enemyPoints.Length || enemyPoints[index] == null)
         {
             GameLogger.LogError("[적 생성] 프리팹, 적 데이터, 생성 지점 연결 확인", this);

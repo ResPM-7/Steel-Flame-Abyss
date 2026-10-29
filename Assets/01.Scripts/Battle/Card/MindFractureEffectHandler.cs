@@ -4,14 +4,17 @@ public class MindFractureEffectHandler : ICardEffectHandler
     //자신 대상 차단 및 적 전용 상태 확인
     public bool CanApply(EffectSpec effect, CardEffectContext context) =>
         (effect.Target is TargetType.SingleEnemy or TargetType.AllEnemies or TargetType.RandomEnemy) &&
-        context.Participants.Player != null &&
-        context.GetTarget(effect.Target)?.CanReceiveMindFracture == true;
+        context.Participants.Player != null;
 
     //플레이어 카드 경로에서만 정신분열 부여
     public virtual void Apply(EffectSpec effect, CardEffectContext context)
     {
         if (!CanApply(effect, context) || !context.Participants.IsBattleActive) return;
-        context.GetTarget(effect.Target).ApplyMindFracture(effect.Amount);
+        foreach (var target in context.GetTargets(effect.Target))
+        {
+            if (!context.Participants.IsBattleActive) break;
+            if (target.CanReceiveMindFracture) target.ApplyMindFracture(effect.Amount);
+        }
     }
 }
 
@@ -22,6 +25,10 @@ public class AmplifyMindFractureEffectHandler : MindFractureEffectHandler
     public override void Apply(EffectSpec effect, CardEffectContext context)
     {
         if (!CanApply(effect, context) || !context.Participants.IsBattleActive) return;
-        context.GetTarget(effect.Target).AmplifyMindFracture(effect.Amount);
+        foreach (var target in context.GetTargets(effect.Target))
+        {
+            if (!context.Participants.IsBattleActive) break;
+            if (target.CanReceiveMindFracture) target.AmplifyMindFracture(effect.Amount);
+        }
     }
 }

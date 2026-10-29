@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum BattleResult { Ongoing, Victory, Defeat, Inactive }
 
-//첫 1:1 전투의 참가자를 SO에서 만들고 UI에 연결
+//편성에 포함된 전투 참가자 생성과 개별 UI 연결
 public class BattleParticipants : MonoBehaviour
 {
     private IGameDataProvider dataProvider;
@@ -18,7 +19,7 @@ public class BattleParticipants : MonoBehaviour
     public event Action<BattleResult> ResultChanged;
     public BattleResult Result { get; private set; } = BattleResult.Ongoing;
     public bool IsBattleActive => IsReady && Result == BattleResult.Ongoing &&
-        Player.Stats.IsAlive && Enemy.Stats.IsAlive;
+        Player.Stats.IsAlive && enemies.Any(enemy => enemy.Stats.IsAlive);
 
     //외부에서 전달한 데이터 조회 기능과 전투 덱 관리자 저장
     public void Inject(IGameDataProvider provider, IBattleDeckManager manager)
@@ -47,7 +48,34 @@ public class BattleParticipants : MonoBehaviour
     [SerializeField] private int playerId = 50001;
     [SerializeField] private int enemyId = 60001;
     public PlayerBattleState Player { get; private set; }
-    public EnemyBattleState Enemy { get; private set; }
+    private readonly List<EnemyBattleState> enemies = new();
+    private readonly List<BattleCombatantView> enemyViews = new();
+    public IReadOnlyList<EnemyBattleState> Enemies => enemies;
+    public IReadOnlyList<BattleCombatantView> EnemyViews => enemyViews;
+    //기존 디버그와 보상 코드의 전투 식별용 첫 적
+    public EnemyBattleState Enemy => enemies.FirstOrDefault();
+    public int EncounterId { get; private set; }
+    public EnemyBattleState FirstAliveEnemy => enemies.FirstOrDefault(enemy => enemy.Stats.IsAlive);
+
+    //살아 있는 적 중 무작위 대상 선택
+    public EnemyBattleState GetRandomAliveEnemy()
+    {
+        var alive = enemies.Where(enemy => enemy.Stats.IsAlive).ToArray();
+        return alive.Length == 0 ? null : alive[UnityEngine.Random.Range(0, alive.Length)];
+    }
+
+    //드래그한 UI에 연결된 살아 있는 적 조회
+    public bool TryGetEnemy(BattleCombatantView view, out EnemyBattleState enemy)
+    {
+        int index = view == null ? -1 : enemyViews.IndexOf(view);
+        enemy = index < 0 ? null : enemies[index];
+        return enemy != null && enemy.Stats.IsAlive;
+    }
+
+    //현재 편성 그대로 테스트 전투 초기화
+    public bool RestartBattle() => EncounterId > 0
+        ? InitializeEncounter(Player.Data.Id, EncounterId)
+        : Initialize(Player.Data.Id, Enemy.Data.Id);
     public BattleCombatantView PlayerView => playerView;
     public BattleCombatantView EnemyView => enemyView;
     public bool IsReady => Player != null && Enemy != null;
@@ -107,57 +135,86 @@ public class BattleParticipants : MonoBehaviour
     }
 #endif
 
-    //참가자 생성과 세션 체력 또는 기존 체력 적용 및 화면 연결
-    public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false, int? currentHealth = null)
+    //전투 편성 조회 후 빈 자리를 유지한 참가자 생성
+    public bool InitializeEncounter(int characterId, int encounterId, int? currentHealth = null)
+    {
+        if (dataProvider == null || !dataProvider.TryGetEncounter(encounterId, out var encounter))
+        {
+            GameLogger.LogError($"[전투] 편성 {encounterId}를 찾지 못했습니다", this);
+            return false;
+        }
+        return InitializeEnemies(characterId, encounter.EnemyIds, false, currentHealth, encounterId);
+    }
+
+    //기존 단일 적 테스트 진입점
+    public bool Initialize(int characterId, int targetEnemyId, bool preserveHealth = false, int? currentHealth = null) =>
+        InitializeEnemies(characterId, new[] { targetEnemyId }, preserveHealth, currentHealth, 0);
+
+    //배치와 데이터 검증 후 개별 상태 및 외형 생성
+    private bool InitializeEnemies(int characterId, IReadOnlyList<int> ids, bool preserveHealth,
+        int? currentHealth, int encounterId)
     {
         if (dataProvider == null || !dataProvider.IsReady || playerView == null ||
-            (enemyFactory != null ? !enemyFactory.IsConfigured : enemyView == null) || playerEnergyStatus == null || deckManager == null ||
-            deckCountText == null)
-        {
-            GameLogger.LogError("[전투] BattleParticipants의 데이터 및 UI 연결을 확인해 주세요.", this);
-            return false;
-        }
-        if (!dataProvider.TryGetCharacter(characterId, out var character) ||
-            !dataProvider.TryGetEnemy(targetEnemyId, out var enemy))
-        {
-            GameLogger.LogError($"[전투] 캐릭터 {characterId} 또는 적 {targetEnemyId}를 찾지 못했습니다.", this);
-            return false;
-        }
+            playerEnergyStatus == null || deckManager == null || deckCountText == null ||
+            ids == null || ids.Count == 0 || ids.Count > 3 || !ids.Any(id => id > 0) ||
+            !dataProvider.TryGetCharacter(characterId, out var character)) return false;
 
-        var nextPlayer = new PlayerBattleState(character);
-        if (currentHealth.HasValue)
+        var definitions = new List<(EnemyData data, int slot)>();
+        for (int slot = 0; slot < ids.Count; slot++)
         {
-            if (currentHealth.Value <= 0) return false;
-            nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - currentHealth.Value));
-        }
-        else if (preserveHealth && Player != null)
-        {
-            if (!Player.Stats.IsAlive)
+            if (ids[slot] == 0) continue;
+            if (!dataProvider.TryGetEnemy(ids[slot], out var definition) ||
+                (enemyFactory != null ? !enemyFactory.CanCreateAt(slot) : slot != 0 || enemyView == null))
+            {
+                GameLogger.LogError($"[전투] 적 {ids[slot]} 데이터 또는 EnemyPoint{slot + 1} 연결 확인", this);
                 return false;
-            nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - Player.Stats.CurrentHealth));
+            }
+            definitions.Add((definition, slot));
         }
-        var nextEnemy = new EnemyBattleState(enemy, new System.Random());
-        //동적 전투 UI 생성 후 실제 카드 대상 참조 교체
-        if (enemyFactory != null)
-        {
-            enemyFactory.Clear();
-            enemyView = enemyFactory.Create(enemy, nextEnemy.Stats);
-            if (enemyView == null) return false;
-        }
+        var nextPlayer = new PlayerBattleState(character);
+        int health = currentHealth ?? (preserveHealth && Player != null ? Player.Stats.CurrentHealth : character.MaxHealth);
+        if (health <= 0) return false;
+        nextPlayer.Stats.TakeDamage(Math.Max(0, nextPlayer.Stats.MaxHealth - health));
+        var random = new System.Random();
+        var nextEnemies = definitions.Select(entry => new EnemyBattleState(entry.data, random)).ToList();
         UnsubscribeParticipantEvents();
+        enemyFactory?.Clear();
+        enemies.Clear();
+        enemyViews.Clear();
         Player = nextPlayer;
-        Enemy = nextEnemy;
-        Result = BattleResult.Ongoing;
+        EncounterId = encounterId;
+        Result = BattleResult.Inactive;
+        for (int index = 0; index < definitions.Count; index++)
+        {
+            var definition = definitions[index];
+            var state = nextEnemies[index];
+            var view = enemyFactory != null
+                ? enemyFactory.Create(definition.data, state.Stats, definition.slot) : enemyView;
+            if (view == null)
+            {
+                enemyFactory?.Clear();
+                enemies.Clear();
+                enemyViews.Clear();
+                return false;
+            }
+            if (enemyFactory == null)
+                view.Bind(definition.data.DisplayName, definition.data.Artwork, state.Stats, definition.data.BattlePrefab, true);
+            enemies.Add(state);
+            enemyViews.Add(view);
+        }
+        enemyView = enemyViews[0];
         Player.Changed += RefreshPlayer;
         Player.Stats.Changed += RefreshPlayer;
         Player.Stats.Changed += CheckBattleResult;
-        Enemy.Stats.Changed += CheckBattleResult;
         Player.Stats.Changed += RefreshDamagePreviews;
-        Enemy.Stats.Changed += RefreshDamagePreviews;
-        Enemy.IntentChanged += RefreshEnemy;
+        foreach (var enemy in enemies)
+        {
+            enemy.Stats.Changed += CheckBattleResult;
+            enemy.Stats.Changed += RefreshDamagePreviews;
+            enemy.IntentChanged += RefreshEnemy;
+        }
         playerView.Bind(character.DisplayName, character.Portrait, Player.Stats, character.BattlePrefab);
-        if (enemyFactory == null)
-            enemyView.Bind(enemy.DisplayName, enemy.Artwork, Enemy.Stats, enemy.BattlePrefab, true);
+        Result = BattleResult.Ongoing;
         RefreshPlayer();
         RefreshEnemy();
         ResultChanged?.Invoke(Result);
@@ -172,7 +229,7 @@ public class BattleParticipants : MonoBehaviour
 
         if (!Player.Stats.IsAlive)
             Result = BattleResult.Defeat;
-        else if (!Enemy.Stats.IsAlive)
+        else if (enemies.All(enemy => !enemy.Stats.IsAlive))
             Result = BattleResult.Victory;
         else
             return;
@@ -201,18 +258,27 @@ public class BattleParticipants : MonoBehaviour
             deckCountText.text = $"덱 {deckManager.DrawCount} / {deckManager.DiscardCount}";
     }
 
-    //적의 다음 행동과 효과 수치를 표시
+    //각 적의 다음 행동과 보정된 공격 수치 표시
     private void RefreshEnemy()
     {
-        if (!Enemy.PlannedAction.HasValue) { enemyView.SetDetail("다음 행동 없음"); return; }
-        var action = Enemy.PlannedAction.Value;
-        var intent = action.Intent switch
+        for (int index = 0; index < enemies.Count; index++)
         {
-            IntentType.Attack => "공격", IntentType.Defend => "방어",
-            IntentType.Buff => "강화", IntentType.Debuff => "약화", _ => "특수"
-        };
-        enemyView.SetDetail($"다음 행동: {intent}\n" +
-            string.Join(" / ", action.Effects.Select(e => $"{e.Type} {Enemy.GetPreviewAmount(e, Player.Stats)}")));
+            var enemy = enemies[index];
+            var view = enemyViews[index];
+            if (!enemy.Stats.IsAlive || !enemy.PlannedAction.HasValue)
+            {
+                view.SetDetail("다음 행동 없음");
+                continue;
+            }
+            var action = enemy.PlannedAction.Value;
+            var intent = action.Intent switch
+            {
+                IntentType.Attack => "공격", IntentType.Defend => "방어",
+                IntentType.Buff => "강화", IntentType.Debuff => "약화", _ => "특수"
+            };
+            view.SetDetail($"다음 행동: {intent}\n" + string.Join(" / ",
+                action.Effects.Select(effect => $"{effect.Type} {enemy.GetPreviewAmount(effect, Player.Stats)}")));
+        }
     }
 
     //양쪽 상태 변경 시 손패 설명과 적 공격 예고 갱신
@@ -242,11 +308,11 @@ public class BattleParticipants : MonoBehaviour
             Player.Stats.Changed -= CheckBattleResult;
             Player.Stats.Changed -= RefreshDamagePreviews;
         }
-        if (Enemy != null)
+        foreach (var enemy in enemies)
         {
-            Enemy.IntentChanged -= RefreshEnemy;
-            Enemy.Stats.Changed -= CheckBattleResult;
-            Enemy.Stats.Changed -= RefreshDamagePreviews;
+            enemy.IntentChanged -= RefreshEnemy;
+            enemy.Stats.Changed -= CheckBattleResult;
+            enemy.Stats.Changed -= RefreshDamagePreviews;
         }
     }
 
@@ -255,7 +321,7 @@ public class BattleParticipants : MonoBehaviour
     private void DamageEnemy()
     {
         if (!Application.isPlaying || !IsReady) return;
-        Enemy.Stats.TakeDamage(10);
+        FirstAliveEnemy?.Stats.TakeDamage(10);
         GameLogger.Log($"[전투 테스트] 적 피해 10 / HP {Enemy.Stats.CurrentHealth}", this);
     }
 
@@ -295,7 +361,7 @@ public class BattleParticipants : MonoBehaviour
     private void PlanEnemy()
     {
         if (!Application.isPlaying || !IsReady) return;
-        Enemy.PlanNextAction();
+        foreach (var enemy in enemies) enemy.PlanNextAction();
         GameLogger.Log("[전투 테스트] 적 다음 행동 재선택", this);
     }
 
@@ -303,7 +369,7 @@ public class BattleParticipants : MonoBehaviour
     private void ResetParticipants()
     {
         if (!Application.isPlaying || !IsBattleActive) return;
-        Initialize(Player.Data.Id, Enemy.Data.Id);
+        RestartBattle();
         GameLogger.Log("[전투 테스트] 참가자 초기화", this);
     }
 

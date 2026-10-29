@@ -33,10 +33,10 @@ public class CardEffectResolver
     }
 
     //미지원 효과의 부분 실행 차단과 전투 종료 시 중단
-    public void Resolve(CardInstance card)
+    public void Resolve(CardInstance card, EnemyBattleState target = null)
     {
         if (card == null || card.Effects == null || card.Effects.Count == 0) return;
-        var context = new CardEffectContext(card, deckManager, participants);
+        var context = new CardEffectContext(card, deckManager, participants, target);
         if (!CanResolve(context)) return;
         foreach (EffectSpec effect in card.Effects)
         {

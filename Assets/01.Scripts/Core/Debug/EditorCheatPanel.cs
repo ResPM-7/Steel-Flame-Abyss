@@ -134,7 +134,7 @@ public class EditorCheatPanel : MonoBehaviour
         if (PlayerHealth != null)
             GUILayout.Label($"플레이어 HP {PlayerHealth.CurrentHealth}/{PlayerHealth.MaxHealth}");
         if (ActiveBattle)
-            GUILayout.Label($"적 HP {battle.Enemy.Stats.CurrentHealth}/{battle.Enemy.Stats.MaxHealth}");
+            GUILayout.Label($"적 HP {battle.FirstAliveEnemy.Stats.CurrentHealth}/{battle.FirstAliveEnemy.Stats.MaxHealth}");
         damageInput = InputRow("피해 / 회복량", damageInput);
         GUILayout.BeginHorizontal();
         ActionButton("적 피해", ActiveBattle, () => Damage(true, false));
@@ -161,10 +161,10 @@ public class EditorCheatPanel : MonoBehaviour
         GUILayout.BeginHorizontal();
         ActionButton("약화 +1", ActiveBattle, () => battle.Player.Stats.ApplyWeak(1));
         ActionButton("취약 +1", ActiveBattle, () => battle.Player.Stats.ApplyVulnerable(1));
-        ActionButton("적 행동 재추첨", ActiveBattle, () => battle.Enemy.PlanNextAction());
+        ActionButton("적 행동 재추첨", ActiveBattle, () => { foreach (var enemy in battle.Enemies) enemy.PlanNextAction(); });
         GUILayout.EndHorizontal();
         ActionButton("현재 전투 참가자 초기화", ActiveBattle, () =>
-            battle.Initialize(battle.Player.Data.Id, battle.Enemy.Data.Id));
+            battle.RestartBattle());
         GUILayout.Label("피해는 방어도 적용 / 즉사는 방어도 제거 후 처리");
     }
 
@@ -240,7 +240,7 @@ public class EditorCheatPanel : MonoBehaviour
     {
         if (!ActiveBattle)
             return;
-        CombatantState target = enemy ? battle.Enemy.Stats : battle.Player.Stats;
+        CombatantState target = enemy ? battle.FirstAliveEnemy.Stats : battle.Player.Stats;
         int amount;
         if (kill)
         {

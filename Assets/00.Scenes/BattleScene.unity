@@ -321,7 +321,7 @@ MonoBehaviour:
   deckManager: {fileID: 1118476882}
   nextButton: {fileID: 0}
   testPlayerId: 50001
-  testEnemyId: 60001
+  testEncounterId: 90001
   testFinalBoss: 0
 --- !u!4 &587055151
 Transform:

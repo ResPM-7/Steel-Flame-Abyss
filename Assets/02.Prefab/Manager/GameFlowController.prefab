@@ -73,6 +73,6 @@ MonoBehaviour:
   maxRandomCamps: 3
   useFixedSeed: 0
   fixedSeed: 0
-  battleEnemyIds: 61ea0000
+  battleEncounterIds: 915f0100925f0100
   eventIds: 01000000
-  bossEnemyId: 60002
+  bossEncounterId: 90003

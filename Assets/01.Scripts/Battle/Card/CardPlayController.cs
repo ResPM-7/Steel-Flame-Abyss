@@ -59,9 +59,8 @@ public class CardPlayController
 
         int damage = context.CalculateBaseDamage(effect);
         CombatantState attacker = participants.Player?.Stats;
-        if (previewTarget != null && previewTarget == participants.EnemyView &&
-            participants.Enemy != null && participants.Enemy.Stats.IsAlive)
-            return participants.Enemy.Stats.CalculateAttackDamage(damage, attacker);
+        if (participants.TryGetEnemy(previewTarget, out var enemy))
+            return enemy.Stats.CalculateAttackDamage(damage, attacker);
 
         return System.Math.Max(0, damage - (attacker?.Weak ?? 0));
     }
@@ -128,8 +127,8 @@ public class CardPlayController
             return false;
 
         bool requiresEnemyTarget = RequiresEnemyTarget(card);
-        if (requiresEnemyTarget &&
-            (targetView != participants.EnemyView || !participants.Enemy.Stats.IsAlive))
+        bool validEnemy = participants.TryGetEnemy(targetView, out var selectedEnemy);
+        if (requiresEnemyTarget && !validEnemy)
             return false;
         if (!requiresEnemyTarget && !raisedEnough)
             return false;
@@ -146,7 +145,7 @@ public class CardPlayController
         if (!participants.Player.TrySpendEnergy(card.Cost))
             return false;
 
-        effectResolver.Resolve(card);
+        effectResolver.Resolve(card, selectedEnemy);
         bool exhaust = HasExhaustEffect(card);
         if (!deckManager.FinishPlayingCard(card, exhaust))
             return false;

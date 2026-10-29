@@ -21,9 +21,11 @@ public class RandomMapView : MonoBehaviour
     [SerializeField] private bool useFixedSeed;
     [SerializeField] private int fixedSeed;
     [Header("노드 콘텐츠 ID")]
-    [SerializeField] private int[] battleEnemyIds = { 60001 };
+    [UnityEngine.Serialization.FormerlySerializedAs("battleEnemyIds")]
+    [SerializeField] private int[] battleEncounterIds = { 90001, 90002 };
     [SerializeField] private int[] eventIds = { 1 };
-    [SerializeField] private int bossEnemyId = 60002;
+    [UnityEngine.Serialization.FormerlySerializedAs("bossEnemyId")]
+    [SerializeField] private int bossEncounterId = 90003;
     private MapConnectionsGraphic connections;
 
     //씬 노드 없이 설정된 콘텐츠 후보에서 새 맵 생성
@@ -31,21 +33,23 @@ public class RandomMapView : MonoBehaviour
     {
         int seed = useFixedSeed ? fixedSeed : Guid.NewGuid().GetHashCode();
         return MapGenerator.Generate(seed, middleFloors, campChance, maxRandomCamps,
-            battleEnemyIds.Distinct().ToArray(), eventIds.Distinct().ToArray(), bossEnemyId);
+            battleEncounterIds.Distinct().ToArray(), eventIds.Distinct().ToArray(), bossEncounterId);
     }
 
     //전투·이벤트·보스 후보의 실제 데이터 존재 확인
     public bool ValidateContent(IGameDataProvider data, Func<int, bool> hasEvent)
     {
-        if (battleEnemyIds == null || battleEnemyIds.Length == 0 || eventIds == null || eventIds.Length == 0)
+        if (battleEncounterIds == null || battleEncounterIds.Length == 0 || eventIds == null || eventIds.Length == 0)
         {
             GameLogger.LogError("[맵] Random Map View의 전투·이벤트 ID 후보를 입력해 주세요", this);
             return false;
         }
-        foreach (int id in battleEnemyIds.Concat(new[] { bossEnemyId }))
+        foreach (int id in battleEncounterIds.Concat(new[] { bossEncounterId }))
         {
-            if (data.TryGetEnemy(id, out _)) continue;
-            GameLogger.LogError($"[맵] 적 ID {id}를 데이터베이스에서 찾을 수 없습니다", this);
+            if (data.TryGetEncounter(id, out var encounter) && encounter.EnemyIds.Count == 3 &&
+                encounter.EnemyIds.Any(enemyId => enemyId > 0) &&
+                encounter.EnemyIds.All(enemyId => enemyId == 0 || data.TryGetEnemy(enemyId, out _))) continue;
+            GameLogger.LogError($"[맵] 전투 편성 ID {id} 또는 편성의 적 데이터를 확인해 주세요", this);
             return false;
         }
         foreach (int id in eventIds)

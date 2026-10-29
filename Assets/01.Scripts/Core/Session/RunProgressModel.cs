@@ -29,10 +29,10 @@ public class RunProgressModel
     public int PlayerId { get; private set; }
     public CombatantState Health { get; private set; }
     public MapProgressModel Map { get; private set; }
-    public int PendingEnemyId { get; private set; }
+    public int PendingEncounterId { get; private set; }
     public bool IsFinalBossBattle { get; private set; }
     public bool IsCleared { get; private set; }
-    public bool HasPendingBattle => PendingEnemyId > 0;
+    public bool HasPendingBattle => PendingEncounterId > 0;
     public float MapScrollX { get; private set; }
     public float MapScrollY { get; private set; }
 
@@ -61,9 +61,9 @@ public class RunProgressModel
     }
 
     //전투 대상과 최종 보스 여부 저장
-    public void SetBattle(int enemyId, bool isFinalBoss = false)
+    public void SetBattle(int encounterId, bool isFinalBoss = false)
     {
-        PendingEnemyId = enemyId;
+        PendingEncounterId = encounterId;
         IsFinalBossBattle = isFinalBoss;
     }
 
@@ -87,7 +87,7 @@ public class RunProgressModel
     //전투 진입 정보 제거
     public void ClearBattle()
     {
-        PendingEnemyId = 0;
+        PendingEncounterId = 0;
         IsFinalBossBattle = false;
     }
 
@@ -99,7 +99,7 @@ public class RunProgressModel
         PlayerId = 0;
         Health = null;
         Map = null;
-        PendingEnemyId = 0;
+        PendingEncounterId = 0;
         IsFinalBossBattle = false;
         IsCleared = false;
         MapScrollX = 0f;
@@ -113,7 +113,7 @@ public interface IRunSceneLoader
     bool IsLoading { get; }
 
     //전투 대상의 비동기 이동 요청
-    bool EnterBattle(int enemyId, bool isFinalBoss = false);
+    bool EnterBattle(int encounterId, bool isFinalBoss = false);
 
     //승리 보상 완료 후 맵 씬 복귀 요청
     bool ReturnToMap();

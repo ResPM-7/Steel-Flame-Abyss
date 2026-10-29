@@ -8,8 +8,8 @@ public class MapNodeView : MonoBehaviour
 {
     [SerializeField] private MapNodeType nodeType;
     [UnityEngine.Serialization.FormerlySerializedAs("enemyId")]
-    [Tooltip("Battle와 Boss는 적 ID / Event는 이벤트 ID / Camp와 Shop은 사용하지 않음")]
-    [SerializeField] private int value = 60001;
+    [Tooltip("Battle와 Boss는 전투 편성 ID / Event는 이벤트 ID / Camp와 Shop은 사용하지 않음")]
+    [SerializeField] private int value;
     [SerializeField] private UnityEngine.UI.Button button;
     [SerializeField] private UnityEngine.UI.Image icon;
     [SerializeField] private Color availableColor = Color.white;

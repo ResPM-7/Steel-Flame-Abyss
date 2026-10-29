@@ -49,10 +49,15 @@ public class BattleCoinInstaller : CoinInstaller
         }
         if (result == BattleResult.Victory && rewardEnemy != null && reward == null)
         {
-            int min = Mathf.Max(0, rewardEnemy.Data.MinGold);
-            int max = Mathf.Max(min, rewardEnemy.Data.MaxGold);
-            int amount = min + (int)(random.NextDouble() * ((long)max - min + 1));
-            reward = new CoinReward(amount);
+            //처치한 편성 전체의 코인 합산, 전투당 한 번 지급
+            long total = 0;
+            foreach (var enemy in participants.Enemies)
+            {
+                int min = Mathf.Max(0, enemy.Data.MinGold);
+                int max = Mathf.Max(min, enemy.Data.MaxGold);
+                total += min + (int)(random.NextDouble() * ((long)max - min + 1));
+            }
+            reward = new CoinReward((int)System.Math.Min(int.MaxValue, total));
         }
         if (rewardButton != null) rewardButton.interactable = result == BattleResult.Victory && reward != null &&
             !reward.IsClaimed && reward.Amount > 0;

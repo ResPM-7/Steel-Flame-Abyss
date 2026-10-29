@@ -65,27 +65,29 @@ public class BattleTurnController : MonoBehaviour
             participants.Player.Stats.ResolveBurnAtTurnEnd();
             if (!participants.IsBattleActive) return;
 
-            //적 행동 전 화상으로 승리하면 턴 진행 중단
-            participants.Enemy.Stats.ResolveBurnAtTurnEnd();
-            if (!participants.IsBattleActive) return;
-
-            //화상으로 감소한 적 체력 기준 처형 검사
-            participants.Enemy.Stats.TryExecuteMindFracture();
-            if (!participants.IsBattleActive) return;
-
+            //모든 적 화상 처리 후 정신분열 검사
+            foreach (var enemy in participants.Enemies)
+            {
+                if (enemy.Stats.IsAlive) enemy.Stats.ResolveBurnAtTurnEnd();
+                if (!participants.IsBattleActive) return;
+            }
+            foreach (var enemy in participants.Enemies)
+            {
+                if (enemy.Stats.IsAlive) enemy.Stats.TryExecuteMindFracture();
+                if (!participants.IsBattleActive) return;
+            }
             participants.Player.Stats.TickDebuffs();
 
-            participants.Enemy.Stats.ClearBlock();
-            participants.Enemy.Stats.ClearBurnRetaliation();
-            participants.Enemy.ExecutePlannedAction(participants.Player.Stats);
-
-            if (!participants.IsBattleActive)
+            //생존한 적을 배치 순서대로 실행, 승패 확정 시 즉시 중단
+            foreach (var enemy in participants.Enemies)
             {
-                GameLogger.Log("[턴] 전투 종료 / 다음 턴 진행 중단", this);
-                return;
+                if (!enemy.Stats.IsAlive) continue;
+                enemy.Stats.ClearBlock();
+                enemy.Stats.ClearBurnRetaliation();
+                enemy.ExecutePlannedAction(participants.Player.Stats);
+                if (!participants.IsBattleActive) return;
+                enemy.Stats.TickDebuffs();
             }
-
-            participants.Enemy.Stats.TickDebuffs();
 
             StartPlayerTurn();
         }
@@ -101,7 +103,8 @@ public class BattleTurnController : MonoBehaviour
         participants.Player.Stats.ClearBlock();
         participants.Player.Stats.ClearBurnRetaliation();
         participants.Player.ResetEnergy();
-        participants.Enemy.PlanNextAction();
+        foreach (var enemy in participants.Enemies)
+            enemy.PlanNextAction();
         int drawnCount = deckManager.DrawCards(cardsPerTurn);
         relicEffects?.Apply(RelicTrigger.TurnStart);
         GameLogger.Log($"[턴] 적 행동 완료 / 내 턴 시작 / 새 손패 {drawnCount}장", this);

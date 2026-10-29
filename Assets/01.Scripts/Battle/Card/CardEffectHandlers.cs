@@ -8,8 +8,11 @@ public abstract class TargetedCardEffectHandler : ICardEffectHandler
     //현재 대상 조회 후 효과 실행
     public void Apply(EffectSpec effect, CardEffectContext context)
     {
-        CombatantState target = context.GetTarget(effect.Target);
-        if (target != null) ApplyToTarget(effect, context, target);
+        foreach (var target in context.GetTargets(effect.Target))
+        {
+            if (!context.Participants.IsBattleActive) break;
+            ApplyToTarget(effect, context, target);
+        }
     }
 
     //효과별 전투 상태 변경
