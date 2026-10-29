@@ -11,16 +11,19 @@ public class GameDatabase : ScriptableObject
     [SerializeField] private List<CharacterData> characters = new();
     [SerializeField] private List<EnemyData> enemies = new();
     [SerializeField] private List<RelicData> relics = new();
+    [SerializeField] private List<EncounterData> encounters = new();
 
     private Dictionary<int, CardData> cardById;
     private Dictionary<int, CharacterData> characterById;
     private Dictionary<int, EnemyData> enemyById;
     private Dictionary<int, RelicData> relicById;
+    private Dictionary<int, EncounterData> encounterById;
 
     public IReadOnlyList<CardData> Cards => cards;
     public IReadOnlyList<CharacterData> Characters => characters;
     public IReadOnlyList<EnemyData> Enemies => enemies;
     public IReadOnlyList<RelicData> Relics => relics;
+    public IReadOnlyList<EncounterData> Encounters => encounters;
     private void OnEnable() => RebuildLookup();
 
     public bool TryGetCard(int id, out CardData value)
@@ -53,6 +56,13 @@ public class GameDatabase : ScriptableObject
             RebuildLookup();
     }
 
+    //전투 편성 ID로 데이터 조회
+    public bool TryGetEncounter(int id, out EncounterData value)
+    {
+        EnsureLookup();
+        return encounterById.TryGetValue(id, out value);
+    }
+
     private void RebuildLookup()
     {
         //런타임에서는 정수 ID로 빠르게 데이터를 찾을 수 있도록 사전을 구성
@@ -60,6 +70,7 @@ public class GameDatabase : ScriptableObject
         characterById = BuildLookup(characters);
         enemyById = BuildLookup(enemies);
         relicById = BuildLookup(relics);
+        encounterById = BuildLookup(encounters);
     }
 
     private static Dictionary<int, T> BuildLookup<T>(IEnumerable<T> entries) where T : GameDataEntry
@@ -74,6 +85,13 @@ public class GameDatabase : ScriptableObject
     }
 
 #if UNITY_EDITOR
+    //전투 편성 서브에셋 목록 연결
+    public void EditorSetEncounters(List<EncounterData> values)
+    {
+        encounters = values;
+        RebuildLookup();
+    }
+
     public void EditorSetEntries(List<CardData> newCards, List<CharacterData> newCharacters,
         List<EnemyData> newEnemies, List<RelicData> newRelics)
     {

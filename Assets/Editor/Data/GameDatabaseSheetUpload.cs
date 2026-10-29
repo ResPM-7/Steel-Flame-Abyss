@@ -45,7 +45,7 @@ internal static class GameDatabaseSheetUpload
             throw new InvalidOperationException($"시트가 업로드 요청을 거부했습니다.\n{response}");
 
         Debug.Log($"[게임 데이터] 시트 업로드 완료: 카드 {database.Cards.Count}, " +
-                  $"캐릭터 {database.Characters.Count}, 적 {database.Enemies.Count}, 유물 {database.Relics.Count}");
+                  $"캐릭터 {database.Characters.Count}, 적 {database.Enemies.Count}, 유물 {database.Relics.Count}, 전투 편성 {database.Encounters.Count}");
     }
 
     private static UploadPayload BuildPayload(GameDatabase database, SheetUploadConnectionSettings.Values settings)
@@ -74,7 +74,41 @@ internal static class GameDatabaseSheetUpload
                 rows = database.Relics.Where(value => value != null).Select(RelicRow).ToList()
             });
         }
+        if (database.Encounters.Any(value => value != null))
+        {
+            if (string.IsNullOrWhiteSpace(settings.EncountersSheetName))
+                throw new InvalidOperationException("시트 업로드 연결에서 전투 편성 탭 이름을 입력해 주세요.");
+            if (payload.tables.Any(table => string.Equals(table.name, settings.EncountersSheetName, StringComparison.OrdinalIgnoreCase)))
+                throw new InvalidOperationException("전투 편성 탭 이름은 다른 데이터 탭 이름과 달라야 합니다.");
+            payload.tables.Add(new UploadTable
+            {
+                name = settings.EncountersSheetName,
+                rows = database.Encounters.Where(value => value != null)
+                    .Select(value => EncounterRow(value, database)).ToList()
+            });
+        }
         return payload;
+    }
+
+    //전투 편성 검증 후 시트 열 구성, 빈 자리는 0 유지
+    private static UploadRow EncounterRow(EncounterData encounter, GameDatabase database)
+    {
+        if (encounter.Id <= 0 || string.IsNullOrWhiteSpace(encounter.DisplayName) ||
+            encounter.EnemyIds == null || encounter.EnemyIds.Count != 3 ||
+            !encounter.EnemyIds.Any(id => id > 0))
+            throw new InvalidOperationException($"전투 편성 '{encounter.Id}'의 이름과 적 배치 3칸을 확인해 주세요.");
+        var row = NewRow(encounter);
+        Add(row, "encounterId", encounter.Id.ToString(CultureInfo.InvariantCulture));
+        Add(row, "encounterName", encounter.DisplayName);
+        for (int slot = 0; slot < 3; slot++)
+        {
+            int enemyId = encounter.EnemyIds[slot];
+            if (enemyId < 0 || (enemyId != 0 && !database.TryGetEnemy(enemyId, out _)))
+                throw new InvalidOperationException($"전투 편성 '{encounter.Id}'의 적 ID '{enemyId}'가 유효하지 않습니다.");
+            Add(row, $"enemyId{slot + 1}", enemyId.ToString(CultureInfo.InvariantCulture));
+        }
+        Add(row, "enabled", "TRUE");
+        return row;
     }
 
     //카드 정보와 효과의 시트 업로드 필드 구성

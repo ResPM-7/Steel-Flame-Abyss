@@ -51,6 +51,21 @@ MonoBehaviour:
     duration: 0
   icon: {fileID: 0}
   effectsEnabled: 1
+--- !u!114 &-7572520652342701610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912f304b44f77ee459fe6817fff2aec5, type: 3}
+  m_Name: EncounterData_90004
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterData
+  id: 90004
+  displayName: "\uBCF4\uC2A4\uC640 \uD638\uC704"
+  enemyIds: 62ea000061ea000061ea0000
 --- !u!114 &-7525678505189942033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +249,21 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &-4528273833106646390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912f304b44f77ee459fe6817fff2aec5, type: 3}
+  m_Name: EncounterData_90003
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterData
+  id: 90003
+  displayName: "\uBE14\uB799 \uC624\uD06C \uBCF4\uC2A4"
+  enemyIds: 62ea00000000000000000000
 --- !u!114 &-3076726178586581687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,6 +467,21 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &-164831777647892512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912f304b44f77ee459fe6817fff2aec5, type: 3}
+  m_Name: EncounterData_90002
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterData
+  id: 90002
+  displayName: "\uB291\uB300 \uBB34\uB9AC"
+  enemyIds: 61ea000061ea000061ea0000
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,6 +523,11 @@ MonoBehaviour:
   - {fileID: -4994107017506138331}
   - {fileID: -9161943771842496306}
   - {fileID: -8034073419062296371}
+  encounters:
+  - {fileID: 1693516754801979686}
+  - {fileID: -164831777647892512}
+  - {fileID: -4528273833106646390}
+  - {fileID: -7572520652342701610}
 --- !u!114 &596276596265036108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,6 +618,21 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &1693516754801979686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912f304b44f77ee459fe6817fff2aec5, type: 3}
+  m_Name: EncounterData_90001
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterData
+  id: 90001
+  displayName: "\uB291\uB300 \uD55C \uB9C8\uB9AC"
+  enemyIds: 61ea00000000000000000000
 --- !u!114 &2035420301826485214
 MonoBehaviour:
   m_ObjectHideFlags: 0

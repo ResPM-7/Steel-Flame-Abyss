@@ -11,6 +11,7 @@ internal static class SheetConnectionSettings
     public static string CardsUrl { get => Get("Cards"); set => Set("Cards", value); }
     public static string CharactersUrl { get => Get("Characters"); set => Set("Characters", value); }
     public static string EnemiesUrl { get => Get("Enemies"); set => Set("Enemies", value); }
+    public static string EncountersUrl { get => Get("Encounters"); set => Set("Encounters", value); }
     public static string RelicsUrl { get => Get("Relics"); set => Set("Relics", value); }
     public static string ObjectPoolUrl { get => Get("ObjectPool"); set => Set("ObjectPool", value); }
     public static string CanvasPoolUrl { get => Get("CanvasPool"); set => Set("CanvasPool", value); }
@@ -35,11 +36,13 @@ internal static class SheetConnectionSettings
             NormalizeCsvUrl(CardsUrl),
             NormalizeCsvUrl(CharactersUrl),
             NormalizeCsvUrl(EnemiesUrl),
-            NormalizeCsvUrl(RelicsUrl));
+            NormalizeCsvUrl(RelicsUrl),
+            NormalizeCsvUrl(EncountersUrl));
         ValidateRequired("카드", urls.Cards);
         ValidateRequired("캐릭터", urls.Characters);
         ValidateRequired("적", urls.Enemies);
         ValidateOptional("유물", urls.Relics);
+        ValidateOptional("전투 편성", urls.Encounters);
         return urls;
     }
 
@@ -102,18 +105,20 @@ internal static class SheetConnectionSettings
 
     internal readonly struct DatabaseUrls
     {
-        public DatabaseUrls(string cards, string characters, string enemies, string relics)
+        public DatabaseUrls(string cards, string characters, string enemies, string relics, string encounters = "")
         {
             Cards = cards;
             Characters = characters;
             Enemies = enemies;
             Relics = relics;
+            Encounters = encounters;
         }
 
         public string Cards { get; }
         public string Characters { get; }
         public string Enemies { get; }
         public string Relics { get; }
+        public string Encounters { get; }
     }
 
     internal readonly struct PoolUrls
@@ -135,6 +140,7 @@ internal class SheetConnectionSettingsWindow : EditorWindow
     private string charactersUrl;
     private string enemiesUrl;
     private string relicsUrl;
+    private string encountersUrl;
     private string objectPoolUrl;
     private string canvasPoolUrl;
 
@@ -153,6 +159,7 @@ internal class SheetConnectionSettingsWindow : EditorWindow
         charactersUrl = SheetConnectionSettings.CharactersUrl;
         enemiesUrl = SheetConnectionSettings.EnemiesUrl;
         relicsUrl = SheetConnectionSettings.RelicsUrl;
+        encountersUrl = SheetConnectionSettings.EncountersUrl;
         objectPoolUrl = SheetConnectionSettings.ObjectPoolUrl;
         canvasPoolUrl = SheetConnectionSettings.CanvasPoolUrl;
     }
@@ -167,7 +174,8 @@ internal class SheetConnectionSettingsWindow : EditorWindow
         cardsUrl = EditorGUILayout.TextField("카드 CSV", cardsUrl);
         charactersUrl = EditorGUILayout.TextField("캐릭터 CSV", charactersUrl);
         enemiesUrl = EditorGUILayout.TextField("적 CSV", enemiesUrl);
-        relicsUrl = EditorGUILayout.TextField("유물 CSV (선택)", relicsUrl);
+        relicsUrl = EditorGUILayout.TextField("유물 CSV", relicsUrl);
+        encountersUrl = EditorGUILayout.TextField("전투 편성 CSV", encountersUrl);
         EditorGUILayout.Space();
         objectPoolUrl = EditorGUILayout.TextField("ObjectPool CSV", objectPoolUrl);
         canvasPoolUrl = EditorGUILayout.TextField("CanvasPool CSV", canvasPoolUrl);
@@ -188,6 +196,7 @@ internal class SheetConnectionSettingsWindow : EditorWindow
         SheetConnectionSettings.CharactersUrl = charactersUrl;
         SheetConnectionSettings.EnemiesUrl = enemiesUrl;
         SheetConnectionSettings.RelicsUrl = relicsUrl;
+        SheetConnectionSettings.EncountersUrl = encountersUrl;
         SheetConnectionSettings.ObjectPoolUrl = objectPoolUrl;
         SheetConnectionSettings.CanvasPoolUrl = canvasPoolUrl;
         // URL 필드가 제거되기 전 GameDatabase YAML에 남은 레거시 값을 Unity 직렬화로 정리합니다.

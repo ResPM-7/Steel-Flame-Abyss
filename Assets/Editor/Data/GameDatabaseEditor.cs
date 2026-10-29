@@ -8,7 +8,7 @@ using UnityEngine;
 [CustomEditor(typeof(GameDatabase))]
 internal class GameDatabaseEditor : UnityEditor.Editor
 {
-    private readonly string[] categoryLabels = { "전체", "카드", "캐릭터", "적", "유물" };
+    private readonly string[] categoryLabels = { "전체", "카드", "캐릭터", "적", "유물", "전투 편성" };
     private string searchText = string.Empty;
     private int categoryIndex;
     private Vector2 listScroll;
@@ -72,13 +72,14 @@ internal class GameDatabaseEditor : UnityEditor.Editor
         var missingCount = database.Cards.Count(entry => entry == null) +
                            database.Characters.Count(entry => entry == null) +
                            database.Enemies.Count(entry => entry == null) +
-                           database.Relics.Count(entry => entry == null);
+                           database.Relics.Count(entry => entry == null) +
+                           database.Encounters.Count(entry => entry == null);
         if (missingCount > 0)
             EditorGUILayout.HelpBox($"Script 연결이 끊긴 데이터가 {missingCount}개 있습니다. " +
                                     "아래의 '원격 시트에서 다시 동기화'를 실행해 복구하세요.", MessageType.Error);
         else
             EditorGUILayout.HelpBox($"카드 {database.Cards.Count} / 캐릭터 {database.Characters.Count} / " +
-                                    $"적 {database.Enemies.Count} / 유물 {database.Relics.Count}", MessageType.Info);
+                                    $"적 {database.Enemies.Count} / 유물 {database.Relics.Count} / 전투 편성 {database.Encounters.Count}", MessageType.Info);
     }
 
     private void DrawSelectedEntry()
@@ -137,7 +138,7 @@ internal class GameDatabaseEditor : UnityEditor.Editor
     {
         serializedObject.ApplyModifiedProperties();
         if (!EditorUtility.DisplayDialog("Google 시트 업로드",
-                "Unity의 현재 카드·캐릭터·적 데이터를 연결된 Google 시트에 반영할까요?\n" +
+                "Unity의 현재 카드·캐릭터·적·유물·전투 편성 데이터를 연결된 Google 시트에 반영할까요?\n" +
                 "같은 ID의 행은 수정되고, 없는 ID는 새 행으로 추가됩니다.", "업로드", "취소"))
             return;
 
@@ -175,6 +176,7 @@ internal class GameDatabaseEditor : UnityEditor.Editor
             .Concat(database.Characters)
             .Concat(database.Enemies)
             .Concat(database.Relics)
+            .Concat(database.Encounters)
             .Where(entry => entry != null);
 
     private bool MatchesSearch(GameDataEntry entry)
@@ -192,6 +194,7 @@ internal class GameDatabaseEditor : UnityEditor.Editor
         2 => entry is CharacterData,
         3 => entry is EnemyData,
         4 => entry is RelicData,
+        5 => entry is EncounterData,
         _ => true
     };
 
@@ -201,6 +204,7 @@ internal class GameDatabaseEditor : UnityEditor.Editor
         CharacterData => 1,
         EnemyData => 2,
         RelicData => 3,
+        EncounterData => 4,
         _ => 4
     };
 
@@ -210,6 +214,7 @@ internal class GameDatabaseEditor : UnityEditor.Editor
         CharacterData => "캐릭터",
         EnemyData => "적",
         RelicData => "유물",
+        EncounterData => "전투 편성",
         _ => "기타"
     };
 }

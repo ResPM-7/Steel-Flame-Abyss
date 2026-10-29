@@ -9,11 +9,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 공개 CSV 주소에서 모든 시트를 내려받아 검증한 뒤 GameDatabase 서브에셋을 갱신합니다.
-/// 일부 시트만 적용되는 상태를 막기 위해 네 시트 다운로드와 검증이 모두 끝난 후에만 에셋을 변경합니다.
-/// </summary>
-internal static class GameDatabaseCsvSync
+//연결된 CSV 다운로드와 전체 검증 후 GameDatabase 서브에셋 갱신
+internal static partial class GameDatabaseCsvSync
 {
     internal const string DatabasePath = "Assets/03.Data/GameDatabase.asset";
     private static bool isSyncing;
@@ -35,10 +32,12 @@ internal static class GameDatabaseCsvSync
             ? null
             : DownloadCsvBlocking("유물", urls.Relics);
 
-        var input = ReadAndValidateAllSheets(cardsCsv, charactersCsv, enemiesCsv, relicsCsv);
+        var encountersCsv = string.IsNullOrWhiteSpace(urls.Encounters)
+            ? null : DownloadCsvBlocking("전투 편성", urls.Encounters);
+        var input = ReadAndValidateAllSheets(cardsCsv, charactersCsv, enemiesCsv, relicsCsv, encountersCsv);
         Apply(database, input);
         Debug.Log($"[게임 데이터] 배치 복구 완료: 카드 {input.Cards.Count}, " +
-                  $"캐릭터 {input.Characters.Count}, 적 {input.Enemies.Count}, 유물 {input.Relics.Count}");
+                  $"캐릭터 {input.Characters.Count}, 적 {input.Enemies.Count}, 유물 {input.Relics.Count}, 전투 편성 {input.Encounters?.Count ?? 0}");
     }
 
     [MenuItem("Tools/데이터/게임 데이터베이스 선택", false, 200)]
@@ -84,21 +83,26 @@ internal static class GameDatabaseCsvSync
             if (hasRelicSheet)
                 downloadTasks.Add(DownloadCsvAsync("유물", urls.Relics));
 
+            var hasEncounterSheet = !string.IsNullOrWhiteSpace(urls.Encounters);
+            if (hasEncounterSheet)
+                downloadTasks.Add(DownloadCsvAsync("전투 편성", urls.Encounters));
+
             var downloads = await Task.WhenAll(downloadTasks);
 
             EditorUtility.DisplayProgressBar("원격 시트 동기화", "CSV 형식과 데이터 참조를 검증하는 중...", 0.65f);
             var input = ReadAndValidateAllSheets(downloads[0], downloads[1], downloads[2],
-                hasRelicSheet ? downloads[3] : null);
+                hasRelicSheet ? downloads[3] : null,
+                hasEncounterSheet ? downloads[hasRelicSheet ? 4 : 3] : null);
 
             EditorUtility.DisplayProgressBar("원격 시트 동기화", "서브에셋을 갱신하는 중...", 0.9f);
             Apply(database, input);
             Debug.Log($"[게임 데이터] 원격 시트 동기화 완료: 카드 {input.Cards.Count}, " +
-                      $"캐릭터 {input.Characters.Count}, 적 {input.Enemies.Count}, 유물 {input.Relics.Count}");
+                      $"캐릭터 {input.Characters.Count}, 적 {input.Enemies.Count}, 유물 {input.Relics.Count}, 전투 편성 {input.Encounters?.Count ?? 0}");
 
             if (showDialogOnFailure)
                 EditorUtility.DisplayDialog("원격 시트 동기화 완료",
                     $"카드 {input.Cards.Count}개 / 캐릭터 {input.Characters.Count}개 / " +
-                    $"적 {input.Enemies.Count}개 / 유물 {input.Relics.Count}개를 반영했습니다.", "확인");
+                    $"적 {input.Enemies.Count}개 / 유물 {input.Relics.Count}개 / 전투 편성 {input.Encounters?.Count ?? 0}개를 반영했습니다.", "확인");
         }
         catch (Exception exception)
         {
@@ -115,7 +119,7 @@ internal static class GameDatabaseCsvSync
     }
 
     private static ImportData ReadAndValidateAllSheets(string cardsCsv, string charactersCsv,
-        string enemiesCsv, string relicsCsv)
+        string enemiesCsv, string relicsCsv, string encountersCsv = null)
     {
         var input = new ImportData
         {
@@ -125,18 +129,23 @@ internal static class GameDatabaseCsvSync
             // 유물은 MVP 후순위이므로 URL이 없으면 빈 목록으로 정상 처리합니다.
             Relics = string.IsNullOrWhiteSpace(relicsCsv)
                 ? new List<RelicRow>()
-                : ReadRelics(CsvTable.Parse("유물 시트", relicsCsv))
+                : ReadRelics(CsvTable.Parse("유물 시트", relicsCsv)),
+            Encounters = encountersCsv == null ? null : ReadEncounters(CsvTable.Parse("전투 편성 시트", encountersCsv))
         };
 
         var allIds = new HashSet<int>();
         foreach (var id in input.Cards.Select(x => x.Id)
                      .Concat(input.Characters.Select(x => x.Id))
                      .Concat(input.Enemies.Select(x => x.Id))
-                     .Concat(input.Relics.Select(x => x.Id)))
+                     .Concat(input.Relics.Select(x => x.Id))
+                     .Concat(input.Encounters?.Select(x => x.Id) ?? Enumerable.Empty<int>()))
         {
             if (!allIds.Add(id))
                 throw new InvalidDataException($"모든 시트를 통틀어 ID '{id}'가 중복됩니다.");
         }
+
+        if (input.Encounters != null)
+            ValidateEncounterEnemies(input.Encounters, input.Enemies.Select(x => x.Id).ToHashSet());
 
         var cardIds = input.Cards.Select(x => x.Id).ToHashSet();
         foreach (var character in input.Characters)
@@ -514,6 +523,20 @@ internal static class GameDatabaseCsvSync
             .Where(entry => entry.Id > 0)
             .GroupBy(entry => entry.Id)
             .ToDictionary(group => group.Key, group => group.First());
+        //편성 시트 미연결 시 기존 편성 보존과 참조 검증
+        if (input.Encounters == null)
+        {
+            input.Encounters = database.Encounters.Where(x => x != null)
+                .Select(x => new EncounterRow { Id = x.Id, Name = x.DisplayName, EnemyIds = x.EnemyIds.ToArray() }).ToList();
+            ValidateEncounterEnemies(input.Encounters, input.Enemies.Select(x => x.Id).ToHashSet());
+        }
+        //서브에셋 변경 전 전체 ID 충돌과 기존 데이터 종류 확인
+        EnsureUnique(input.Cards.Select(x => x.Id).Concat(input.Characters.Select(x => x.Id))
+            .Concat(input.Enemies.Select(x => x.Id)).Concat(input.Relics.Select(x => x.Id))
+            .Concat(input.Encounters.Select(x => x.Id)), "전체 시트");
+        foreach (var row in input.Encounters)
+            if (allExisting.Any(x => x.Id == row.Id && !(x is EncounterData)))
+                throw new InvalidDataException($"전투 편성 ID '{row.Id}'가 다른 데이터 ID와 중복됩니다.");
         var retained = new HashSet<GameDataEntry>();
         var cards = input.Cards.Select(row =>
         {
@@ -557,11 +580,15 @@ internal static class GameDatabaseCsvSync
             return asset;
         }).ToList();
 
+        var encounters = ApplyEncounterRows(database, input.Encounters, existing);
+        foreach (var encounter in encounters) retained.Add(encounter);
+
         // 시트에서 제거된 행, ID가 0으로 깨진 항목, 중복 ID 서브에셋까지 모두 정리합니다.
         foreach (var orphan in allExisting.Where(entry => !retained.Contains(entry)).ToArray())
             UnityEngine.Object.DestroyImmediate(orphan, true);
 
         database.EditorSetEntries(cards, characters, enemies, relics);
+        database.EditorSetEncounters(encounters);
         EditorUtility.SetDirty(database);
         AssetDatabase.SaveAssets();
         AssetDatabase.ImportAsset(DatabasePath, ImportAssetOptions.ForceUpdate);
@@ -831,6 +858,7 @@ internal static class GameDatabaseCsvSync
         public List<CharacterRow> Characters;
         public List<EnemyRow> Enemies;
         public List<RelicRow> Relics;
+        public List<EncounterRow> Encounters;
     }
 
     private class CardRow

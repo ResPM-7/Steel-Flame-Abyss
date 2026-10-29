@@ -20,10 +20,12 @@ internal static class SheetUploadConnectionSettings
     public static string EnemiesSheetName { get => Get("EnemiesSheet", "Enemy"); set => Set("EnemiesSheet", value); }
     public static string RelicsSheetName { get => Get("RelicsSheet", "Relic"); set => Set("RelicsSheet", value); }
 
+    public static string EncountersSheetName { get => Get("EncountersSheet", "Encounters"); set => Set("EncountersSheet", value); }
+
     public static Values GetValidated()
     {
         var values = new Values(UploadUrl?.Trim(), Token, CardsSheetName?.Trim(),
-            CharactersSheetName?.Trim(), EnemiesSheetName?.Trim(), RelicsSheetName?.Trim());
+            CharactersSheetName?.Trim(), EnemiesSheetName?.Trim(), RelicsSheetName?.Trim(), EncountersSheetName?.Trim());
         if (!Uri.TryCreate(values.UploadUrl, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
             throw new InvalidDataException("Tools > 시트 > 시트 업로드 연결에서 HTTPS Apps Script 웹앱 URL을 입력해 주세요.");
         if (string.IsNullOrWhiteSpace(values.CardsSheetName) ||
@@ -74,7 +76,7 @@ internal static class SheetUploadConnectionSettings
     internal readonly struct Values
     {
         public Values(string uploadUrl, string token, string cardsSheetName,
-            string charactersSheetName, string enemiesSheetName, string relicsSheetName)
+            string charactersSheetName, string enemiesSheetName, string relicsSheetName, string encountersSheetName = "Encounters")
         {
             UploadUrl = uploadUrl;
             Token = token;
@@ -82,6 +84,7 @@ internal static class SheetUploadConnectionSettings
             CharactersSheetName = charactersSheetName;
             EnemiesSheetName = enemiesSheetName;
             RelicsSheetName = relicsSheetName;
+            EncountersSheetName = encountersSheetName;
         }
 
         public string UploadUrl { get; }
@@ -90,6 +93,7 @@ internal static class SheetUploadConnectionSettings
         public string CharactersSheetName { get; }
         public string EnemiesSheetName { get; }
         public string RelicsSheetName { get; }
+        public string EncountersSheetName { get; }
     }
 }
 
@@ -104,6 +108,7 @@ internal class SheetUploadConnectionWindow : EditorWindow
     private string charactersSheetName;
     private string enemiesSheetName;
     private string relicsSheetName;
+    private string encountersSheetName;
 
     [MenuItem("Tools/시트/시트 업로드 연결", false, 110)]
     public static void Open()
@@ -122,6 +127,7 @@ internal class SheetUploadConnectionWindow : EditorWindow
         charactersSheetName = SheetUploadConnectionSettings.CharactersSheetName;
         enemiesSheetName = SheetUploadConnectionSettings.EnemiesSheetName;
         relicsSheetName = SheetUploadConnectionSettings.RelicsSheetName;
+        encountersSheetName = SheetUploadConnectionSettings.EncountersSheetName;
     }
 
     private void OnGUI()
@@ -138,6 +144,7 @@ internal class SheetUploadConnectionWindow : EditorWindow
         charactersSheetName = EditorGUILayout.TextField("캐릭터 탭 이름", charactersSheetName);
         enemiesSheetName = EditorGUILayout.TextField("적 탭 이름", enemiesSheetName);
         relicsSheetName = EditorGUILayout.TextField("유물 탭 이름", relicsSheetName);
+        encountersSheetName = EditorGUILayout.TextField("전투 편성 탭 이름", encountersSheetName);
 
         EditorGUILayout.Space();
         if (GUILayout.Button("Google Apps Script 템플릿 표시"))
@@ -164,6 +171,7 @@ internal class SheetUploadConnectionWindow : EditorWindow
         SheetUploadConnectionSettings.CharactersSheetName = charactersSheetName;
         SheetUploadConnectionSettings.EnemiesSheetName = enemiesSheetName;
         SheetUploadConnectionSettings.RelicsSheetName = relicsSheetName;
+        SheetUploadConnectionSettings.EncountersSheetName = encountersSheetName;
         AssetDatabase.ForceReserializeAssets(new[] { "Assets/03.Data/GameDatabase.asset" });
         AssetDatabase.SaveAssets();
         ShowNotification(new GUIContent("로컬 업로드 연결 설정을 저장했습니다."));

@@ -12,11 +12,13 @@ public interface IGameDataProvider
     bool TryGetCharacter(int id, out CharacterData value);
     bool TryGetEnemy(int id, out EnemyData value);
     bool TryGetRelic(int id, out RelicData value);
+    bool TryGetEncounter(int id, out EncounterData value);
 
     CardData GetCard(int id);
     CharacterData GetCharacter(int id);
     EnemyData GetEnemy(int id);
     RelicData GetRelic(int id);
+    EncounterData GetEncounter(int id);
 }
 
 //GameDatabase SO를 직접 노출하지 않고 카드·캐릭터·적·유물 조회를 한곳에서 제공
@@ -60,6 +62,15 @@ public class GameDataProvider : MonoBehaviour, IGameDataProvider
     }
 
     public CardData GetCard(int id) => GetRequired<CardData>(id, TryGetCard, "카드");
+    //전투 편성 ID로 데이터 조회
+    public bool TryGetEncounter(int id, out EncounterData value)
+    {
+        value = null;
+        return database != null && database.TryGetEncounter(id, out value);
+    }
+
+    //필수 전투 편성 반환
+    public EncounterData GetEncounter(int id) => GetRequired<EncounterData>(id, TryGetEncounter, "전투 편성");
     public CharacterData GetCharacter(int id) =>
         GetRequired<CharacterData>(id, TryGetCharacter, "캐릭터");
     public EnemyData GetEnemy(int id) => GetRequired<EnemyData>(id, TryGetEnemy, "적");
