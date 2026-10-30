@@ -575,17 +575,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1923272085 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8681358115640633892, guid: 20f6a235653dc5b45b93682ba902e944, type: 3}
-  m_PrefabInstance: {fileID: 2063796726759725345}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &434038947216064972
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -869,7 +858,7 @@ PrefabInstance:
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: mapTitle
       value: 
-      objectReference: {fileID: 1923272085}
+      objectReference: {fileID: 0}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: mapScroll
       value: 
@@ -1116,10 +1105,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4291683221099495346}
-    - target: {fileID: 4811308313579827404, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
     - target: {fileID: 6207995935719444507, guid: a54762ff77027be46aaf279867f4d46d, type: 3}
       propertyPath: factory
       value: 
