@@ -9,6 +9,8 @@ public class CardTargetArrowView : MaskableGraphic
     [SerializeField, Min(1f)] private float arrowSize = 22f;
     [SerializeField, Min(0f)] private float curveHeight = 120f;
     [SerializeField, Range(8, 64)] private int segments = 32;
+    [Tooltip("X: 구간 순서, Y: 곡선 진행 위치. (0,0)에서 (1,1)로 증가하는 커브 사용. 평평한 구간에 점을 촘촘하게 배치")]
+    [SerializeField] private AnimationCurve segmentDistribution = AnimationCurve.Linear(0f, 0f, 1f, 1f);
     [SerializeField] private Color idleColor = Color.white;
     [SerializeField] private Color selectedColor = new Color(1f, 0.75f, 0.2f);
     private Vector2 start;
@@ -71,10 +73,18 @@ public class CardTargetArrowView : MaskableGraphic
         if (direction.sqrMagnitude < 0.01f) direction = (end - start).normalized;
         Vector2 tipBase = end - direction * arrowSize;
         Vector2 previous = start;
+        float previousT = 0f;
         int count = Mathf.Max(8, segments);
         for (int i = 1; i <= count; i++)
         {
-            float t = (float)i / count;
+            float progress = (float)i / count;
+            float t = segmentDistribution != null && segmentDistribution.length > 0
+                ? segmentDistribution.Evaluate(progress) : progress;
+            //잘못된 커브 값과 역방향 이동 차단, 마지막 점은 화살촉에 연결
+            if (float.IsNaN(t) || float.IsInfinity(t)) t = progress;
+            t = i == count ? 1f : Mathf.Clamp(t, previousT, 1f);
+            if (t <= previousT) continue;
+            previousT = t;
             Vector2 next = (1f - t) * (1f - t) * start + 2f * (1f - t) * t * control + t * t * tipBase;
             Vector2 delta = (next - previous).normalized;
             Vector2 normal = new Vector2(-delta.y, delta.x) * lineWidth * 0.5f;
