@@ -198,7 +198,7 @@ public class BattleParticipants : MonoBehaviour
                 return false;
             }
             if (enemyFactory == null)
-                view.Bind(definition.data.DisplayName, definition.data.Artwork, state.Stats, definition.data.BattlePrefab, true);
+                view.Bind(definition.data.DisplayName, null, state.Stats, definition.data.BattlePrefab, true);
             enemies.Add(state);
             enemyViews.Add(view);
         }

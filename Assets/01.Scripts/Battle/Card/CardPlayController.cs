@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Text.RegularExpressions;
 
 //카드 대상과 에너지를 검사하고 카드 효과 실행
@@ -155,7 +155,7 @@ public class CardPlayController
     }
 
     //단일 적 선택 효과 포함 여부 확인
-    private static bool RequiresEnemyTarget(CardInstance card)
+    public static bool RequiresEnemyTarget(CardInstance card)
     {
         for (int index = 0; index < card.Effects.Count; index++)
         {
@@ -165,6 +165,23 @@ public class CardPlayController
 
         return false;
     }
+
+    //살아 있는 적의 전체 UI 영역에서 포인터 대상 탐색
+    public BattleCombatantView FindTarget(Vector2 screenPosition)
+    {
+        if (!participants.IsBattleActive || SceneTransitionController.BlocksGameplay) return null;
+        for (int index = participants.EnemyViews.Count - 1; index >= 0; index--)
+        {
+            var view = participants.EnemyViews[index];
+            if (view != null && view.isActiveAndEnabled && participants.TryGetEnemy(view, out _) &&
+                view.ContainsScreenPoint(screenPosition)) return view;
+        }
+        return null;
+    }
+
+    //전투 종료와 손패 변경 시 조작 중단 여부 확인
+    public bool CanKeepSelecting(CardInstance card) => !SceneTransitionController.BlocksGameplay &&
+        participants.IsBattleActive && deckManager.ContainsInHand(card);
 
     //사용 후 소멸 효과 포함 여부 확인
     private static bool HasExhaustEffect(CardInstance card)

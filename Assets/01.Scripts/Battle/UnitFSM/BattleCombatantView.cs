@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +15,32 @@ public class BattleCombatantView : MonoBehaviour
 
     [SerializeField] private Color placeholderColor = new Color(0.3f, 0.6f, 0.85f);
 
+    [Header("카드 타겟팅")]
+    [SerializeField] private RectTransform targetAnchor;
+    [SerializeField] private RectTransform targetArea;
+    [Tooltip("선택 표시 전용 이미지, Raycast Target 해제 권장")]
+    [SerializeField] private UnityEngine.UI.Graphic targetHighlight;
+    public RectTransform TargetAnchor => targetAnchor;
+
+    //선택 영역 미지정 시 CombatantInfo 전체 범위 사용
+    public bool ContainsScreenPoint(Vector2 screenPosition)
+    {
+        var area = targetArea != null ? targetArea : transform as RectTransform;
+        var canvas = area.GetComponentInParent<Canvas>();
+        var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
+        return RectTransformUtility.RectangleContainsScreenPoint(area, screenPosition, camera);
+    }
+
+    //선택 강조 전용 그래픽 표시
+    public void SetTargetHighlight(bool selected)
+    {
+        if (targetHighlight != null)
+        {
+            targetHighlight.raycastTarget = false;
+            targetHighlight.enabled = selected;
+        }
+    }
+
     private CombatantState state;
     private string detail = string.Empty;
     private Color aliveColor;
@@ -27,6 +53,7 @@ public class BattleCombatantView : MonoBehaviour
     {
         if (state != null) state.Changed -= Refresh;
 
+        SetTargetHighlight(false);
         state = value;
         nameLabel.text = displayName;
         portrait.sprite = sprite;
@@ -57,6 +84,7 @@ public class BattleCombatantView : MonoBehaviour
     //비활성화 시 상태 변경 구독을 해제
     private void OnDisable()
     {
+        SetTargetHighlight(false);
         if (state != null) state.Changed -= Refresh;
         if (statusBar != null) statusBar.HideTooltip();
     }

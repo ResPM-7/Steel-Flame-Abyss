@@ -31,7 +31,7 @@ public class EnemyViewFactory : MonoBehaviour
         rect.localScale = Vector3.one;
         view.gameObject.SetActive(true);
         //적 ID 분기 없이 SO에 등록된 외형과 공통 애니메이션 연결
-        view.Bind(data.DisplayName, data.Artwork, state, data.BattlePrefab, true);
+        view.Bind(data.DisplayName, null, state, data.BattlePrefab, true);
         spawned.Add(view);
         return view;
     }

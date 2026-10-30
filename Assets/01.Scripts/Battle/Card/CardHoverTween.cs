@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +9,7 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] private float riseDistance = 100f;
     [SerializeField] private float hoverScale = 1.05f;
     [SerializeField] private float duration = 0.2f;
+    [Min(0f)] [SerializeField] private float targetingScaleDuration = 0.15f;
 
     [SerializeField] private Ease enterEase = Ease.OutCubic;
     [SerializeField] private Ease exitEase = Ease.OutCubic;
@@ -240,6 +241,39 @@ public class CardHoverTween : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         float scaleFactor = Mathf.Max(0.01f, canvasScaleFactor);
         cardRect.anchoredPosition += screenDelta / scaleFactor;
+    }
+
+    public RectTransform CardRect => cardRect;
+
+    //기존 트윈 종료 후 타겟팅 카드 크기 전환
+    public void AnimateTargetScale(float scale)
+    {
+        if (cardRect == null) return;
+        currentTween?.Kill();
+        currentTween = DOTween.Sequence()
+            .Append(cardRect.DOScale(Vector3.one * scale, targetingScaleDuration))
+            .SetEase(Ease.OutCubic)
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable);
+    }
+
+    //서로 다른 Canvas 사이의 화면 좌표로 카드 중심 고정
+    public void PinTo(RectTransform center)
+    {
+        var sourceCanvas = center.GetComponentInParent<Canvas>();
+        var destinationCanvas = hoverLayer.GetComponentInParent<Canvas>();
+        var sourceCamera = sourceCanvas != null && sourceCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? sourceCanvas.worldCamera : null;
+        var destinationCamera = destinationCanvas != null && destinationCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? destinationCanvas.worldCamera : null;
+        var screen = RectTransformUtility.WorldToScreenPoint(sourceCamera, center.position);
+        if (!RectTransformUtility.ScreenPointToWorldPointInRectangle(hoverLayer, screen, destinationCamera, out var world)) return;
+        cardRect.rotation = hoverLayer.rotation;
+        cardRect.position += world - cardRect.TransformPoint(cardRect.rect.center);
+    }
+
+    //타겟팅 영역에서 손패로 내릴 때 포인터 위치 복구
+    public void MoveToPointer(Vector2 screenPosition, Camera camera)
+    {
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(hoverLayer, screenPosition, camera, out var world))
+            cardRect.position = world;
     }
 
     //실패한 카드 사용을 원래 슬롯으로 복귀

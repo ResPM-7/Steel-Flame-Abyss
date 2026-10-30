@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 //카드 덱의 드로우와 버리기 결과를 미리 배치한 손패 슬롯에 표시
@@ -10,6 +10,9 @@ public class CardHandController : MonoBehaviour
     [SerializeField] private CardHandLayout handLayout;
     [SerializeField] private RectTransform hoverLayer;
     [SerializeField] private CardView[] slots;
+    [Header("단일 적 타겟팅")]
+    [SerializeField] private RectTransform cardCenter;
+    [SerializeField] private CardTargetArrowView targetArrow;
 
 #if UNITY_EDITOR
     //손패 빈자리 확인과 치트 카드 추가
@@ -128,7 +131,10 @@ public class CardHandController : MonoBehaviour
             for (int index = 0; index < visibleCount; index++)
             {
                 if (slots[index] != null)
+                {
+                    slots[index].SetTargetingReferences(cardCenter, targetArrow);
                     slots[index].Bind(deckManager.Hand[index], hoverLayer, cardPlayController);
+                }
             }
         }
 
