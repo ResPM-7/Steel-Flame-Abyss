@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -38,6 +38,7 @@ public class BattleInstaller : MonoBehaviour, IScenePreparation
         deckManager.BattleStarted -= ApplyStartingRelics;
         deckManager.BattleStarted += ApplyStartingRelics;
         turnController.InjectRelics(relicEffects);
+        cardPlayController?.InjectRelics(relicEffects);
     }
 
     //기본 손패와 참가자 생성 후 전투 시작 및 첫 턴 유물 적용
@@ -51,6 +52,7 @@ public class BattleInstaller : MonoBehaviour, IScenePreparation
     private void OnDestroy()
     {
         if (deckManager != null) deckManager.BattleStarted -= ApplyStartingRelics;
+        cardPlayController?.InjectRelics(null);
     }
 
 #if UNITY_EDITOR
@@ -88,6 +90,7 @@ public class BattleInstaller : MonoBehaviour, IScenePreparation
         deckManager.Inject(dataProvider);
         participants.Inject(dataProvider, deckManager);
         cardPlayController = new CardPlayController(deckManager, participants);
+        cardPlayController.InjectRelics(relicEffects);
         handController.Inject(deckManager, cardPlayController);
         turnController.Inject(deckManager, participants);
         participants.UseMapFlow();

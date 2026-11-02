@@ -26,7 +26,6 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     [SerializeField] private MapPopupManager popups;
     [SerializeField] private PlayerHealthView commonHealthView;
     [SerializeField] private UnityEngine.UI.ScrollRect mapScroll;
-    [SerializeField] private TMP_Text mapTitle;
     [SerializeField] private RandomMapView randomMap;
     //실행 중 생성된 노드만 보관
     private MapNodeView[] nodes;
@@ -113,7 +112,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
     {
         if (dataProvider == null || !dataProvider.IsReady || run == null || ownedDeck == null ||
             sceneLoader == null || objectPoolManager == null || mapPanel == null || popups == null || !popups.IsConfigured ||
-            mapScroll == null || mapScroll.content == null || mapScroll.viewport == null || mapTitle == null || randomMap == null || !randomMap.IsConfigured ||
+            mapScroll == null || mapScroll.content == null || mapScroll.viewport == null || randomMap == null || !randomMap.IsConfigured ||
             !dataProvider.TryGetCharacter(ActivePlayerId, out _))
             return false;
         return randomMap.ValidateContent(dataProvider, popups.HasEvent);
@@ -187,7 +186,6 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
         State = run.Map.IsFailed ? GameFlowState.Defeat :
             run.Map.IsComplete ? GameFlowState.Complete : GameFlowState.Map;
         SetPanels(true);
-        mapTitle.text = run.Map.IsFailed ? "진행 종료" : run.Map.IsComplete ? "지도 완료" : "지도";
         for (int i = 0; i < nodes.Length; i++)
             nodes[i].Refresh(run.Map.CanEnter(i), run.Map.IsCompleted(i));
         randomMap.RefreshRoutes();

@@ -141,6 +141,32 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &-6757090765053102745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70005
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70005
+  displayName: "\uD53C \uBB3B\uC740 \uB3D9\uC804"
+  rarity: 2
+  description: "\uB9E4 \uD134 \uCC98\uC74C \uC0AC\uC6A9\uD558\uB294 \uCE74\uB4DC\uB294
+    \uC5D0\uB108\uC9C0 \uB300\uC2E0 \uBE44\uC6A9\uB9CC\uD07C \uCCB4\uB825\uC744 \uC18C\uBAA8\uD569\uB2C8\uB2E4."
+  trigger: 2
+  effects:
+  - type: 109
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
 --- !u!114 &-5752501738432402752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,6 +534,7 @@ MonoBehaviour:
   - {fileID: -4994107017506138331}
   - {fileID: -9161943771842496306}
   - {fileID: -8034073419062296371}
+  - {fileID: -6757090765053102745}
   encounters:
   - {fileID: 1693516754801979686}
   - {fileID: -164831777647892512}
@@ -716,7 +743,6 @@ MonoBehaviour:
       amount: 5
       secondaryAmount: 0
       duration: 0
-  artwork: {fileID: 0}
   battlePrefab: {fileID: 4553075792530485228, guid: 69b859dea3264394935cad294ca531fa, type: 3}
 --- !u!114 &4394696580758261533
 MonoBehaviour:
@@ -765,7 +791,6 @@ MonoBehaviour:
       amount: 1
       secondaryAmount: 0
       duration: 2
-  artwork: {fileID: 0}
   battlePrefab: {fileID: 1439994459352874351, guid: f1031120801f4e1d97477949282446cb, type: 3}
 --- !u!114 &4574230653417062746
 MonoBehaviour:

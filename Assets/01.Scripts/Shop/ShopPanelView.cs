@@ -9,6 +9,12 @@ public class ShopPanelView : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button mapButton;
     [SerializeField] private CardShopPrices cardPrices = new CardShopPrices();
 
+    [Header("등급 등장 확률")]
+    [SerializeField] private RarityDropRates cardDropRates;
+    [SerializeField] private RarityDropRates relicDropRates;
+    public RarityDropRates CardDropRates => cardDropRates;
+    public RarityDropRates RelicDropRates => relicDropRates;
+
     [Header("유물 상품")]
     [SerializeField] private RectTransform relicRoot;
     [SerializeField] private ShopRelicItemView relicItemPrefab;

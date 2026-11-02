@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 //등록된 처리기로 카드 효과 검증과 순차 실행
 public class CardEffectResolver
@@ -33,10 +33,10 @@ public class CardEffectResolver
     }
 
     //미지원 효과의 부분 실행 차단과 전투 종료 시 중단
-    public void Resolve(CardInstance card, EnemyBattleState target = null)
+    public void Resolve(CardInstance card, EnemyBattleState target = null, Action<int> playerHealthLost = null)
     {
         if (card == null || card.Effects == null || card.Effects.Count == 0) return;
-        var context = new CardEffectContext(card, deckManager, participants, target);
+        var context = new CardEffectContext(card, deckManager, participants, target, playerHealthLost);
         if (!CanResolve(context)) return;
         foreach (EffectSpec effect in card.Effects)
         {

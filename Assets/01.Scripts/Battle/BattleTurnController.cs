@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 //플레이어 턴 시작과 종료에 필요한 전투 상태 변경
 public class BattleTurnController : MonoBehaviour
@@ -60,6 +60,7 @@ public class BattleTurnController : MonoBehaviour
 
         try
         {
+            relicEffects?.EndPlayerTurn();
             deckManager.DiscardAll();
             //플레이어 화상으로 패배하면 적 행동 중단
             participants.Player.Stats.ResolveBurnAtTurnEnd();

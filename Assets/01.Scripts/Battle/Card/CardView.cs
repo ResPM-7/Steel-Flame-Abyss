@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -118,7 +118,8 @@ public class CardView : CardDisplayView
         previewTarget = null;
         cardPlayController = playController;
         hoverTween.SetDragReceiver(this);
-        SetDisplay(card.Data, card.Cost, cardPlayController.GetDescription(card));
+        SetDisplay(card.Data, cardPlayController.GetCardCost(card), cardPlayController.GetDescription(card));
+        costText.text = cardPlayController.GetCardCostText(card);
         gameObject.SetActive(true);
         hoverTween.Initialize(transform as RectTransform, hoverLayer);
         hoverTween.gameObject.SetActive(true);
@@ -130,6 +131,7 @@ public class CardView : CardDisplayView
         if (Card == null || cardPlayController == null || descriptionText == null)
             return;
 
+        costText.text = cardPlayController.GetCardCostText(Card);
         descriptionText.text = cardPlayController.GetDescription(Card, isDragging ? previewTarget : null);
     }
 

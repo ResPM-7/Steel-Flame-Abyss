@@ -1,4 +1,4 @@
-//전투 대상이 필요한 효과의 공통 검증과 전달
+﻿//전투 대상이 필요한 효과의 공통 검증과 전달
 public abstract class TargetedCardEffectHandler : ICardEffectHandler
 {
     //명시적인 전투 대상 종류만 허용
@@ -30,8 +30,11 @@ public class DamageEffectHandler : TargetedCardEffectHandler
 public class LoseHealthEffectHandler : TargetedCardEffectHandler
 {
     //공격 판정 없이 대상 체력 직접 차감
-    protected override void ApplyToTarget(EffectSpec effect, CardEffectContext context, CombatantState target) =>
-        target.LoseHealth(effect.Amount);
+    protected override void ApplyToTarget(EffectSpec effect, CardEffectContext context, CombatantState target)
+    {
+        int lost = target.LoseHealth(effect.Amount);
+        context.NotifyHealthLost(target, lost);
+    }
 }
 
 //방어도 획득

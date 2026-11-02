@@ -1,21 +1,30 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 //한 카드 실행의 원본 정보와 전투 의존성 전달
 public class CardEffectContext
 {
     private readonly EnemyBattleState selectedEnemy;
+    private readonly System.Action<int> playerHealthLost;
     public CardInstance Card { get; }
     public IBattleDeckManager Deck { get; }
     public BattleParticipants Participants { get; }
 
     //실행 중 교체 없는 카드와 전투 참조 저장
-    public CardEffectContext(CardInstance card, IBattleDeckManager deck, BattleParticipants participants, EnemyBattleState target = null)
+    public CardEffectContext(CardInstance card, IBattleDeckManager deck, BattleParticipants participants, EnemyBattleState target = null, System.Action<int> playerHealthLost = null)
     {
         Card = card;
         Deck = deck;
         Participants = participants;
         selectedEnemy = target ?? participants.FirstAliveEnemy;
+        this.playerHealthLost = playerHealthLost;
+    }
+
+    //카드 효과로 실제 감소한 플레이어 체력만 전달
+    public void NotifyHealthLost(CombatantState target, int lost)
+    {
+        if (lost > 0 && target == Participants.Player?.Stats)
+            playerHealthLost?.Invoke(lost);
     }
 
     //단일 대상은 카드 사용 시 선택한 적에 고정

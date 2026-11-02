@@ -680,11 +680,13 @@ MonoBehaviour:
     uncommon: 80
     rare: 120
     special: 180
+  cardDropRates: {fileID: 11400000, guid: eb0d330abea41e14fb24c108d44c906e, type: 2}
+  relicDropRates: {fileID: 11400000, guid: 4c5743d5745d3f44687167074313b813, type: 2}
   relicRoot: {fileID: 4778155499268743190}
   relicItemPrefab: {fileID: 162572882987146414, guid: 98f4d535aff2b974fb12711181505cb0, type: 3}
   relicTooltipPrefab: {fileID: 7265075070187780350, guid: 8f7bc00ddc69fc34e8a60c58525b5dd0, type: 3}
   noRelicsText: {fileID: 1229937852385180670}
-  relicOfferCount: 1
+  relicOfferCount: 3
   relicPrices:
     starter: 75
     common: 75

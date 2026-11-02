@@ -49,7 +49,7 @@ public class CardRewardPresenter : IDisposable
             (reward != null && reward.IsClaimed))
             return;
         if (reward == null)
-            reward = new CardRewardModel(data.Database.Cards, participants.Player.Data.Class, random);
+            reward = new CardRewardModel(data.Database.Cards, participants.Player.Data.Class, random, view.CardDropRates);
         if (reward.Candidates.Count == 0)
         {
             GameLogger.LogWarning("[카드 보상] 선택 가능한 캐릭터 또는 공용 카드가 없습니다");

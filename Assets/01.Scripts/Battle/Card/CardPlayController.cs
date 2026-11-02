@@ -1,10 +1,35 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Text.RegularExpressions;
 
 //카드 대상과 에너지를 검사하고 카드 효과 실행
 public class CardPlayController
 {
     private readonly IBattleDeckManager deckManager;
+    private BattleRelicEffects relicEffects;
+    private event System.Action costsChanged;
+
+    //유물 교체 시 이전 비용 알림 해제 후 새 효과 연결
+    public void InjectRelics(BattleRelicEffects effects)
+    {
+        if (relicEffects != null) relicEffects.CostsChanged -= NotifyCostsChanged;
+        relicEffects = effects;
+        if (relicEffects != null) relicEffects.CostsChanged += NotifyCostsChanged;
+        NotifyCostsChanged();
+    }
+
+    //손패에 실제 사용 비용 표시
+    public int GetCardCost(CardInstance card) => relicEffects?.GetCardCost(card) ?? card.Cost;
+
+    //체력 결제 카드는 비용 배지에 HP 단위 표시
+    public string GetCardCostText(CardInstance card) => relicEffects?.UsesHealthForNextCard == true
+        ? $"HP {GetCardCost(card)}" : GetCardCost(card).ToString();
+
+    //비용 변경을 손패 갱신 구독자에게 전달
+    private void NotifyCostsChanged() => costsChanged?.Invoke();
+
+    //카드 체력 소모 사건을 현재 유물 효과에 전달
+    private void OnCardHealthLost(int lost) => relicEffects?.OnCardHealthLost(lost);
+
     private readonly BattleParticipants participants;
     private readonly CardEffectResolver effectResolver;
     private static readonly Regex damageTextPattern = new Regex(@"(?<![\d.])\d+(?=\s*의?\s*피해)");
@@ -13,8 +38,8 @@ public class CardPlayController
 
     public event System.Action DescriptionsChanged
     {
-        add { participants.DamagePreviewChanged += value; }
-        remove { participants.DamagePreviewChanged -= value; }
+        add { participants.DamagePreviewChanged += value; costsChanged += value; }
+        remove { participants.DamagePreviewChanged -= value; costsChanged -= value; }
     }
 
     //카드 설명의 효과 키워드를 현재 효과 수치로 변환
@@ -137,15 +162,28 @@ public class CardPlayController
             GameLogger.LogWarning($"[카드 사용] {card.Data.DisplayName} 효과는 아직 지원하지 않습니다");
             return false;
         }
-        if (participants.Player.Energy < card.Cost)
+        int cost = GetCardCost(card);
+        bool payHealth = relicEffects?.UsesHealthForNextCard == true;
+        if (payHealth)
+        {
+            //비용 결제로 사망하지 않도록 HP 최소 1 유지
+            if (participants.Player.Stats.CurrentHealth <= cost)
+            {
+                GameLogger.LogWarning($"[카드 사용] {card.Data.DisplayName} 카드의 체력이 부족합니다");
+                return false;
+            }
+        }
+        else if (participants.Player.Energy < cost)
         {
             GameLogger.LogWarning($"[카드 사용] {card.Data.DisplayName} 카드의 에너지가 부족합니다");
             return false;
         }
-        if (!participants.Player.TrySpendEnergy(card.Cost))
-            return false;
 
-        effectResolver.Resolve(card, selectedEnemy);
+        if (!payHealth && !participants.Player.TrySpendEnergy(cost)) return false;
+        //검증 완료 후 첫 카드 예약 소모, 결제에 따른 상태 알림보다 먼저 반영
+        relicEffects?.ConsumeCardDiscount();
+        if (payHealth) participants.Player.Stats.LoseHealth(cost);
+        effectResolver.Resolve(card, selectedEnemy, OnCardHealthLost);
         bool exhaust = HasExhaustEffect(card);
         if (!deckManager.FinishPlayingCard(card, exhaust))
             return false;

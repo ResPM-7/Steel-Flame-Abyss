@@ -27,7 +27,7 @@ public class ShopModel
 
     //첫 방문의 미보유 활성 유물 추첨과 가격 고정
     public void InitializeRelics(IEnumerable<RelicData> source, OwnedRelicModel owned,
-        Random random, RelicShopPrices prices, int count)
+        Random random, RelicShopPrices prices, int count, RarityDropRates dropRates = null)
     {
         if (relicsInitialized) return;
         if (source == null || owned == null || random == null || prices == null) throw new ArgumentNullException();
@@ -38,7 +38,8 @@ public class ShopModel
                 pool.Add(relic);
         while (pool.Count > 0 && relics.Count < count)
         {
-            int index = random.Next(pool.Count);
+            int index = RarityWeightedPicker.SelectIndex(pool, random, item => item.Rarity, dropRates);
+            if (index < 0) break;
             relics.Add(new RelicOffer(pool[index], prices.GetPrice(pool[index].Rarity)));
             pool.RemoveAt(index);
         }
@@ -77,7 +78,7 @@ public class ShopModel
     }
 
     //캐릭터와 공용 카드 추첨 후 등급별 가격 고정
-    public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, Func<DataRarity, int> getPrice)
+    public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, Func<DataRarity, int> getPrice, RarityDropRates dropRates = null)
     {
         if (source == null || random == null || getPrice == null)
             throw new ArgumentNullException();
@@ -89,7 +90,8 @@ public class ShopModel
                 pool.Add(card);
         while (pool.Count > 0 && cards.Count < 3)
         {
-            int index = random.Next(pool.Count);
+            int index = RarityWeightedPicker.SelectIndex(pool, random, item => item.Rarity, dropRates);
+            if (index < 0) break;
             int price = getPrice(pool[index].Rarity);
             if (price <= 0) throw new ArgumentOutOfRangeException(nameof(getPrice));
             cards.Add(pool[index]);
