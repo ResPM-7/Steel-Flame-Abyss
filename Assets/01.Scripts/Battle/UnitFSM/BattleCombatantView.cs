@@ -8,10 +8,8 @@ public class BattleCombatantView : MonoBehaviour
     [SerializeField] private Image portrait;
     [SerializeField] private Image healthFill;
 
-    [SerializeField] private TMP_Text nameLabel;
     [SerializeField] private TMP_Text healthLabel;
     [SerializeField] private TMP_Text statusLabel;
-    [SerializeField] private TMP_Text detailLabel;
 
     [SerializeField] private Color placeholderColor = new Color(0.3f, 0.6f, 0.85f);
 
@@ -55,7 +53,6 @@ public class BattleCombatantView : MonoBehaviour
 
         SetTargetHighlight(false);
         state = value;
-        nameLabel.text = displayName;
         portrait.sprite = sprite;
         aliveColor = sprite != null ? Color.white : placeholderColor;
 
@@ -103,6 +100,5 @@ public class BattleCombatantView : MonoBehaviour
         statusBar.Refresh(state);
         if (unitPortrait == null || !unitPortrait.HasVisual)
             portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
-        detailLabel.text = state.IsAlive ? detail : "전투 불능";
     }
 }

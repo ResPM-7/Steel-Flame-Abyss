@@ -51,7 +51,6 @@ MonoBehaviour:
   popups: {fileID: 0}
   commonHealthView: {fileID: 0}
   mapScroll: {fileID: 0}
-  mapTitle: {fileID: 0}
   randomMap: {fileID: 224390510790807823}
   playerId: 50001
 --- !u!114 &224390510790807823

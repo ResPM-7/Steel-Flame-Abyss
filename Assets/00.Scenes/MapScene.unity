@@ -856,10 +856,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 650682949814874340}
     - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
-      propertyPath: mapTitle
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137143289574801936, guid: dce490f85d2985242b965680f82626ab, type: 3}
       propertyPath: mapScroll
       value: 
       objectReference: {fileID: 6088915543586060218}
@@ -1030,14 +1026,6 @@ PrefabInstance:
     - target: {fileID: 6556848082030925693, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
-      propertyPath: commonHudCanvas
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
-      propertyPath: commonHudCanvases.Array.size
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6563572095996711554, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: 'commonHudCanvases.Array.data[0]'

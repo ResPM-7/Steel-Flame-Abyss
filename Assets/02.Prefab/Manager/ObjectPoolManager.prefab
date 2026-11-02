@@ -67,7 +67,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
   - poolName: Node
     targetCanvas: {fileID: 0}
-    poolSize: 12
+    poolSize: 15
     addressablePrefab:
       m_AssetGUID: 8dedd8e36fd0b574cbee51652f61f903
       m_SubObjectName: 

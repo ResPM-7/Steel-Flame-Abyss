@@ -121,4 +121,6 @@ MonoBehaviour:
   defaultEvent: {fileID: 11400000, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
   eventDatabase: {fileID: -3273855691364875213, guid: 3bc55169fa2905146bc7ce2b9d3616e3, type: 2}
   deckPrefab: {fileID: 4390597565296369372, guid: 09970e7cb504e9543824dc9ea5063b01, type: 3}
-  commonHudCanvas: {fileID: 0}
+  commonHudCanvases:
+  - {fileID: 0}
+  - {fileID: 0}
