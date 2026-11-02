@@ -11,8 +11,8 @@ public class CardRewardView : MonoBehaviour
     [SerializeField] private TMP_Text rewardText;
     [SerializeField] private CardRewardItemView[] items = new CardRewardItemView[3];
 
-    [SerializeField] private RarityDropRates cardDropRates;
-    public RarityDropRates CardDropRates => cardDropRates;
+    [SerializeField] private RarityWeights cardRarityWeights = new RarityWeights();
+    public RarityWeights CardDropRates => cardRarityWeights;
 
     public event Action OpenRequested;
     public event Action CloseRequested;

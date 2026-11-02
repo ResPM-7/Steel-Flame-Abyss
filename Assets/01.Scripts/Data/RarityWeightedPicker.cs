@@ -7,9 +7,9 @@ public static class RarityWeightedPicker
     private static readonly DataRarity[] rarities =
         { DataRarity.Starter, DataRarity.Common, DataRarity.Uncommon, DataRarity.Rare, DataRarity.Special };
 
-    //SO 미연결은 기존 균등 추첨, 추첨 가능한 등급 부재는 -1 반환
+    //설정 미전달은 기존 균등 추첨, 추첨 가능한 등급 부재는 -1 반환
     public static int SelectIndex<T>(IReadOnlyList<T> pool, Random random,
-        Func<T, DataRarity> getRarity, RarityDropRates rates)
+        Func<T, DataRarity> getRarity, RarityWeights rates)
     {
         if (pool == null || random == null || getRarity == null) throw new ArgumentNullException();
         if (pool.Count == 0) return -1;

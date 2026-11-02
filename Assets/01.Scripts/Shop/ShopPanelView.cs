@@ -10,10 +10,10 @@ public class ShopPanelView : MonoBehaviour
     [SerializeField] private CardShopPrices cardPrices = new CardShopPrices();
 
     [Header("등급 등장 확률")]
-    [SerializeField] private RarityDropRates cardDropRates;
-    [SerializeField] private RarityDropRates relicDropRates;
-    public RarityDropRates CardDropRates => cardDropRates;
-    public RarityDropRates RelicDropRates => relicDropRates;
+    [SerializeField] private RarityWeights cardRarityWeights = new RarityWeights();
+    [SerializeField] private RarityWeights relicRarityWeights = new RarityWeights();
+    public RarityWeights CardDropRates => cardRarityWeights;
+    public RarityWeights RelicDropRates => relicRarityWeights;
 
     [Header("유물 상품")]
     [SerializeField] private RectTransform relicRoot;

@@ -1,10 +1,10 @@
 using UnityEngine;
 
 //등급별 추첨 가중치 보관, 합계 기준으로 확률 환산
-[CreateAssetMenu(fileName = "RarityDropRates", menuName = "강철과 불꽃과 심연/등급 등장 확률")]
-public class RarityDropRates : ScriptableObject
+[System.Serializable]
+public class RarityWeights
 {
-    [Min(0f)] [SerializeField] private float starter = 20f;
+    [Min(0f)] [SerializeField] private float starter = 0f;
     [Min(0f)] [SerializeField] private float common = 50f;
     [Min(0f)] [SerializeField] private float uncommon = 20f;
     [Min(0f)] [SerializeField] private float rare = 9f;

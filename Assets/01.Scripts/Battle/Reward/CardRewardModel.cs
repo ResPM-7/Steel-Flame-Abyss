@@ -9,7 +9,7 @@ public class CardRewardModel
     public bool IsClaimed { get; private set; }
 
     //캐릭터 카드와 공용 카드에서 중복 없는 후보 추첨
-    public CardRewardModel(IEnumerable<CardData> cards, CharacterClass owner, Random random, RarityDropRates dropRates = null)
+    public CardRewardModel(IEnumerable<CardData> cards, CharacterClass owner, Random random, RarityWeights dropRates = null)
     {
         if (cards == null || random == null)
             throw new ArgumentNullException();

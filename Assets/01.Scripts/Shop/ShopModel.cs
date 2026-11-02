@@ -27,7 +27,7 @@ public class ShopModel
 
     //첫 방문의 미보유 활성 유물 추첨과 가격 고정
     public void InitializeRelics(IEnumerable<RelicData> source, OwnedRelicModel owned,
-        Random random, RelicShopPrices prices, int count, RarityDropRates dropRates = null)
+        Random random, RelicShopPrices prices, int count, RarityWeights dropRates = null)
     {
         if (relicsInitialized) return;
         if (source == null || owned == null || random == null || prices == null) throw new ArgumentNullException();
@@ -78,7 +78,7 @@ public class ShopModel
     }
 
     //캐릭터와 공용 카드 추첨 후 등급별 가격 고정
-    public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, Func<DataRarity, int> getPrice, RarityDropRates dropRates = null)
+    public ShopModel(IEnumerable<CardData> source, CharacterClass owner, Random random, Func<DataRarity, int> getPrice, RarityWeights dropRates = null)
     {
         if (source == null || random == null || getPrice == null)
             throw new ArgumentNullException();

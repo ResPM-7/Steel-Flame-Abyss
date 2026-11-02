@@ -1191,7 +1191,12 @@ MonoBehaviour:
   - {fileID: 8070162231292607530}
   - {fileID: 7959591879846859384}
   - {fileID: 5486462888704292469}
-  cardDropRates: {fileID: 11400000, guid: d1781af0878c26c49add67f81ae0a098, type: 2}
+  cardRarityWeights:
+    starter: 0
+    common: 50
+    uncommon: 20
+    rare: 9
+    special: 1
 --- !u!114 &731083226850140598
 MonoBehaviour:
   m_ObjectHideFlags: 0
