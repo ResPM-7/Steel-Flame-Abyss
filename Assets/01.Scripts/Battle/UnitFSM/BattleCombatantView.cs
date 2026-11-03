@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class BattleCombatantView : MonoBehaviour
 {
     [SerializeField] private Image portrait;
+    [Tooltip("플레이어 전용 RenderTexture 표시, 적은 비워 두기")]
+    [SerializeField] private BattlePlayerRenderView playerRender;
     [SerializeField] private Image healthFill;
 
     [SerializeField] private TMP_Text healthLabel;
@@ -53,12 +55,21 @@ public class BattleCombatantView : MonoBehaviour
 
         SetTargetHighlight(false);
         state = value;
-        portrait.sprite = sprite;
+        if (portrait != null) portrait.sprite = sprite;
         aliveColor = sprite != null ? Color.white : placeholderColor;
 
         //전투 표시 객체 한 번 생성, 재연결 시 기존 객체 정리
-        if (unitPortrait == null) unitPortrait = gameObject.AddComponent<BattleUnitPortraitView>();
-        unitPortrait.Bind(portrait, battlePrefab, state, faceLeft);
+        if (playerRender != null)
+        {
+            if (unitPortrait != null) unitPortrait.Bind(portrait, null, null);
+            playerRender.Bind(battlePrefab, state);
+            if (portrait != null) portrait.enabled = false;
+        }
+        else
+        {
+            if (unitPortrait == null) unitPortrait = gameObject.AddComponent<BattleUnitPortraitView>();
+            unitPortrait.Bind(portrait, battlePrefab, state, faceLeft);
+        }
 
         if (state != null && isActiveAndEnabled) state.Changed += Refresh;
         Refresh();
@@ -98,7 +109,7 @@ public class BattleCombatantView : MonoBehaviour
         //기존 능력치 아래에 상태 아이콘 생성 후 재사용
         if (statusBar == null) statusBar = BattleStatusBarView.Create(statusLabel);
         statusBar.Refresh(state);
-        if (unitPortrait == null || !unitPortrait.HasVisual)
+        if (portrait != null && playerRender == null && (unitPortrait == null || !unitPortrait.HasVisual))
             portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
     }
 }
