@@ -224,6 +224,7 @@ public class CardPlayController
     //사용 후 소멸 효과 포함 여부 확인
     private static bool HasExhaustEffect(CardInstance card)
     {
+        if (card.Data.Exhaust) return true;
         for (int index = 0; index < card.Effects.Count; index++)
         {
             if (card.Effects[index].Type == EffectType.Exhaust)

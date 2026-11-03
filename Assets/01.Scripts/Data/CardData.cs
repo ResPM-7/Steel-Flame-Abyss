@@ -8,6 +8,8 @@ public class CardData : GameDataEntry
     [SerializeField] private CardType cardType;
     [SerializeField] private DataRarity rarity;
     [Min(0)] [SerializeField] private int cost;
+    [Min(-1)] [SerializeField] private int upgradeCost = -1;
+    [SerializeField] private bool exhaust;
     [TextArea(2, 5)] [SerializeField] private string description;
     [TextArea(2, 5)] [SerializeField] private string upgradedDescription;
     [SerializeField] private List<EffectSpec> effects = new();
@@ -19,6 +21,8 @@ public class CardData : GameDataEntry
     public CardType CardType => cardType;
     public DataRarity Rarity => rarity;
     public int Cost => cost;
+    public int UpgradeCost => upgradeCost < 0 ? cost : upgradeCost;
+    public bool Exhaust => exhaust;
     public string Description => description;
     public string UpgradedDescription => upgradedDescription;
     public IReadOnlyList<EffectSpec> Effects => effects;
@@ -30,12 +34,14 @@ public class CardData : GameDataEntry
     //검증된 카드 시트의 기본 정보와 효과를 서브에셋에 반영
     public void EditorApply(CharacterClass newOwner, CardType newCardType, DataRarity newRarity, int newCost,
         string newDescription, string newUpgradedDescription, List<EffectSpec> newEffects,
-        List<EffectSpec> newUpgradedEffects, List<string> newKeywords)
+        List<EffectSpec> newUpgradedEffects, List<string> newKeywords, int newUpgradeCost = -1, bool newExhaust = false)
     {
         owner = newOwner;
         cardType = newCardType;
         rarity = newRarity;
         cost = newCost;
+        upgradeCost = newUpgradeCost;
+        exhaust = newExhaust;
         description = newDescription;
         upgradedDescription = newUpgradedDescription;
         effects = newEffects;

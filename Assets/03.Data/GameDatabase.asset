@@ -26,6 +26,100 @@ MonoBehaviour:
     duration: 0
   icon: {fileID: 0}
   effectsEnabled: 1
+--- !u!114 &-8347766142539456737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40005
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 40005
+  displayName: "\uC7AC\uC815\uBE44"
+  owner: 0
+  cardType: 1
+  rarity: 2
+  cost: 1
+  upgradeCost: 1
+  exhaust: 1
+  description: "\uCE74\uB4DC\uB97C {f1}\uC7A5 \uBF51\uACE0 \uC5D0\uB108\uC9C0\uB97C
+    {f2} \uC5BB\uC2B5\uB2C8\uB2E4. \uC18C\uBA78"
+  upgradedDescription: 
+  effects:
+  - type: 101
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 101
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-8248392511463423973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30005
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 30005
+  displayName: "\uC2EC\uC5F0 \uC99D\uD3ED"
+  owner: 3
+  cardType: 1
+  rarity: 2
+  cost: 2
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC758 \uC815\uC2E0\uBD84\uC5F4\uC744 {f1}\uBC30\uB85C
+    \uB9CC\uB4E4\uACE0 \uCDE8\uC57D {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 32
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 32
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-8034073419062296371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +163,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
     \uD654\uC0C1 {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -114,6 +210,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 1
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0,
     {f2}\uC758 \uD53C\uD574\uB97C \uD55C \uBC88 \uB354 \uC90D\uB2C8\uB2E4."
   upgradedDescription: 
@@ -167,6 +265,53 @@ MonoBehaviour:
     duration: 0
   icon: {fileID: 0}
   effectsEnabled: 1
+--- !u!114 &-5831435857512555704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20004
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 20004
+  displayName: "\uC7BF\uBD88\uC758 \uD30C\uB3D9"
+  owner: 2
+  cardType: 1
+  rarity: 1
+  cost: 1
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 {f1}\uACFC \uC57D\uD654
+    {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 21
+    target: 2
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  - type: 104
+    target: 2
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 21
+    target: 2
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  - type: 104
+    target: 2
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-5752501738432402752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,9 +330,92 @@ MonoBehaviour:
   maxHealth: 66
   startingEnergy: 3
   startingDeckIds: 214e0000214e0000214e0000224e0000224e0000224e0000234e0000234e0000
-  cardPoolIds: 214e0000224e0000234e00002a4e0000419c0000429c0000439c0000
+  cardPoolIds: 214e0000224e0000234e0000244e0000254e00002a4e0000419c0000429c0000439c0000449c0000459c0000834e0000a39c0000
   resourceName: "\uACFC\uC5F4"
   battlePrefab: {fileID: 1367983366861570566, guid: 673eab3a19dabf84cbbe8e73de6cf378, type: 3}
+--- !u!114 &-5500712865622070705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40004
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 40004
+  displayName: "\uC751\uAE09 \uBC29\uC5B4"
+  owner: 0
+  cardType: 1
+  rarity: 1
+  cost: 1
+  upgradeCost: 0
+  exhaust: 1
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4. \uC18C\uBA78"
+  upgradedDescription: 
+  effects:
+  - type: 1
+    target: 0
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 1
+    target: 0
+    amount: 9
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &-5352745669223866888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30004
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 30004
+  displayName: "\uAD11\uAE30\uC758 \uBA54\uC544\uB9AC"
+  owner: 3
+  cardType: 1
+  rarity: 1
+  cost: 1
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 {f1}\uACFC
+    \uC57D\uD654 {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 31
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 104
+    target: 1
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 31
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  - type: 104
+    target: 1
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &-4994107017506138331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +460,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 2
   cost: 0
+  upgradeCost: 0
+  exhaust: 0
   description: "\uD50C\uB808\uC774\uC5B4 \uCCB4\uB825\uC744 {f1}\uC758 \uD53C\uD574\uB97C
     \uC8FC\uACE0, {f2}\uC758 \uC5D0\uB108\uC9C0\uB97C \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
@@ -274,6 +504,89 @@ MonoBehaviour:
   id: 90003
   displayName: "\uBE14\uB799 \uC624\uD06C \uBCF4\uC2A4"
   enemyIds: 62ea00000000000000000000
+--- !u!114 &-4468155456964837322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70010
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70010
+  displayName: "\uAEBC\uC9C0\uC9C0 \uC54A\uB294 \uB300\uD654\uB85C"
+  rarity: 4
+  description: "\uD134 \uC2DC\uC791 \uC2DC \uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1\uC744
+    2 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  trigger: 2
+  effects:
+  - type: 21
+    target: 2
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
+--- !u!114 &-3394922320915312412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70011
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70011
+  displayName: "\uC804\uC7C1\uC2E0\uC758 \uC11C\uD310"
+  rarity: 4
+  description: "\uC804\uD22C \uC2DC\uC791 \uC2DC \uCE74\uB4DC\uB97C 3\uC7A5 \uBF51\uACE0
+    \uBC29\uC5B4\uB3C4\uB97C 10 \uC5BB\uC2B5\uB2C8\uB2E4."
+  trigger: 1
+  effects:
+  - type: 101
+    target: 0
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  - type: 1
+    target: 0
+    amount: 10
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
+--- !u!114 &-3195875925980084548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70008
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70008
+  displayName: "\uAE08\uC774 \uAC04 \uC6B0\uC0C1"
+  rarity: 3
+  description: "\uC804\uD22C \uC2DC\uC791 \uC2DC \uC801 \uD55C \uBA85\uC5D0\uAC8C
+    \uC815\uC2E0\uBD84\uC5F4\uC744 5 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  trigger: 1
+  effects:
+  - type: 31
+    target: 1
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
 --- !u!114 &-3076726178586581687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +605,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 0
+  upgradeCost: 0
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uCDE8\uC57D {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -326,6 +641,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 1
   cost: 2
+  upgradeCost: 2
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uB370\uBBF8\uC9C0 {f1}\uC758 \uD53C\uD574\uB97C
     \uC8FC\uACE0 \uCDE8\uC57D {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -371,6 +688,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 0
+  upgradeCost: 0
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC57D\uD654 {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -405,6 +724,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
     \uC815\uC2E0\uBD84\uC5F4 {f2}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -450,6 +771,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uBC29\uC5B4\uB3C4\uB97C {f1}\uB97C \uC5BB\uACE0 \uC801\uC774 \uACF5\uACA9\uD55C\uB2E4\uBA74
     \uD654\uC0C1 {f2}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -509,18 +832,30 @@ MonoBehaviour:
   - {fileID: 960357282857903389}
   - {fileID: 1209620363538409710}
   - {fileID: -1941972444394071981}
+  - {fileID: 2616995487377879991}
+  - {fileID: 4321463979304662916}
   - {fileID: -6792585572910564596}
   - {fileID: -4567537172980619206}
   - {fileID: -7525678505189942033}
   - {fileID: -841411431289117930}
   - {fileID: 2035420301826485214}
+  - {fileID: -5831435857512555704}
+  - {fileID: 5832850431013009548}
   - {fileID: 4574230653417062746}
   - {fileID: -1246789902702565287}
   - {fileID: 7049939704652520354}
   - {fileID: 6126127775062050035}
+  - {fileID: -5352745669223866888}
+  - {fileID: -8248392511463423973}
   - {fileID: 8219795776332101764}
   - {fileID: -1577703197552816408}
   - {fileID: -3076726178586581687}
+  - {fileID: -5500712865622070705}
+  - {fileID: -8347766142539456737}
+  - {fileID: 358251397258765477}
+  - {fileID: 3119648535000272369}
+  - {fileID: 577602313813638667}
+  - {fileID: 9050855674731642311}
   characters:
   - {fileID: 7863753474886238170}
   - {fileID: -5752501738432402752}
@@ -534,11 +869,64 @@ MonoBehaviour:
   - {fileID: -9161943771842496306}
   - {fileID: -8034073419062296371}
   - {fileID: -6757090765053102745}
+  - {fileID: 5493224052594263523}
+  - {fileID: 3535942442880552379}
+  - {fileID: -3195875925980084548}
+  - {fileID: 4556945829413326959}
+  - {fileID: -4468155456964837322}
+  - {fileID: -3394922320915312412}
+  - {fileID: 5895498753706929792}
   encounters:
   - {fileID: 1693516754801979686}
   - {fileID: -164831777647892512}
   - {fileID: -4528273833106646390}
   - {fileID: 389863463451105728}
+--- !u!114 &358251397258765477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10099
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10099
+  displayName: "\uD53C\uC758 \uC655\uC88C"
+  owner: 1
+  cardType: 1
+  rarity: 4
+  cost: 0
+  upgradeCost: 0
+  exhaust: 0
+  description: "\uCCB4\uB825\uC744 {f1} \uC783\uACE0 \uD798\uC744 {f2} \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 107
+    target: 0
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
+  - type: 2
+    target: 0
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 107
+    target: 0
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  - type: 2
+    target: 0
+    amount: 7
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &389863463451105728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,6 +942,53 @@ MonoBehaviour:
   id: 90101
   displayName: "\uBCF4\uC2A4\uC640 \uD638\uC704"
   enemyIds: 62ea000061ea000061ea0000
+--- !u!114 &577602313813638667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_30099
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 30099
+  displayName: "\uC2EC\uC5F0\uC758 \uAC1C\uC548"
+  owner: 3
+  cardType: 1
+  rarity: 4
+  cost: 2
+  upgradeCost: 2
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC758 \uC815\uC2E0\uBD84\uC5F4\uC744 {f1}\uBC30\uB85C
+    \uB9CC\uB4E4\uACE0 \uCDE8\uC57D {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 32
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 3
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 32
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 105
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &596276596265036108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,7 +1007,7 @@ MonoBehaviour:
   maxHealth: 70
   startingEnergy: 3
   startingDeckIds: 3175000032750000
-  cardPoolIds: 317500003275000033750000419c0000429c0000439c0000
+  cardPoolIds: 3175000032750000337500003475000035750000419c0000429c0000439c0000449c0000459c000093750000a39c0000
   resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
   battlePrefab: {fileID: 8822287842208179044, guid: 80ecfc08f0363554c9e9c2f124eb38f6, type: 3}
 --- !u!114 &960357282857903389
@@ -593,6 +1028,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -627,6 +1064,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uD798\uC744 {f1} \uC5BB\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -676,6 +1115,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 2
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uBAA8\uB450\uC5D0\uAC8C \uD654\uC0C1 {f1}\uC744 \uBD80\uC5EC\uD558\uACE0
     \uC57D\uD654 {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -699,6 +1140,101 @@ MonoBehaviour:
   - type: 104
     target: 2
     amount: 8
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &2616995487377879991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10005
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10005
+  displayName: "\uBC29\uD328 \uC790\uC138"
+  owner: 1
+  cardType: 1
+  rarity: 1
+  cost: 1
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uACE0 \uCE74\uB4DC\uB97C {f2}\uC7A5
+    \uBF51\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 1
+    target: 0
+    amount: 7
+    secondaryAmount: 0
+    duration: 0
+  - type: 101
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 1
+    target: 0
+    amount: 10
+    secondaryAmount: 0
+    duration: 0
+  - type: 101
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &3119648535000272369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20099
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 20099
+  displayName: "\uBD88\uC0AC\uC870\uC758 \uC7A5\uB9C9"
+  owner: 2
+  cardType: 1
+  rarity: 4
+  cost: 2
+  upgradeCost: 2
+  exhaust: 0
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4. \uB2E4\uC74C
+    \uC790\uAE30 \uD134\uAE4C\uC9C0 \uACF5\uACA9\uD55C \uC801\uC5D0\uAC8C \uD654\uC0C1
+    {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 1
+    target: 0
+    amount: 12
+    secondaryAmount: 0
+    duration: 0
+  - type: 24
+    target: 0
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 1
+    target: 0
+    amount: 18
+    secondaryAmount: 0
+    duration: 0
+  - type: 24
+    target: 0
+    amount: 12
     secondaryAmount: 0
     duration: 0
   keywords: []
@@ -742,6 +1278,68 @@ MonoBehaviour:
       secondaryAmount: 0
       duration: 0
   battlePrefab: {fileID: 4553075792530485228, guid: 69b859dea3264394935cad294ca531fa, type: 3}
+--- !u!114 &3535942442880552379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70007
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70007
+  displayName: "\uAEBC\uC9C0\uC9C0 \uC54A\uB294 \uC2EC\uC9C0"
+  rarity: 3
+  description: "\uD134 \uC2DC\uC791 \uC2DC \uC801 \uD55C \uBA85\uC5D0\uAC8C \uD654\uC0C1\uC744
+    1 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  trigger: 2
+  effects:
+  - type: 21
+    target: 1
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
+--- !u!114 &4321463979304662916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_10006
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 10006
+  displayName: "\uCC98\uD615\uC758 \uC77C\uACA9"
+  owner: 1
+  cardType: 0
+  rarity: 2
+  cost: 2
+  upgradeCost: 2
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 14
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 18
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
 --- !u!114 &4394696580758261533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,6 +1388,32 @@ MonoBehaviour:
       secondaryAmount: 0
       duration: 2
   battlePrefab: {fileID: 1439994459352874351, guid: f1031120801f4e1d97477949282446cb, type: 3}
+--- !u!114 &4556945829413326959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70009
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70009
+  displayName: "\uC2DC\uAC04\uC744 \uD6D4\uCE5C \uBAA8\uB798\uC2DC\uACC4"
+  rarity: 4
+  description: "\uB9E4 \uD134 \uCC98\uC74C \uC0AC\uC6A9\uD558\uB294 \uCE74\uB4DC\uC758
+    \uBE44\uC6A9\uC774 1 \uAC10\uC18C\uD569\uB2C8\uB2E4."
+  trigger: 2
+  effects:
+  - type: 108
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
 --- !u!114 &4574230653417062746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,6 +1432,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uD654\uC0C1 {f1}\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -824,6 +1450,110 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &5493224052594263523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70006
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70006
+  displayName: "\uAC80\uD22C\uC0AC\uC758 \uC778\uC7A5"
+  rarity: 2
+  description: "\uC804\uD22C \uC2DC\uC791 \uC2DC \uD798\uC744 1 \uC5BB\uC2B5\uB2C8\uB2E4."
+  trigger: 1
+  effects:
+  - type: 2
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
+--- !u!114 &5832850431013009548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_20005
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 20005
+  displayName: "\uBD88\uD0C0\uB294 \uCC3D"
+  owner: 2
+  cardType: 0
+  rarity: 2
+  cost: 2
+  upgradeCost: 2
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uD654\uC0C1 {f2}\uB97C \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 0
+    target: 1
+    amount: 8
+    secondaryAmount: 0
+    duration: 0
+  - type: 21
+    target: 1
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 0
+    target: 1
+    amount: 11
+    secondaryAmount: 0
+    duration: 0
+  - type: 21
+    target: 1
+    amount: 6
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &5895498753706929792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70012
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70012
+  displayName: "\uC2EC\uC5F0\uC758 \uACC4\uC57D\uC11C"
+  rarity: 4
+  description: "\uD134 \uC2DC\uC791 \uC2DC \uCE74\uB4DC\uB97C 2\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4.
+    \uB2E4\uC74C \uCE74\uB4DC\uC758 \uBE44\uC6A9\uC740 \uC5D0\uB108\uC9C0 \uB300\uC2E0
+    \uCCB4\uB825\uC73C\uB85C \uC9C0\uBD88\uD569\uB2C8\uB2E4."
+  trigger: 2
+  effects:
+  - type: 109
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  - type: 101
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
 --- !u!114 &6126127775062050035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,8 +1572,10 @@ MonoBehaviour:
   cardType: 1
   rarity: 1
   cost: 2
-  description: "\uB300\uC0C1\uC758 \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744 {f1}\uBC30\uB85C
-    \uB9CC\uB4ED\uB2C8\uB2E4."
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 \uC2A4\uD0DD\uC744
+    {f1}\uBC30\uB85C \uB9CC\uB4ED\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
   - type: 32
@@ -902,6 +1634,8 @@ MonoBehaviour:
   cardType: 0
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C {f1}\uC758 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -936,6 +1670,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 0
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uC801 \uD558\uB098\uC5D0\uAC8C \uC815\uC2E0\uBD84\uC5F4 {f1}\uC744
     \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   upgradedDescription: 
@@ -971,7 +1707,7 @@ MonoBehaviour:
   maxHealth: 80
   startingEnergy: 3
   startingDeckIds: 112700001127000011270000122700001227000012270000132700001427000014270000
-  cardPoolIds: 112700001227000013270000142700001a2700001b270000419c0000429c0000439c0000
+  cardPoolIds: 1127000012270000132700001427000015270000162700001a2700001b270000419c0000429c0000439c0000449c0000459c000073270000a39c0000
   resourceName: "\uBD84\uB178"
   battlePrefab: {fileID: 4222570037109911963, guid: a83cfd5c17fdecd499d0d0dbd2c37eb4, type: 3}
 --- !u!114 &8219795776332101764
@@ -992,6 +1728,8 @@ MonoBehaviour:
   cardType: 1
   rarity: 2
   cost: 1
+  upgradeCost: 1
+  exhaust: 0
   description: "\uCE74\uB4DC\uB97C {f1}\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   upgradedDescription: 
   effects:
@@ -1004,6 +1742,53 @@ MonoBehaviour:
   - type: 101
     target: 0
     amount: 3
+    secondaryAmount: 0
+    duration: 0
+  keywords: []
+  artwork: {fileID: 0}
+--- !u!114 &9050855674731642311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a989acab4962794d84c4736723807c1, type: 3}
+  m_Name: CardData_40099
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  id: 40099
+  displayName: "\uC644\uC804 \uC7AC\uC815\uBE44"
+  owner: 0
+  cardType: 1
+  rarity: 4
+  cost: 1
+  upgradeCost: 1
+  exhaust: 0
+  description: "\uCE74\uB4DC\uB97C {f1}\uC7A5 \uBF51\uACE0 \uC5D0\uB108\uC9C0\uB97C
+    {f2} \uC5BB\uC2B5\uB2C8\uB2E4."
+  upgradedDescription: 
+  effects:
+  - type: 101
+    target: 0
+    amount: 4
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 2
+    secondaryAmount: 0
+    duration: 0
+  upgradedEffects:
+  - type: 101
+    target: 0
+    amount: 5
+    secondaryAmount: 0
+    duration: 0
+  - type: 102
+    target: 0
+    amount: 2
     secondaryAmount: 0
     duration: 0
   keywords: []

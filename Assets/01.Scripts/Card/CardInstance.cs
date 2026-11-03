@@ -8,7 +8,7 @@ public class CardInstance
 
     public CardData Data { get; }
     public bool IsUpgraded { get; private set; }
-    public int Cost => Math.Max(0, Data.Cost + temporaryCostModifier);
+    public int Cost => Math.Max(0, (IsUpgraded ? Data.UpgradeCost : Data.Cost) + temporaryCostModifier);
 
     public string Description =>
         IsUpgraded && !string.IsNullOrWhiteSpace(Data.UpgradedDescription)

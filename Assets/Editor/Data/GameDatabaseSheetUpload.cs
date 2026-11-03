@@ -121,15 +121,21 @@ internal static class GameDatabaseSheetUpload
         Add(row, "cardType", card.CardType.ToString());
         Add(row, "rarity", card.Rarity.ToString());
         Add(row, "cost", card.Cost.ToString(CultureInfo.InvariantCulture));
-        Add(row, "target", card.Effects.Count > 0 ? card.Effects[0].Target.ToString() : string.Empty);
-        Add(row, "effect1", card.Effects.Count > 0 ? card.Effects[0].Type.ToString() : "None");
-        Add(row, "value1", card.Effects.Count > 0 ? card.Effects[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");
-        Add(row, "effect2", card.Effects.Count > 1 ? card.Effects[1].Type.ToString() : "None");
-        Add(row, "value2", card.Effects.Count > 1 ? card.Effects[1].Amount.ToString(CultureInfo.InvariantCulture) : "0");
-        //강화 효과 수치를 기획 시트 열에 반영
-        var upgraded = card.UpgradedEffects.Count > 0 ? card.UpgradedEffects : card.Effects;
-        Add(row, "upgradeValue1", upgraded.Count > 0 ? upgraded[0].Amount.ToString(CultureInfo.InvariantCulture) : "0");
-        Add(row, "upgradeValue2", upgraded.Count > 1 ? upgraded[1].Amount.ToString(CultureInfo.InvariantCulture) : "0");
+        //소멸 표식은 별도 열로 분리, 효과 두 칸에는 실제 효과만 기록
+        var effects = card.Effects.Where(effect => effect.Type != EffectType.Exhaust).ToList();
+        var upgraded = (card.UpgradedEffects.Count > 0 ? card.UpgradedEffects : card.Effects)
+            .Where(effect => effect.Type != EffectType.Exhaust).ToList();
+        if (effects.Count > 2 || upgraded.Count > 2)
+            throw new InvalidOperationException($"카드 {card.Id}: 시트에 기록 가능한 효과는 2개입니다.");
+        for (int slot = 0; slot < 2; slot++)
+        {
+            AddRelicEffect(row, slot + 1, slot < effects.Count ? effects[slot] : default, slot < effects.Count);
+            Add(row, $"upgradeValue{slot + 1}", slot < upgraded.Count
+                ? upgraded[slot].Amount.ToString(CultureInfo.InvariantCulture) : "0");
+        }
+        Add(row, "upgradeCost", card.UpgradeCost.ToString(CultureInfo.InvariantCulture));
+        Add(row, "exhaust", card.Exhaust || card.Effects.Any(effect => effect.Type == EffectType.Exhaust) ? "TRUE" : "FALSE");
+        Add(row, "enabled", "TRUE");
 
         Add(row, "Character", card.Owner.ToString());
         Add(row, "Type", card.CardType.ToString());

@@ -222,9 +222,10 @@ internal static partial class GameDatabaseCsvSync
     //카드 시트의 기본 정보와 효과 검증
     private static List<CardRow> ReadCards(CsvTable table)
     {
-        // 기존 Total Card 탭은 기획자가 쓰던 열 이름을 유지하고 Unity 형식으로 변환합니다.
-        if (table.Has("cardId", "cardName", "owner", "cardType", "rarity", "cost", "target",
-                "effect1", "value1", "effect2", "value2"))
+        //기획 시트의 효과별 타깃과 이전 공통 타깃 지원
+        if (table.Has("cardId", "cardName", "owner", "cardType", "rarity", "cost",
+                "effect1", "value1", "effect2", "value2") &&
+            (table.Has("target1", "target2") || table.Has("target")))
             return ReadTotalCardRows(table);
 
         table.Require("Id", "Name", "Character", "Type", "Rarity", "Cost", "Description", "UpgradedDescription", "Effects", "UpgradedEffects", "Keywords");
@@ -261,19 +262,17 @@ internal static partial class GameDatabaseCsvSync
             if (!ShouldImportRow(table, row, "cardId"))
                 continue;
 
-            var targetText = Required(table, row, "target");
-            var target = string.Equals(targetText, "None", StringComparison.OrdinalIgnoreCase)
-                ? TargetType.Self
-                : EnumFromText<TargetType>(targetText, table, row, "target");
             var effects = new List<EffectSpec>();
-            AddTotalCardEffect(effects, table, row, "effect1", "value1", target);
-            AddTotalCardEffect(effects, table, row, "effect2", "value2", target);
-            //강화 수치 열이 있으면 효과 순서를 유지한 강화 목록 생성
             var upgradedEffects = new List<EffectSpec>();
-            if (table.Has("upgradeValue1", "upgradeValue2"))
+            for (int slot = 1; slot <= 2; slot++)
             {
-                AddTotalCardEffect(upgradedEffects, table, row, "effect1", "upgradeValue1", target);
-                AddTotalCardEffect(upgradedEffects, table, row, "effect2", "upgradeValue2", target);
+                string effectColumn = $"effect{slot}";
+                if (string.Equals(table.Get(row, effectColumn), "None", StringComparison.OrdinalIgnoreCase)) continue;
+                string targetColumn = table.Has($"target{slot}") ? $"target{slot}" : "target";
+                var target = EnumFromText<TargetType>(Required(table, row, targetColumn), table, row, targetColumn);
+                AddTotalCardEffect(effects, table, row, effectColumn, $"value{slot}", target);
+                if (table.Has("upgradeValue1", "upgradeValue2"))
+                    AddTotalCardEffect(upgradedEffects, table, row, effectColumn, $"upgradeValue{slot}", target);
             }
 
             result.Add(new CardRow
@@ -284,6 +283,8 @@ internal static partial class GameDatabaseCsvSync
                 Type = EnumValue<CardType>(table, row, "cardType"),
                 Rarity = EnumValue<DataRarity>(table, row, "rarity"),
                 Cost = NonNegativeInt(table, row, "cost"),
+                UpgradeCost = table.Has("upgradeCost") ? NonNegativeInt(table, row, "upgradeCost") : -1,
+                Exhaust = ReadExhaust(table, row),
                 Description = table.Has("description") ? table.Get(row, "description") : string.Empty,
                 UpgradedDescription = string.Empty,
                 Effects = effects,
@@ -293,6 +294,17 @@ internal static partial class GameDatabaseCsvSync
         }
         EnsureUnique(result.Select(x => x.Id), "Total Card 시트");
         return result;
+    }
+
+    //소멸 체크박스 검증, 잘못된 값의 조용한 누락 방지
+    private static bool ReadExhaust(CsvTable table, int row)
+    {
+        if (!table.Has("exhaust")) return false;
+        string raw = table.Get(row, "exhaust").Trim();
+        if (bool.TryParse(raw, out bool value)) return value;
+        if (raw == "1") return true;
+        if (raw == "0" || raw.Length == 0) return false;
+        throw Error(table, row, "exhaust는 TRUE 또는 FALSE로 입력해 주세요.");
     }
 
     private static void AddTotalCardEffect(List<EffectSpec> effects, CsvTable table, int row,
@@ -543,7 +555,7 @@ internal static partial class GameDatabaseCsvSync
             var asset = GetOrCreate<CardData>(database, existing, row.Id);
             asset.EditorSetIdentity(row.Id, row.Name);
             asset.EditorApply(row.Owner, row.Type, row.Rarity, row.Cost, row.Description,
-                row.UpgradedDescription, row.Effects, row.UpgradedEffects, row.Keywords);
+                row.UpgradedDescription, row.Effects, row.UpgradedEffects, row.Keywords, row.UpgradeCost, row.Exhaust);
             retained.Add(asset);
             EditorUtility.SetDirty(asset);
             return asset;
@@ -869,6 +881,8 @@ internal static partial class GameDatabaseCsvSync
         public CardType Type;
         public DataRarity Rarity;
         public int Cost;
+        public int UpgradeCost = -1;
+        public bool Exhaust;
         public List<EffectSpec> Effects, UpgradedEffects;
         public List<string> Keywords;
     }
