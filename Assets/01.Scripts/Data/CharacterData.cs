@@ -11,7 +11,6 @@ public class CharacterData : GameDataEntry
     [SerializeField] private List<int> startingDeckIds = new();
     [SerializeField] private List<int> cardPoolIds = new();
     [SerializeField] private string resourceName;
-    [SerializeField] private Sprite portrait;
     [Tooltip("전투 시작 시 한 번 생성할 공통 애니메이션 프리팹")]
     [SerializeField] private GameObject battlePrefab;
 
@@ -21,7 +20,6 @@ public class CharacterData : GameDataEntry
     public IReadOnlyList<int> StartingDeckIds => startingDeckIds;
     public IReadOnlyList<int> CardPoolIds => cardPoolIds;
     public string ResourceName => resourceName;
-    public Sprite Portrait => portrait;
     public GameObject BattlePrefab => battlePrefab;
 
 #if UNITY_EDITOR

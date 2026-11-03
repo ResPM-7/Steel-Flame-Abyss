@@ -112,7 +112,7 @@ public class BattleParticipants : MonoBehaviour
         Player.Changed += RefreshPlayer;
         Player.Stats.Changed += RefreshPlayer;
         Player.Stats.Changed += CheckBattleResult;
-        playerView.Bind(character.DisplayName, character.Portrait, Player.Stats);
+        playerView.Bind(character.DisplayName, null, Player.Stats);
         RefreshPlayer();
         return true;
     }
@@ -213,7 +213,7 @@ public class BattleParticipants : MonoBehaviour
             enemy.Stats.Changed += RefreshDamagePreviews;
             enemy.IntentChanged += RefreshEnemy;
         }
-        playerView.Bind(character.DisplayName, character.Portrait, Player.Stats, character.BattlePrefab);
+        playerView.Bind(character.DisplayName, null, Player.Stats, character.BattlePrefab);
         Result = BattleResult.Ongoing;
         RefreshPlayer();
         RefreshEnemy();

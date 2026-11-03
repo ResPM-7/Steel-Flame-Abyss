@@ -187,8 +187,7 @@ MonoBehaviour:
   startingDeckIds: 214e0000214e0000214e0000224e0000224e0000224e0000234e0000234e0000
   cardPoolIds: 214e0000224e0000234e00002a4e0000419c0000429c0000439c0000
   resourceName: "\uACFC\uC5F4"
-  portrait: {fileID: 0}
-  battlePrefab: {fileID: 0}
+  battlePrefab: {fileID: 1367983366861570566, guid: 673eab3a19dabf84cbbe8e73de6cf378, type: 3}
 --- !u!114 &-4994107017506138331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,8 +574,7 @@ MonoBehaviour:
   startingDeckIds: 3175000032750000
   cardPoolIds: 317500003275000033750000419c0000429c0000439c0000
   resourceName: "\uC815\uC2E0 \uBD84\uC5F4"
-  portrait: {fileID: 0}
-  battlePrefab: {fileID: 0}
+  battlePrefab: {fileID: 8822287842208179044, guid: 80ecfc08f0363554c9e9c2f124eb38f6, type: 3}
 --- !u!114 &960357282857903389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,8 +973,7 @@ MonoBehaviour:
   startingDeckIds: 112700001127000011270000122700001227000012270000132700001427000014270000
   cardPoolIds: 112700001227000013270000142700001a2700001b270000419c0000429c0000439c0000
   resourceName: "\uBD84\uB178"
-  portrait: {fileID: 0}
-  battlePrefab: {fileID: 0}
+  battlePrefab: {fileID: 9102677403811989548, guid: 9ed3b92a0f47c224fac810f8ba7c2cff, type: 3}
 --- !u!114 &8219795776332101764
 MonoBehaviour:
   m_ObjectHideFlags: 0
