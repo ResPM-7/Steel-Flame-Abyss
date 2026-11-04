@@ -65,11 +65,11 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - poolName: Node
+  - poolName: DamageText
     targetCanvas: {fileID: 0}
-    poolSize: 15
+    poolSize: 5
     addressablePrefab:
-      m_AssetGUID: 8dedd8e36fd0b574cbee51652f61f903
+      m_AssetGUID: cd4ba29bfe9aa734c90211436dae96eb
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 

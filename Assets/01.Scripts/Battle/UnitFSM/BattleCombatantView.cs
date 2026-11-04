@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +12,8 @@ public class BattleCombatantView : MonoBehaviour
 
     [SerializeField] private TMP_Text healthLabel;
     [SerializeField] private TMP_Text statusLabel;
+    [Tooltip("적의 다음 행동 표시용 DetailText, 플레이어는 선택 연결")]
+    [SerializeField] private TMP_Text detailLabel;
 
     [SerializeField] private Color placeholderColor = new Color(0.3f, 0.6f, 0.85f);
 
@@ -71,6 +73,9 @@ public class BattleCombatantView : MonoBehaviour
             unitPortrait.Bind(portrait, battlePrefab, state, faceLeft);
         }
 
+        //인스펙터에 추가한 피해 연출 컴포넌트에 전투 상태 전달
+        if (TryGetComponent<BattleDamageFeedback>(out var feedback)) feedback.Bind(state);
+
         if (state != null && isActiveAndEnabled) state.Changed += Refresh;
         Refresh();
     }
@@ -100,6 +105,8 @@ public class BattleCombatantView : MonoBehaviour
     //체력 능력치 생존 여부를 UI에 반영
     private void Refresh()
     {
+        //전달받은 다음 행동 문자열을 실제 UI에 반영
+        if (detailLabel != null) detailLabel.text = detail;
         if (state == null) return;
         healthFill.fillAmount = (float)state.CurrentHealth / state.MaxHealth;
 

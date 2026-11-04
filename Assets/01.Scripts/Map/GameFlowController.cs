@@ -76,7 +76,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
         }
     }
 
-    //노드 풀 로드와 배치 완료 이후 맵 입력 허용
+    //노드 프리팹 생성과 배치 완료 이후 맵 입력 허용
     private async UniTask InitializeAsync(CancellationToken cancellationToken)
     {
         if (!ValidateReferences())
@@ -96,7 +96,7 @@ public class GameFlowController : MonoBehaviour, IScenePreparation
         }
         run.PreparePlayer(character);
         run.PrepareMap(randomMap.Generate);
-        nodes = await randomMap.BuildAsync(run.Map, mapScroll, objectPoolManager, cancellationToken);
+        nodes = await randomMap.BuildAsync(run.Map, mapScroll, cancellationToken);
         if (commonHealthView != null) commonHealthView.InjectHealth(run.Health);
         for (int i = 0; i < nodes.Length; i++) nodes[i].Bind(i, SelectNode);
         initialized = true;

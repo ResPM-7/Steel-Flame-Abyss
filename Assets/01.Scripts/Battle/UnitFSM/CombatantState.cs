@@ -1,5 +1,18 @@
 using System;
 
+//피해 연출 분류
+public enum DamageKind { Normal, Burn, HealthLoss, Execution }
+
+//실제 체력 손실과 방어 흡수 결과
+public readonly struct DamageResult
+{
+    public int HealthLost { get; }
+    public int Blocked { get; }
+    public DamageKind Kind { get; }
+    public DamageResult(int healthLost, int blocked, DamageKind kind)
+    { HealthLost = healthLost; Blocked = blocked; Kind = kind; }
+}
+
 //전투 중에만 사용하는 캐릭터/적의 가변 상태
 //ScriptableObject 원본 데이터는 변경하지 않음
 public class CombatantState
@@ -9,6 +22,7 @@ public class CombatantState
     //공격과 실제 피해 발생 시 공통 연출 알림
     public event Action AttackPerformed;
     public event Action Damaged;
+    public event Action<DamageResult> DamageResolved;
 
     public int MaxHealth { get; }
     public int CurrentHealth { get; private set; }
@@ -87,6 +101,7 @@ public class CombatantState
 
         int healthDamage = Math.Min(CurrentHealth, amount - blockedDamage);
         CurrentHealth -= healthDamage;
+        DamageResolved?.Invoke(new DamageResult(healthDamage, blockedDamage, DamageKind.Normal));
         Changed?.Invoke();
         Damaged?.Invoke();
         return healthDamage;
@@ -98,6 +113,7 @@ public class CombatantState
         if (amount <= 0 || !IsAlive) return 0;
         int lost = Math.Min(CurrentHealth, amount);
         CurrentHealth -= lost;
+        DamageResolved?.Invoke(new DamageResult(lost, 0, DamageKind.HealthLoss));
         Changed?.Invoke();
         Damaged?.Invoke();
         return lost;
@@ -124,7 +140,9 @@ public class CombatantState
     {
         if (!CanReceiveMindFracture || !IsAlive || MindFracture <= 0 || MindFracture < CurrentHealth)
             return false;
+        int lost = CurrentHealth;
         CurrentHealth = 0;
+        DamageResolved?.Invoke(new DamageResult(lost, 0, DamageKind.Execution));
         Changed?.Invoke();
         return true;
     }
@@ -144,6 +162,7 @@ public class CombatantState
         int lost = Math.Min(CurrentHealth, Burn);
         CurrentHealth -= lost;
         Burn--;
+        DamageResolved?.Invoke(new DamageResult(lost, 0, DamageKind.Burn));
         Changed?.Invoke();
         Damaged?.Invoke();
         return lost;

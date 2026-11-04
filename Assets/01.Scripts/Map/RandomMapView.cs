@@ -10,11 +10,10 @@ public class RandomMapView : MonoBehaviour
 {
     [Header("맵 생성")]
     [SerializeField] private RectTransform generatedRoot;
-    [SerializeField] private string nodePoolName = "Node";
-    private ObjectPoolManager pool;
+    [SerializeField] private MapNodeView nodePrefab;
     private bool built;
-    private readonly List<MapNodeView> rentedNodes = new List<MapNodeView>();
-    public bool IsConfigured => generatedRoot != null && !string.IsNullOrWhiteSpace(nodePoolName);
+    private readonly List<MapNodeView> createdNodes = new List<MapNodeView>();
+    public bool IsConfigured => generatedRoot != null && nodePrefab != null && nodePrefab.IsConfigured && nodePrefab.transform is RectTransform;
     [SerializeField, Range(1, 12)] private int middleFloors = 4;
     [SerializeField, Range(0f, 1f)] private float campChance = 0.2f;
     [SerializeField, Min(0)] private int maxRandomCamps = 3;
@@ -62,18 +61,15 @@ public class RandomMapView : MonoBehaviour
     }
 
     //저장된 맵으로 노드 버튼과 연결선 생성
-    public async UniTask<MapNodeView[]> BuildAsync(MapProgressModel progress, UnityEngine.UI.ScrollRect scroll,
-        ObjectPoolManager objectPool, CancellationToken cancellationToken)
+    public UniTask<MapNodeView[]> BuildAsync(MapProgressModel progress, UnityEngine.UI.ScrollRect scroll,
+        CancellationToken cancellationToken)
     {
         if (built) throw new InvalidOperationException("맵 화면 중복 생성");
-        if (!IsConfigured || objectPool == null || generatedRoot.parent != scroll.content)
-            throw new InvalidOperationException("Generated Root를 Scroll View의 Content 아래에 연결해 주세요");
+        if (!IsConfigured || scroll == null || scroll.content == null || scroll.viewport == null || generatedRoot.parent != scroll.content)
+            throw new InvalidOperationException("Node Prefab의 UI 참조와 Generated Root, Scroll View 연결을 확인해 주세요");
         built = true;
-        pool = objectPool;
         try
         {
-            if (!await pool.EnsurePoolReadyAsync(nodePoolName).AsUniTask().AttachExternalCancellation(cancellationToken))
-                throw new InvalidOperationException($"맵 노드 풀 준비 실패: {nodePoolName}");
             cancellationToken.ThrowIfCancellationRequested();
             var content = scroll.content;
             //그래프 좌표 배치를 위해 자동 목록 크기 계산 해제
@@ -107,16 +103,11 @@ public class RandomMapView : MonoBehaviour
             foreach (var data in progress.Graph.Nodes)
             {
                 positions[data.Id] = new Vector2(125f + data.Floor * 290f, data.Lane * laneHeight);
-                var instance = pool.GetObject(nodePoolName);
-                if (instance == null) throw new InvalidOperationException($"맵 노드 대여 실패: {nodePoolName}");
-                if (!instance.TryGetComponent<MapNodeView>(out var view) || !view.IsConfigured)
-                {
-                    pool.ReturnObject(nodePoolName, instance);
-                    throw new InvalidOperationException("Node 프리팹의 MapNodeView와 UI 참조 연결 필요");
-                }
-                rentedNodes.Add(view);
-                var rect = (RectTransform)instance.transform;
-                rect.SetParent(generatedRoot, false);
+                cancellationToken.ThrowIfCancellationRequested();
+                var view = Instantiate(nodePrefab, generatedRoot, false);
+                createdNodes.Add(view);
+                view.gameObject.SetActive(true);
+                var rect = (RectTransform)view.transform;
                 rect.SetAsLastSibling();
                 rect.anchorMin = rect.anchorMax = new Vector2(0f, 0.5f);
                 rect.pivot = new Vector2(0.5f, 0.5f);
@@ -127,7 +118,7 @@ public class RandomMapView : MonoBehaviour
                 view.Configure(data);
             }
             connections.Bind(progress, positions, views.Select(view => ((RectTransform)view.transform).rect.size).ToArray());
-            return views;
+            return UniTask.FromResult(views);
         }
         catch
         {
@@ -136,21 +127,27 @@ public class RandomMapView : MonoBehaviour
         }
     }
 
-    //대여 노드의 연결 정리와 풀 반환
+    //생성 노드의 입력 연결 해제와 객체 제거
     public void ReleaseNodes()
     {
-        foreach (var view in rentedNodes)
+        foreach (var view in createdNodes)
         {
             if (view == null) continue;
-            view.ResetForPool();
-            if (pool != null) pool.RequestReturn(nodePoolName, view.gameObject);
+            view.Unbind();
+            view.gameObject.SetActive(false);
+            Destroy(view.gameObject);
         }
-        rentedNodes.Clear();
-        if (connections != null) Destroy(connections.gameObject);
+        createdNodes.Clear();
+        if (connections != null)
+        {
+            connections.gameObject.SetActive(false);
+            Destroy(connections.gameObject);
+            connections = null;
+        }
         built = false;
     }
 
-    //씬 종료 시 대여 참조 정리
+    //씬 종료 시 생성 노드 정리
     private void OnDestroy() => ReleaseNodes();
 
     //방문 완료 이후 연결선 색상 갱신

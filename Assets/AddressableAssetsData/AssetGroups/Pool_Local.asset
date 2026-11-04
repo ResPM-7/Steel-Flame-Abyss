@@ -10,13 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Pool_Cards_Local
+  m_Name: Pool_Local
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Pool_Cards_Local
-  m_GUID: 96aeb41a8c1acac47903047e7a23d894
+  m_GroupName: Pool_Local
+  m_GUID: 02311f4907933d848a0847b9d9fde369
   m_SerializeEntries:
+  - m_GUID: 6aa109de82bcd43458ca3d0943efc4d4
+    m_Address: Assets/02.Prefab/ObjectPool/RelicIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fcd0d7e953af7140aa7f0aaf00f1c88
     m_Address: Assets/02.Prefab/ObjectPool/ViewCardList.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd4ba29bfe9aa734c90211436dae96eb
+    m_Address: Assets/02.Prefab/ObjectPool/DamageTextAnchor.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -24,5 +34,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: b35d253f13b4e0346aed385d804d586a, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: b68af0c26d93aa54c990c69300334928, type: 2}
-    - {fileID: 11400000, guid: e638c285114231648a79051144a5e908, type: 2}
+    - {fileID: 11400000, guid: 81c68d2bb968a7b40a1f0c6765403727, type: 2}
+    - {fileID: 11400000, guid: 9073a84a1ce1d9c43ad1e8a2ae49ebf2, type: 2}
