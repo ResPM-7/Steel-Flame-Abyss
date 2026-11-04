@@ -47,7 +47,7 @@ MonoBehaviour:
   upgradeCost: 1
   exhaust: 1
   description: "\uCE74\uB4DC\uB97C {f1}\uC7A5 \uBF51\uACE0 \uC5D0\uB108\uC9C0\uB97C
-    {f2} \uC5BB\uC2B5\uB2C8\uB2E4. \uC18C\uBA78"
+    {f2} \uC5BB\uC2B5\uB2C8\uB2E4. \n\uC18C\uBA78"
   upgradedDescription: 
   effects:
   - type: 101
@@ -353,7 +353,7 @@ MonoBehaviour:
   cost: 1
   upgradeCost: 0
   exhaust: 1
-  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4. \uC18C\uBA78"
+  description: "\uBC29\uC5B4\uB3C4\uB97C {f1} \uC5BB\uC2B5\uB2C8\uB2E4. \n\uC18C\uBA78"
   upgradedDescription: 
   effects:
   - type: 1
