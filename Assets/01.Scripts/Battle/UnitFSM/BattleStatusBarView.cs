@@ -4,14 +4,14 @@ using UnityEngine;
 //전투 상태 아이콘과 설명창 생성 및 재사용
 public class BattleStatusBarView : MonoBehaviour
 {
-    private readonly BattleStatusItemView[] items = new BattleStatusItemView[5];
+    private readonly BattleStatusItemView[] items = new BattleStatusItemView[6];
     private readonly Vector3[] corners = new Vector3[4];
     private RectTransform tooltip;
     private TMP_Text tooltipText;
     private BattleStatusItemView tooltipOwner;
     private TMP_FontAsset font;
 
-    //기존 상태 텍스트 아래에 공용 상태 표시 줄 배치
+    //기존 상태 텍스트 위치에 공용 상태 표시 줄 배치
     public static BattleStatusBarView Create(TMP_Text source)
     {
         RectTransform rect = NewRect("StatusEffects", source.transform.parent);
@@ -20,7 +20,7 @@ public class BattleStatusBarView : MonoBehaviour
         rect.anchorMax = original.anchorMax;
         rect.pivot = original.pivot;
         rect.sizeDelta = new Vector2(412f, 44f);
-        rect.anchoredPosition = original.anchoredPosition + Vector2.down * (original.rect.height * 0.5f + 30f);
+        rect.anchoredPosition = original.anchoredPosition;
         var layout = rect.gameObject.AddComponent<UnityEngine.UI.HorizontalLayoutGroup>();
         layout.spacing = 4f;
         layout.childAlignment = TextAnchor.MiddleCenter;
@@ -36,6 +36,7 @@ public class BattleStatusBarView : MonoBehaviour
         bar.items[2] = bar.CreateItem("약화", "공격 피해가 약화 수치만큼 감소.\n자신의 턴 종료 시 전체 해제.", new Color(0.25f, 0.35f, 0.25f));
         bar.items[3] = bar.CreateItem("취약", "받는 공격 피해 50% 증가.\n수치는 남은 턴. 자신의 턴 종료 시 1 감소.", new Color(0.38f, 0.22f, 0.48f));
         bar.items[4] = bar.CreateItem("정신\n분열", "수치가 적의 현재 체력 이상이면 처형.\n부여·증가 직후와 턴 종료 화상 처리 후 검사.", new Color(0.24f, 0.16f, 0.42f));
+        bar.items[5] = bar.CreateItem("힘", "공격 피해에 힘 수치만큼 추가.", new Color(0.55f, 0.22f, 0.2f));
         return bar;
     }
 
@@ -47,7 +48,8 @@ public class BattleStatusBarView : MonoBehaviour
         items[2].Refresh(state.IsAlive ? state.Weak : 0);
         items[3].Refresh(state.IsAlive ? state.Vulnerable : 0);
         items[4].Refresh(state.IsAlive ? state.MindFracture : 0);
-        //상태 다섯 개 동시 표시 시 기존 영역 안으로 폭 조정
+        items[5].Refresh(state.IsAlive ? state.Strength : 0);
+        //활성 버프·디버프 수에 따라 기존 영역 안으로 폭 조정
         int count = 0;
         foreach (var item in items)
             if (item.gameObject.activeSelf) count++;

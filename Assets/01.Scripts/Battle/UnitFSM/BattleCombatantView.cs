@@ -11,7 +11,11 @@ public class BattleCombatantView : MonoBehaviour
     [SerializeField] private Image healthFill;
 
     [SerializeField] private TMP_Text healthLabel;
+    [Tooltip("버프·디버프 줄의 위치와 폰트 기준, 기존 텍스트는 숨김")]
     [SerializeField] private TMP_Text statusLabel;
+    [Header("방어도 표시")]
+    [SerializeField] private GameObject shieldRoot;
+    [SerializeField] private TMP_Text shieldLabel;
     [Tooltip("적의 다음 행동 표시용 DetailText, 플레이어는 선택 연결")]
     [SerializeField] private TMP_Text detailLabel;
 
@@ -111,11 +115,18 @@ public class BattleCombatantView : MonoBehaviour
         healthFill.fillAmount = (float)state.CurrentHealth / state.MaxHealth;
 
         healthLabel.text = $"HP {state.CurrentHealth} / {state.MaxHealth}";
-        statusLabel.text = $"방어 {state.Block}   힘 {state.Strength}";
+        //방어도가 남아 있는 생존 유닛만 방패 표시
+        if (shieldRoot != null) shieldRoot.SetActive(state.IsAlive && state.Block > 0);
+        if (shieldLabel != null) shieldLabel.text = state.Block.ToString();
 
-        //기존 능력치 아래에 상태 아이콘 생성 후 재사용
-        if (statusBar == null) statusBar = BattleStatusBarView.Create(statusLabel);
-        statusBar.Refresh(state);
+        //기존 텍스트는 지우고 같은 위치에 버프·디버프 아이콘 표시
+        if (statusLabel != null)
+        {
+            if (statusBar == null) statusBar = BattleStatusBarView.Create(statusLabel);
+            statusLabel.text = string.Empty;
+            statusLabel.enabled = false;
+        }
+        if (statusBar != null) statusBar.Refresh(state);
         if (portrait != null && playerRender == null && (unitPortrait == null || !unitPortrait.HasVisual))
             portrait.color = state.IsAlive ? aliveColor : new Color(0.3f, 0.3f, 0.3f, 0.5f);
     }
