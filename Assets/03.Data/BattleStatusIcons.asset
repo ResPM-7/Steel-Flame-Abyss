@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9bc7cdd587b9d4b805a136499e2c3d, type: 3}
+  m_Name: BattleStatusIcons
+  m_EditorClassIdentifier: Assembly-CSharp::BattleStatusIcons
+  burn: {fileID: 0}
+  burnRetaliation: {fileID: 0}
+  weak: {fileID: 0}
+  vulnerable: {fileID: 0}
+  mindFracture: {fileID: 0}
+  strength: {fileID: -366396754397206061, guid: 8a94e9724e6944f40b61e3e74af99775, type: 3}
