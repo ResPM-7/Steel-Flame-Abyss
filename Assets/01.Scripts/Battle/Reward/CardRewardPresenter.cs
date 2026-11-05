@@ -8,12 +8,13 @@ public class CardRewardPresenter : IDisposable
     private readonly BattleParticipants participants;
     private readonly OwnedDeckModel deck;
     private readonly CardRewardView view;
+    private readonly OwnedRelicModel relics;
     private readonly System.Random random = new System.Random();
     private EnemyBattleState enemy;
     private CardRewardModel reward;
 
     //카드 보상 의존성 저장과 화면 이벤트 연결
-    public CardRewardPresenter(IGameDataProvider data, BattleParticipants participants, OwnedDeckModel deck, CardRewardView view)
+    public CardRewardPresenter(IGameDataProvider data, BattleParticipants participants, OwnedDeckModel deck, CardRewardView view, OwnedRelicModel relics = null)
     {
         if (data == null || participants == null || deck == null || view == null)
             throw new ArgumentNullException();
@@ -21,6 +22,7 @@ public class CardRewardPresenter : IDisposable
         this.participants = participants;
         this.deck = deck;
         this.view = view;
+        this.relics = relics;
         participants.ResultChanged += Refresh;
         view.OpenRequested += Open;
         view.CloseRequested += Close;
@@ -49,7 +51,7 @@ public class CardRewardPresenter : IDisposable
             (reward != null && reward.IsClaimed))
             return;
         if (reward == null)
-            reward = new CardRewardModel(data.Database.Cards, participants.Player.Data.Class, random, view.CardDropRates);
+            reward = new CardRewardModel(data.Database.Cards, participants.Player.Data.Class, random, view.CardDropRates, GetChoiceCount());
         if (reward.Candidates.Count == 0)
         {
             GameLogger.LogWarning("[카드 보상] 선택 가능한 캐릭터 또는 공용 카드가 없습니다");
@@ -58,6 +60,24 @@ public class CardRewardPresenter : IDisposable
         view.Show(reward.Candidates);
     }
 
+    //보유 유물의 보상 후보 증가량 합산
+    private int GetChoiceCount()
+    {
+        long count = 3;
+        if (relics == null) return (int)count;
+        foreach (int id in relics.RelicIds)
+        {
+            if (!data.TryGetRelic(id, out RelicData relic) || !relic.EffectsEnabled ||
+                relic.Trigger != RelicTrigger.BattleReward) continue;
+            foreach (EffectSpec effect in relic.Effects)
+            {
+                if (effect.Type != EffectType.CardRewardChoiceBonus || effect.Target != TargetType.Self)
+                    continue;
+                count = Math.Min(int.MaxValue, count + Math.Max(0, effect.Amount));
+            }
+        }
+        return (int)count;
+    }
     //수령 상태를 유지한 선택창 닫기
     private void Close() { view.Close(); }
 

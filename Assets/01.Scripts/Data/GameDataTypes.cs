@@ -56,6 +56,8 @@ public enum EffectType
     NextCardDiscount = 108,  //이번 턴 다음 카드 한 장 비용 할인
     LoseHealth = 107,         //방어도와 공격 보정 무시 체력 소모
 
+    CardRewardChoiceBonus = 110, //전투 보상 카드 후보 추가
+
     GoldMultiplier = 199      //골드배율
 }
 

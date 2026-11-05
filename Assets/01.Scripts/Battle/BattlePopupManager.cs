@@ -16,6 +16,10 @@ public class BattlePopupManager : MonoBehaviour
     private BattleDefeatPopupView defeatView;
     private BattleClearPopupView clearView;
     private OwnedDeckModel ownedDeck;
+    private OwnedRelicModel ownedRelics;
+
+    //세션 보유 유물 연결
+    public void InjectOwnedRelics(OwnedRelicModel relics) { ownedRelics = relics; }
     private IGameDataProvider data;
     private BattleDeckManager battleDeck;
     private BattleParticipants participants;
@@ -89,7 +93,7 @@ public class BattlePopupManager : MonoBehaviour
                 winView = Create(winPrefab);
                 coinInstaller.BindRewardView(winView.CoinButton, winView.CoinText);
                 sceneController.BindNextButton(winView.NextButton);
-                rewardPresenter = new CardRewardPresenter(data, participants, ownedDeck, winView.RewardView);
+                rewardPresenter = new CardRewardPresenter(data, participants, ownedDeck, winView.RewardView, ownedRelics);
             }
             winView.transform.SetAsLastSibling();
             winView.gameObject.SetActive(true);

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -34,6 +34,7 @@ public class BattleInstaller : MonoBehaviour, IScenePreparation
     //세션의 보유 유물과 전투 발동 시점 연결
     public void InjectOwnedRelics(OwnedRelicModel ownedRelics)
     {
+        if (popups != null) popups.InjectOwnedRelics(ownedRelics);
         relicEffects = new BattleRelicEffects(ownedRelics, dataProvider, participants, handController);
         deckManager.BattleStarted -= ApplyStartingRelics;
         deckManager.BattleStarted += ApplyStartingRelics;

@@ -21,7 +21,7 @@ public class CardRewardView : MonoBehaviour
     //필수 화면 연결과 카드 슬롯 중복 확인
     public bool ValidateReferences()
     {
-        if (panel == null || openButton == null || items == null || items.Length != 3)
+        if (panel == null || openButton == null || items == null || items.Length < 3)
             return false;
         var unique = new HashSet<CardRewardItemView>();
         foreach (CardRewardItemView item in items)
@@ -35,7 +35,7 @@ public class CardRewardView : MonoBehaviour
     {
         if (!ValidateReferences())
         {
-            GameLogger.LogError("[카드 보상] 패널과 버튼 및 카드 슬롯 세 개를 연결해 주세요", this);
+            GameLogger.LogError("[카드 보상] 패널과 버튼 및 카드 슬롯을 최소 세 개 연결해 주세요", this);
             return;
         }
         Close();
@@ -51,6 +51,11 @@ public class CardRewardView : MonoBehaviour
     //후보 카드와 희귀도 색상 표시 후 선택창 열기
     public void Show(IReadOnlyList<CardData> cards)
     {
+        if (cards.Count > items.Length)
+        {
+            GameLogger.LogError($"[카드 보상] 후보 {cards.Count}개에 필요한 슬롯이 부족합니다. Items에 슬롯을 추가해 주세요", this);
+            return;
+        }
         for (int i = 0; i < items.Length; i++)
         {
             if (i >= cards.Count)

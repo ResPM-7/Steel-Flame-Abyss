@@ -876,6 +876,7 @@ MonoBehaviour:
   - {fileID: -4468155456964837322}
   - {fileID: -3394922320915312412}
   - {fileID: 5895498753706929792}
+  - {fileID: 1481882858104637852}
   encounters:
   - {fileID: 1693516754801979686}
   - {fileID: -164831777647892512}
@@ -1082,6 +1083,32 @@ MonoBehaviour:
     duration: 0
   keywords: []
   artwork: {fileID: 0}
+--- !u!114 &1481882858104637852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d5fa8a016fbf1498485d106f18a918, type: 3}
+  m_Name: RelicData_70013
+  m_EditorClassIdentifier: Assembly-CSharp::RelicData
+  id: 70013
+  displayName: "\uD0D0\uAD6C\uC790\uC758 \uB80C\uC988"
+  rarity: 2
+  description: "\uC804\uD22C \uC2B9\uB9AC \uC2DC \uCE74\uB4DC \uBCF4\uC0C1 \uC120\uD0DD\uC9C0\uAC00
+    1\uAC1C \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  trigger: 6
+  effects:
+  - type: 110
+    target: 0
+    amount: 1
+    secondaryAmount: 0
+    duration: 0
+  icon: {fileID: 0}
+  effectsEnabled: 1
 --- !u!114 &1693516754801979686
 MonoBehaviour:
   m_ObjectHideFlags: 0
