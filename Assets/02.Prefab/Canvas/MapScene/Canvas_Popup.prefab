@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 66289925331153226}
   - component: {fileID: 6194655548314729874}
   - component: {fileID: 6563572095996711554}
+  - component: {fileID: 6036562133401670937}
   m_Layer: 5
   m_Name: Canvas_Popup
   m_TagString: Untagged
@@ -124,3 +125,17 @@ MonoBehaviour:
   commonHudCanvases:
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &6036562133401670937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8901989180541690705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1da25f1d18a4a4d96e5da63070a8b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsPopupSpawner
+  prefab: {fileID: 2488678328878684656, guid: 37078b482d7b15f448a4023a92e09944, type: 3}
+  popupRoot: {fileID: 6556848082030925693}
