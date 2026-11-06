@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
 //음향과 화면 설정 저장 및 적용
 public static class GameSettings
@@ -10,39 +9,20 @@ public static class GameSettings
     private const string ResolutionKey = "Settings.Resolution";
     private const string ScreenModeKey = "Settings.ScreenMode";
 
-    public static float MasterVolume => PlayerPrefs.GetFloat(MasterKey, 1f);
-    public static float BgmVolume => PlayerPrefs.GetFloat(BgmKey, 1f);
-    public static float SfxVolume => PlayerPrefs.GetFloat(SfxKey, 1f);
+    public static float MasterVolume => Mathf.Clamp01(PlayerPrefs.GetFloat(MasterKey, 1f));
+    public static float BgmVolume => Mathf.Clamp01(PlayerPrefs.GetFloat(BgmKey, 1f));
+    public static float SfxVolume => Mathf.Clamp01(PlayerPrefs.GetFloat(SfxKey, 1f));
     public static int ResolutionIndex => Mathf.Clamp(PlayerPrefs.GetInt(ResolutionKey, 2), 0, 2);
     public static int ScreenModeIndex => Mathf.Clamp(PlayerPrefs.GetInt(ScreenModeKey, 0), 0, 1);
 
-    //게임 시작 시 저장된 전체 음량 복원
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void RestoreMasterVolume() => AudioListener.volume = MasterVolume;
+    //전체 음량 저장
+    public static void SetMaster(float value) => PlayerPrefs.SetFloat(MasterKey, Mathf.Clamp01(value));
 
-    public static void SetMaster(float value, AudioMixer mixer, string parameter)
-    {
-        value = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(MasterKey, value);
-        if (!SetMixerVolume(mixer, parameter, value))
-            AudioListener.volume = value;
-        else
-            AudioListener.volume = 1f;
-    }
+    //배경음 음량 저장
+    public static void SetBgm(float value) => PlayerPrefs.SetFloat(BgmKey, Mathf.Clamp01(value));
 
-    public static void SetBgm(float value, AudioMixer mixer, string parameter)
-    {
-        value = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(BgmKey, value);
-        SetMixerVolume(mixer, parameter, value);
-    }
-
-    public static void SetSfx(float value, AudioMixer mixer, string parameter)
-    {
-        value = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(SfxKey, value);
-        SetMixerVolume(mixer, parameter, value);
-    }
+    //효과음 음량 저장
+    public static void SetSfx(float value) => PlayerPrefs.SetFloat(SfxKey, Mathf.Clamp01(value));
 
     public static void SetResolution(int index)
     {
@@ -59,13 +39,6 @@ public static class GameSettings
     }
 
     public static void Save() => PlayerPrefs.Save();
-
-    private static bool SetMixerVolume(AudioMixer mixer, string parameter, float value)
-    {
-        if (mixer == null || string.IsNullOrWhiteSpace(parameter)) return false;
-        float decibel = value <= 0.0001f ? -80f : Mathf.Log10(value) * 20f;
-        return mixer.SetFloat(parameter, decibel);
-    }
 
     private static void ApplyDisplay(int resolutionIndex, int screenModeIndex)
     {

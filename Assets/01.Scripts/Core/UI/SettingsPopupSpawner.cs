@@ -5,17 +5,46 @@ public class SettingsPopupSpawner : MonoBehaviour
 {
     [SerializeField] private SettingsPanelView prefab;
     [SerializeField] private Transform popupRoot;
-    [Tooltip("현재 씬에서 사용하는 SceneMenuActions 연결")]
-    [SerializeField] private SceneMenuActions menuActions;
+    private SceneMenuActions menuActions;
     [Tooltip("타이틀 씬은 끄고 맵과 배틀 씬은 켜기")]
     [SerializeField] private bool showRunButtons;
     private SettingsPanelView instance;
+    private SoundManager soundManager;
 
+    //게임 세션의 사운드 관리자 받음
+    public void InjectSound(SoundManager manager)
+    {
+        soundManager = manager;
+        if (instance != null) InjectPopupSound();
+    }
+
+    //동적 팝업과 하위 버튼의 사운드 의존성 연결
+    private void InjectPopupSound()
+    {
+        instance.InjectSound(soundManager);
+        foreach (SoundPlayer player in instance.GetComponentsInChildren<SoundPlayer>(true))
+            player.Inject(soundManager);
+    }
+
+    //게임 세션의 공통 메뉴 기능 받음
+    public void InjectMenuActions(SceneMenuActions actions)
+    {
+        menuActions = actions;
+        if (instance != null) instance.InjectMenuActions(actions);
+    }
+
+    //공통 메뉴 연결 확인 후 설정 팝업 표시
     public void Show()
     {
+        if (menuActions == null)
+        {
+            GameLogger.LogError("[환경 설정] GameSession의 공통 메뉴가 주입되지 않았습니다", this);
+            return;
+        }
         if (instance != null)
         {
             instance.InjectMenuActions(menuActions);
+            InjectPopupSound();
             instance.SetRunButtonsVisible(showRunButtons);
             instance.gameObject.SetActive(true);
             instance.transform.SetAsLastSibling();
@@ -30,6 +59,7 @@ public class SettingsPopupSpawner : MonoBehaviour
         instance = Instantiate(prefab, parent, false);
         instance.name = prefab.name;
         instance.InjectMenuActions(menuActions);
+        InjectPopupSound();
         instance.SetRunButtonsVisible(showRunButtons);
         instance.transform.SetAsLastSibling();
         instance.Closed += Close;

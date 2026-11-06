@@ -11,6 +11,7 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     private readonly OwnedRelicModel ownedRelics = new OwnedRelicModel();
     public OwnedRelicModel OwnedRelics => ownedRelics;
     private SceneMenuActions sceneLoader;
+    private SoundManager soundManager;
     public bool IsLoading => sceneLoader != null && sceneLoader.IsLoading;
 
     //첫 씬 로드 전 중복 없는 게임 세션 생성
@@ -25,6 +26,13 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        //세션 자식으로 사운드 관리자 생성과 씬 전환 간 유지
+        var soundObject = new GameObject("SoundManager");
+        soundObject.transform.SetParent(transform, false);
+        soundManager = soundObject.AddComponent<SoundManager>();
+        SoundLibrary sounds = Resources.Load<SoundLibrary>("SoundLibrary");
+        if (sounds != null) soundManager.Inject(sounds);
+        else GameLogger.LogError("[사운드] Resources/SoundLibrary 에셋을 확인해 주세요", this);
         sceneLoader = gameObject.AddComponent<SceneMenuActions>();
         sceneLoader.InjectNewGameAction(ResetRun);
         SceneManager.sceneLoaded += InjectScene;
@@ -43,8 +51,20 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
         }
         foreach (GameObject root in scene.GetRootGameObjects())
         {
+            foreach (SettingsPopupSpawner settings in root.GetComponentsInChildren<SettingsPopupSpawner>(true))
+            {
+                settings.InjectMenuActions(sceneLoader);
+                settings.InjectSound(soundManager);
+            }
+            foreach (SoundPlayer sound in root.GetComponentsInChildren<SoundPlayer>(true))
+                sound.Inject(soundManager);
+            foreach (SettingsPanelView settingsView in root.GetComponentsInChildren<SettingsPanelView>(true))
+                settingsView.InjectSound(soundManager);
             foreach (TitleCharacterSelectView selection in root.GetComponentsInChildren<TitleCharacterSelectView>(true))
+            {
+                selection.InjectMenuActions(sceneLoader);
                 selection.Inject(this);
+            }
             foreach (CoinInstaller installer in root.GetComponentsInChildren<CoinInstaller>(true))
                 installer.Inject(coins);
             foreach (BattleInstaller installer in root.GetComponentsInChildren<BattleInstaller>(true))

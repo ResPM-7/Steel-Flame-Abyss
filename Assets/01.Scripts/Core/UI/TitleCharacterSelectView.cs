@@ -18,9 +18,11 @@ public class TitleCharacterSelectView : MonoBehaviour
     [SerializeField] private GameObject titleButtons;
     [SerializeField] private GameObject selectionPanel;
     [SerializeField] private UnityEngine.UI.Button startButton;
+    [SerializeField] private UnityEngine.UI.Button exitButton;
     [SerializeField] private GameDatabase database;
     [SerializeField] private Choice[] choices;
     private GameSession session;
+    private SceneMenuActions menuActions;
     private bool starting;
 
     //초기 화면과 버튼 콜백 준비
@@ -29,6 +31,7 @@ public class TitleCharacterSelectView : MonoBehaviour
         selectionPanel.SetActive(false);
         titleButtons.SetActive(true);
         startButton.onClick.AddListener(ShowSelection);
+        if (exitButton != null) exitButton.onClick.AddListener(ExitGame);
         foreach (var choice in choices)
         {
             var captured = choice;
@@ -44,6 +47,24 @@ public class TitleCharacterSelectView : MonoBehaviour
         session = value;
         RefreshButtons();
         RefreshAfterLoadingAsync(value).Forget();
+    }
+
+    //타이틀 외부 Exit 버튼에 공통 메뉴 기능 연결
+    public void InjectMenuActions(SceneMenuActions actions)
+    {
+        menuActions = actions;
+    }
+
+    //설정 저장 후 공통 게임 종료 요청
+    private void ExitGame()
+    {
+        if (menuActions == null)
+        {
+            GameLogger.LogError("[타이틀] 공통 메뉴가 주입되지 않았습니다", this);
+            return;
+        }
+        GameSettings.Save();
+        menuActions.ExitGame();
     }
 
     //타이틀 복귀 로딩 완료 후 버튼 갱신, 씬 제거 시 대기 취소
@@ -91,6 +112,7 @@ public class TitleCharacterSelectView : MonoBehaviour
     private void OnDestroy()
     {
         if (startButton != null) startButton.onClick.RemoveListener(ShowSelection);
+        if (exitButton != null) exitButton.onClick.RemoveListener(ExitGame);
         if (choices == null) return;
         foreach (var choice in choices)
             if (choice.button != null && choice.listener != null)

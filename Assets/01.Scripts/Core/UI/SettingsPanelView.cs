@@ -1,16 +1,12 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 
 //설정 팝업 입력과 현재 값 표시
 public class SettingsPanelView : MonoBehaviour
 {
     [Header("음향")]
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private string masterParameter = "MasterVolume";
-    [SerializeField] private string bgmParameter = "BgmVolume";
-    [SerializeField] private string sfxParameter = "SfxVolume";
+    private SoundManager soundManager;
     [SerializeField] private UnityEngine.UI.Slider masterSlider;
     [SerializeField] private UnityEngine.UI.Slider bgmSlider;
     [SerializeField] private UnityEngine.UI.Slider sfxSlider;
@@ -67,7 +63,7 @@ public class SettingsPanelView : MonoBehaviour
     private bool CanUseMenuActions()
     {
         if (menuActions != null) return !menuActions.IsLoading;
-        GameLogger.LogError("[환경 설정] SettingsPopupSpawner의 Menu Actions를 연결해 주세요", this);
+        GameLogger.LogError("[환경 설정] GameSession에서 설정 팝업으로 전달된 공통 메뉴를 확인해 주세요", this);
         return false;
     }
 
@@ -87,12 +83,17 @@ public class SettingsPanelView : MonoBehaviour
         Bind(true);
     }
 
-    //초기화 이후 믹서에 저장된 음량 적용
-    private void Start()
+    //생성자에게 음량 적용 담당자 받음
+    public void InjectSound(SoundManager manager)
     {
-        GameSettings.SetMaster(GameSettings.MasterVolume, audioMixer, masterParameter);
-        GameSettings.SetBgm(GameSettings.BgmVolume, audioMixer, bgmParameter);
-        GameSettings.SetSfx(GameSettings.SfxVolume, audioMixer, sfxParameter);
+        soundManager = manager;
+    }
+
+    //주입된 관리자로 저장 음량 적용
+    private void ApplySoundVolumes()
+    {
+        if (soundManager != null) soundManager.ApplyVolumes();
+        else GameLogger.LogError("[환경 설정] 사운드 관리자가 주입되지 않았습니다", this);
     }
 
     //활성 상태에 맞춰 입력 이벤트 연결과 해제
@@ -150,21 +151,24 @@ public class SettingsPanelView : MonoBehaviour
     //전체 음량 적용과 표시
     private void ChangeMaster(float value)
     {
-        GameSettings.SetMaster(value, audioMixer, masterParameter);
+        GameSettings.SetMaster(value);
+        ApplySoundVolumes();
         SetPercent(masterValue, value);
     }
 
     //배경음 적용과 표시
     private void ChangeBgm(float value)
     {
-        GameSettings.SetBgm(value, audioMixer, bgmParameter);
+        GameSettings.SetBgm(value);
+        ApplySoundVolumes();
         SetPercent(bgmValue, value);
     }
 
     //효과음 적용과 표시
     private void ChangeSfx(float value)
     {
-        GameSettings.SetSfx(value, audioMixer, sfxParameter);
+        GameSettings.SetSfx(value);
+        ApplySoundVolumes();
         SetPercent(sfxValue, value);
     }
 

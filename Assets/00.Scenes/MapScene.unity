@@ -119,53 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &189952089
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 189952091}
-  - component: {fileID: 189952090}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &189952090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189952089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b114deee833c764a9fc9750a5a9ef60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneMenuActions
-  titleSceneIndex: 0
-  mapSceneIndex: 1
-  battleSceneIndex: 2
---- !u!4 &189952091
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189952089}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 493, y: 487.24097, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &301910337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,7 +962,7 @@ PrefabInstance:
     - target: {fileID: 6036562133401670937, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: menuActions
       value: 
-      objectReference: {fileID: 189952090}
+      objectReference: {fileID: 0}
     - target: {fileID: 6036562133401670937, guid: 9d7a1e9c328ab7a4c80671488bf1ceb6, type: 3}
       propertyPath: showRunButtons
       value: 1
@@ -1388,7 +1341,6 @@ SceneRoots:
   - {fileID: 434038947216064972}
   - {fileID: 8741124786579297160}
   - {fileID: 5441955465272285698}
-  - {fileID: 189952091}
   - {fileID: 810999599}
   - {fileID: 2935485987447433656}
   - {fileID: 3397662981657304075}

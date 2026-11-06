@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09ad853c2dc348aeb2147196ee232206, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::SoundLibrary
+  sounds:
+  - id: ButtonClick
+    clip: {fileID: 8300000, guid: 08891976a8de737438b628d5ad2eb5ea, type: 3}
+    category: 1
+    loop: 0
+    volume: 0.416
+  sfxPoolSize: 12
+  mixer: {fileID: 24100000, guid: 3dc7962b187d4164694b42b6791c2189, type: 2}
+  bgmGroup: {fileID: -5525562168995209466, guid: 3dc7962b187d4164694b42b6791c2189, type: 2}
+  sfxGroup: {fileID: 2798057805777574895, guid: 3dc7962b187d4164694b42b6791c2189, type: 2}
+  masterParameter: MasterVolume
+  bgmParameter: BgmVolume
+  sfxParameter: SfxVolume

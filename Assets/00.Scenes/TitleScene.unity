@@ -372,7 +372,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SettingsPopupSpawner
   prefab: {fileID: 2488678328878684656, guid: 37078b482d7b15f448a4023a92e09944, type: 3}
   popupRoot: {fileID: 42200539}
-  menuActions: {fileID: 194044784}
   showRunButtons: 0
 --- !u!1 &155530034
 GameObject:
@@ -406,53 +405,6 @@ Transform:
   - {fileID: 714736045}
   - {fileID: 660436707}
   m_Father: {fileID: 886163118}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &194044783
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 194044785}
-  - component: {fileID: 194044784}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &194044784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194044783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b114deee833c764a9fc9750a5a9ef60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneMenuActions
-  titleSceneIndex: 0
-  mapSceneIndex: 1
-  battleSceneIndex: 2
---- !u!4 &194044785
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194044783}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 493, y: 487.24097, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &264498543
 GameObject:
@@ -1648,9 +1600,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 194044784}
-        m_TargetAssemblyTypeName: SceneMenuActions, Assembly-CSharp
-        m_MethodName: ExitGame
+      - m_Target: {fileID: 840797798}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2198,6 +2150,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 840797798}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 42200540}
         m_TargetAssemblyTypeName: SettingsPopupSpawner, Assembly-CSharp
         m_MethodName: Show
@@ -2248,6 +2212,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 746228904}
   m_CullTransparentMesh: 1
+--- !u!1 &840797797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 840797799}
+  - component: {fileID: 840797798}
+  m_Layer: 0
+  m_Name: SoundPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &840797798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840797797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6243d10693d44fb5862dec77345ece97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundPlayer
+  soundId: ButtonClick
+  playOnStart: 0
+--- !u!4 &840797799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840797797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 330, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &886163117
 GameObject:
   m_ObjectHideFlags: 0
@@ -4223,7 +4233,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1936884204}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 840797798}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1936884204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4680,6 +4702,7 @@ MonoBehaviour:
   titleButtons: {fileID: 1687469133}
   selectionPanel: {fileID: 1632745678}
   startButton: {fileID: 1936884203}
+  exitButton: {fileID: 430188469}
   database: {fileID: 11400000, guid: 4b7605a96c9ea7e4798a26fec39fe055, type: 2}
   choices:
   - button: {fileID: 955434470}
@@ -4717,8 +4740,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 1169256361}
   - {fileID: 1129849275}
-  - {fileID: 194044785}
   - {fileID: 1889517619343493112}
   - {fileID: 1516406585193926784}
   - {fileID: 42200539}
   - {fileID: 886163118}
+  - {fileID: 840797799}
