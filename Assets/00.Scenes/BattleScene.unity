@@ -2040,19 +2040,19 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[0].targetCanvas
+      propertyPath: scenescope
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
+      propertyPath: parentBindings.Array.data[0].parent
       value: 
       objectReference: {fileID: 1384252662}
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[1].targetCanvas
+      propertyPath: parentBindings.Array.data[1].parent
       value: 
       objectReference: {fileID: 3825453867723116075}
     - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[2].targetCanvas
-      value: 
-      objectReference: {fileID: 567286139}
-    - target: {fileID: 1794633711781877047, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}
-      propertyPath: canvasPools.Array.data[3].targetCanvas
+      propertyPath: parentBindings.Array.data[2].parent
       value: 
       objectReference: {fileID: 567286139}
     - target: {fileID: 5874745398514059078, guid: 95e894f63f72c3b40aced6f54df8f9ba, type: 3}

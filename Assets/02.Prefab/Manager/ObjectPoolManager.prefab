@@ -45,32 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   isDontDestroy: 0
-  objList: []
-  canvasPools:
-  - poolName: ViewCardList
-    targetCanvas: {fileID: 0}
-    poolSize: 12
-    addressablePrefab:
-      m_AssetGUID: 8fcd0d7e953af7140aa7f0aaf00f1c88
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - poolName: RelicIcon
-    targetCanvas: {fileID: 0}
-    poolSize: 4
-    addressablePrefab:
-      m_AssetGUID: 6aa109de82bcd43458ca3d0943efc4d4
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - poolName: DamageText
-    targetCanvas: {fileID: 0}
-    poolSize: 5
-    addressablePrefab:
-      m_AssetGUID: cd4ba29bfe9aa734c90211436dae96eb
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+  scenescope: 0
+  database: {fileID: 11400000, guid: 00d95c9c4744d9d4ab30143889612209, type: 2}
+  parentBindings:
+  - key: Popup
+    parent: {fileID: 0}
+  - key: Relic
+    parent: {fileID: 0}
+  - key: Damage
+    parent: {fileID: 0}

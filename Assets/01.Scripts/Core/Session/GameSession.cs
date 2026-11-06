@@ -78,6 +78,10 @@ public class GameSession : MonoBehaviour, IRunSceneLoader
                 battle.Inject(run, this);
             foreach (RelicPanelView relicPanel in root.GetComponentsInChildren<RelicPanelView>(true))
                 relicPanel.Inject(ownedRelics);
+            foreach (BattlePopupManager popup in root.GetComponentsInChildren<BattlePopupManager>(true))
+            {
+                popup.InjectMenuActions(sceneLoader);
+            }
         }
 #if UNITY_EDITOR
         InjectEditorCheats(scene);

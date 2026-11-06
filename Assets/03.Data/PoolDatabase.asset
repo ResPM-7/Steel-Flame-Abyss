@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c78ad1e444e0344faba2592d2d1f2e2, type: 3}
+  m_Name: PoolDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::PoolDatabase
+  objectPools: []
+  canvasPools:
+  - poolName: ViewCardList
+    scope: 6
+    parentKey: Popup
+    poolSize: 12
+    addressablePrefab:
+      m_AssetGUID: 8fcd0d7e953af7140aa7f0aaf00f1c88
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - poolName: RelicIcon
+    scope: 6
+    parentKey: Relic
+    poolSize: 4
+    addressablePrefab:
+      m_AssetGUID: 6aa109de82bcd43458ca3d0943efc4d4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - poolName: DamageText
+    scope: 4
+    parentKey: Damage
+    poolSize: 5
+    addressablePrefab:
+      m_AssetGUID: cd4ba29bfe9aa734c90211436dae96eb
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

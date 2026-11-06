@@ -12,7 +12,7 @@ using UnityEditor.AddressableAssets;
 
 internal static class ObjectPoolSheetSync
 {
-    private const string ManagerPrefabPath = "Assets/02.Prefab/Manager/ObjectPoolManager.prefab";
+    private const string DatabasePath = "Assets/03.Data/PoolDatabase.asset";
     private const string PoolPrefabFolder = "Assets/02.Prefab/ObjectPool";
     private static bool isSyncing;
 
@@ -48,17 +48,17 @@ internal static class ObjectPoolSheetSync
             var prefabs = FindPoolPrefabs();
             ValidatePrefabMatches(objectRows.Concat(canvasRows), prefabs);
 
-            EditorUtility.DisplayProgressBar("오브젝트 풀 동기화", "ObjectPoolManager 프리팹을 갱신하는 중...", 0.9f);
-            ApplyToManagerPrefab(objectRows, canvasRows, prefabs);
+            EditorUtility.DisplayProgressBar("오브젝트 풀 동기화", "PoolDatabase를 갱신하는 중...", 0.9f);
+            ApplyToDatabase(objectRows, canvasRows, prefabs);
 
             Debug.Log($"[오브젝트 풀] 시트 동기화 완료: 일반 {objectRows.Count}개 / Canvas {canvasRows.Count}개");
-            Debug.Log("새 Canvas 풀의 Target Canvas는 필요하면 Inspector에서 지정해 주세요.");
+            Debug.Log("씬의 Scene Scope와 Parent Bindings는 유지됩니다. 새 부모 키가 있을 때만 연결해 주세요.");
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[오브젝트 풀] 시트 동기화 실패. 기존 프리팹은 유지됩니다.\n{exception}");
+            Debug.LogError($"[오브젝트 풀] 시트 동기화 실패.\n{exception}");
             EditorUtility.DisplayDialog("오브젝트 풀 동기화 실패",
-                exception.Message + "\n\n기존 ObjectPoolManager 프리팹은 변경되지 않았습니다.", "확인");
+                exception.Message, "확인");
         }
         finally
         {
@@ -93,7 +93,9 @@ internal static class ObjectPoolSheetSync
     private static List<PoolRow> ReadRows(string sheetName, string csv)
     {
         var table = CsvTable.Parse(sheetName + " 시트", csv);
-        table.Require("poolName", "size");
+        table.Require("poolName", "scope", "size");
+        bool isCanvas = sheetName == "CanvasPool";
+        if (isCanvas) table.Require("parentKey");
         var rows = new List<PoolRow>();
         for (var rowIndex = 0; rowIndex < table.RowCount; rowIndex++)
         {
@@ -108,9 +110,32 @@ internal static class ObjectPoolSheetSync
                 throw new InvalidDataException($"{sheetName} 시트 {table.SourceLine(rowIndex)}행: poolName이 비어 있습니다.");
             if (!int.TryParse(sizeText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var size) || size < 0)
                 throw new InvalidDataException($"{sheetName} 시트 {table.SourceLine(rowIndex)}행: size는 0 이상의 정수여야 합니다.");
-            rows.Add(new PoolRow(name, size, sheetName, table.SourceLine(rowIndex)));
+            string parentKey = isCanvas ? table.Get(rowIndex, "parentKey").Trim() : "";
+            if (isCanvas && string.IsNullOrWhiteSpace(parentKey))
+                throw new InvalidDataException($"{sheetName} 시트 {table.SourceLine(rowIndex)}행: parentKey가 비어 있습니다.");
+            PoolScope scope = ParseScope(table.Get(rowIndex, "scope"), sheetName, table.SourceLine(rowIndex));
+            rows.Add(new PoolRow(name.Trim(), size, scope, parentKey, sheetName, table.SourceLine(rowIndex)));
         }
         return rows;
+    }
+
+    //다중 선택 CSV 값을 명시적인 씬 조합으로 변환
+    private static PoolScope ParseScope(string value, string sheetName, int line)
+    {
+        PoolScope scope = PoolScope.None;
+        foreach (string token in (value ?? "").Split(new[] { ',', ';', '|', ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            switch (token.Trim())
+            {
+                case "Title": scope |= PoolScope.Title; break;
+                case "Map": scope |= PoolScope.Map; break;
+                case "Battle": scope |= PoolScope.Battle; break;
+                default: throw new InvalidDataException($"{sheetName} 시트 {line}행: 알 수 없는 scope '{token}'. Title, Map, Battle만 사용해 주세요.");
+            }
+        }
+        if (scope == PoolScope.None)
+            throw new InvalidDataException($"{sheetName} 시트 {line}행: scope를 하나 이상 선택해 주세요.");
+        return scope;
     }
 
     private static void ValidateUniqueNames(IEnumerable<PoolRow> objectRows, IEnumerable<PoolRow> canvasRows)
@@ -151,49 +176,40 @@ internal static class ObjectPoolSheetSync
             throw new InvalidDataException($"{PoolPrefabFolder}에서 같은 이름의 프리팹을 찾지 못했습니다: {string.Join(", ", missing)}");
     }
 
-    //시트 풀 설정의 어드레서블 참조 적용
-    private static void ApplyToManagerPrefab(IReadOnlyList<PoolRow> objectRows,
+    //모든 참조 검증 후 SO만 갱신하고 씬과 프리팹 연결 유지
+    private static void ApplyToDatabase(IReadOnlyList<PoolRow> objectRows,
         IReadOnlyList<PoolRow> canvasRows, IReadOnlyDictionary<string, GameObject> prefabs)
     {
-        if (AssetDatabase.LoadAssetAtPath<GameObject>(ManagerPrefabPath) == null)
-            throw new FileNotFoundException($"ObjectPoolManager 프리팹을 찾을 수 없습니다: {ManagerPrefabPath}");
-
-        var root = PrefabUtility.LoadPrefabContents(ManagerPrefabPath);
-        try
+        var objects = objectRows.Select(row => ToDefinition(row, prefabs)).ToList();
+        var canvases = canvasRows.Select(row => ToDefinition(row, prefabs)).ToList();
+        var database = AssetDatabase.LoadAssetAtPath<PoolDatabase>(DatabasePath);
+        if (database == null)
         {
-            var manager = root.GetComponent<ObjectPoolManager>();
-            if (manager == null)
-                throw new InvalidDataException("ObjectPoolManager.prefab에 ObjectPoolManager 컴포넌트가 없습니다.");
-
-            var targetCanvasByName = manager.canvasPools
-                .Where(item => !string.IsNullOrWhiteSpace(item.poolName))
-                .GroupBy(item => item.poolName, StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(group => group.Key, group => group.First().targetCanvas,
-                    StringComparer.OrdinalIgnoreCase);
-
-            manager.objList = objectRows.Select(row => new ObjectPoolManager.ObjectPoolItem
-            {
-                poolName = row.Name,
-                addressablePrefab = GetAddressableReference(prefabs[row.Name]),
-                poolSize = row.Size
-            }).ToList();
-
-            manager.canvasPools = canvasRows.Select(row => new ObjectPoolManager.CanvasPoolItem
-            {
-                poolName = row.Name,
-                addressablePrefab = GetAddressableReference(prefabs[row.Name]),
-                targetCanvas = targetCanvasByName.TryGetValue(row.Name, out var target) ? target : null,
-                poolSize = row.Size
-            }).ToList();
-
-            EditorUtility.SetDirty(manager);
-            PrefabUtility.SaveAsPrefabAsset(root, ManagerPrefabPath);
+            if (!AssetDatabase.IsValidFolder("Assets/03.Data"))
+                AssetDatabase.CreateFolder("Assets", "03.Data");
+            database = ScriptableObject.CreateInstance<PoolDatabase>();
+            database.ReplaceFromSheet(objects, canvases);
+            AssetDatabase.CreateAsset(database, DatabasePath);
         }
-        finally
+        else
         {
-            PrefabUtility.UnloadPrefabContents(root);
+            Undo.RecordObject(database, "오브젝트 풀 시트 동기화");
+            database.ReplaceFromSheet(objects, canvases);
+            EditorUtility.SetDirty(database);
         }
+        AssetDatabase.SaveAssetIfDirty(database);
     }
+
+    //시트 행을 런타임 풀 데이터로 변환
+    private static PoolDefinition ToDefinition(PoolRow row, IReadOnlyDictionary<string, GameObject> prefabs)
+        => new PoolDefinition
+        {
+            poolName = row.Name,
+            scope = row.Scope,
+            parentKey = row.ParentKey,
+            poolSize = row.Size,
+            addressablePrefab = GetAddressableReference(prefabs[row.Name])
+        };
 
     //프리팹 어드레서블 등록 검증과 GUID 참조 생성
     private static AssetReferenceGameObject GetAddressableReference(GameObject prefab)
@@ -208,16 +224,20 @@ internal static class ObjectPoolSheetSync
 
     private readonly struct PoolRow
     {
-        public PoolRow(string name, int size, string sheetName, int line)
+        public PoolRow(string name, int size, PoolScope scope, string parentKey, string sheetName, int line)
         {
             Name = name;
             Size = size;
+            Scope = scope;
+            ParentKey = parentKey;
             SheetName = sheetName;
             Line = line;
         }
 
         public string Name { get; }
         public int Size { get; }
+        public PoolScope Scope { get; }
+        public string ParentKey { get; }
         public string SheetName { get; }
         public int Line { get; }
     }

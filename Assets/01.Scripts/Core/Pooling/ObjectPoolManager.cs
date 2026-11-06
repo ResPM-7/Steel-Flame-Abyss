@@ -4,31 +4,31 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+public enum SceneScope
+{
+    None,
+    Title,
+    Map,
+    Battle
+}
+
+
 //일반 및 Canvas 오브젝트 풀 관리
 public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     [System.Serializable]
-    public struct CanvasPoolItem
+    public struct ParentBinding
     {
-        public string poolName;
-        public Transform targetCanvas;
-        public int poolSize;
-        public AssetReferenceGameObject addressablePrefab;
+        public string key;
+        public Transform parent;
     }
-
-
-    [System.Serializable]
-    public struct ObjectPoolItem
-    {
-        public string poolName;
-        public AssetReferenceGameObject addressablePrefab;
-        public int poolSize;
-    }
-
-    //일반 오브젝트 풀 설정
-    [SerializeField] public List<ObjectPoolItem> objList = new List<ObjectPoolItem>();
-    //Canvas 오브젝트 풀 설정
-    [SerializeField] public List<CanvasPoolItem> canvasPools = new List<CanvasPoolItem>();
+    //현재 이곳의 씬
+    [SerializeField] public SceneScope scenescope = SceneScope.None;
+    [SerializeField] private PoolDatabase database;
+    //시트 순서와 독립적인 씬 부모 연결
+    [SerializeField] private List<ParentBinding> parentBindings = new List<ParentBinding>();
+    private readonly Dictionary<string, Transform> parentsByKey = new Dictionary<string, Transform>(System.StringComparer.Ordinal);
+    private readonly HashSet<string> reportedMissingPools = new HashSet<string>();
 
     private Dictionary<string, Queue<GameObject>> pools = new Dictionary<string, Queue<GameObject>>();
     private Dictionary<string, Transform> poolParents = new Dictionary<string, Transform>();
@@ -38,7 +38,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     private readonly Queue<KeyValuePair<string, GameObject>> pendingReturns = new Queue<KeyValuePair<string, GameObject>>();
     private bool shuttingDown;
     private bool initialized;
-    private readonly Dictionary<string, ObjectPoolItem> addressablePools = new Dictionary<string, ObjectPoolItem>();
+    private readonly Dictionary<string, PoolDefinition> addressablePools = new Dictionary<string, PoolDefinition>();
     private readonly Dictionary<string, Task<bool>> loadingTasks = new Dictionary<string, Task<bool>>();
     private readonly Dictionary<string, AsyncOperationHandle<GameObject>> loadHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
     private readonly List<GameObject> addressableInstances = new List<GameObject>();
@@ -56,33 +56,62 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     {
         if (initialized || shuttingDown) return;
         initialized = true;
-        //일반 오브젝트 풀 생성
-        foreach (var item in objList)
+        if (database == null || scenescope == SceneScope.None || !System.Enum.IsDefined(typeof(SceneScope), scenescope))
         {
-            if (!RegisterPool(item, transform)) continue;
+            GameLogger.LogError("[오브젝트 풀] Pool Database와 현재 Scene Scope를 지정해 주세요", this);
+            return;
+        }
+        foreach (var binding in parentBindings)
+        {
+            if (string.IsNullOrWhiteSpace(binding.key)) continue;
+            if (!parentsByKey.TryAdd(binding.key.Trim(), binding.parent))
+                GameLogger.LogError($"[오브젝트 풀] 중복 부모 키: {binding.key}", this);
+        }
+        //일반 오브젝트 풀 생성
+        foreach (var item in database.ObjectPools)
+        {
+            if (!MatchesScope(item)) continue;
+            Transform parent = string.IsNullOrWhiteSpace(item.parentKey) ? transform : ResolveParent(item);
+            if (!RegisterPool(item, parent)) continue;
 
             GameObject parentPool = new GameObject($"{item.poolName}_Pool");
-            parentPool.transform.SetParent(transform, false);
+            parentPool.transform.SetParent(parent, false);
             poolParents[item.poolName] = parentPool.transform;
         }
 
         //Canvas 오브젝트 풀 생성
-        foreach (var item in canvasPools)
+        foreach (var item in database.CanvasPools)
         {
-            RegisterPool(new ObjectPoolItem
-            {
-                poolName = item.poolName,
-                addressablePrefab = item.addressablePrefab,
-                poolSize = item.poolSize
-            }, item.targetCanvas);
+            if (!MatchesScope(item)) continue;
+            RegisterPool(item, ResolveParent(item));
         }
     }
 
+    //현재 씬에 해당하는 풀만 선택
+    private bool MatchesScope(PoolDefinition item)
+    {
+        if (item == null) return false;
+        PoolScope current = scenescope == SceneScope.Title ? PoolScope.Title
+            : scenescope == SceneScope.Map ? PoolScope.Map : PoolScope.Battle;
+        return (item.scope & current) != 0;
+    }
+
+    //부모 키로 현재 씬의 생성 위치 조회
+    private Transform ResolveParent(PoolDefinition item)
+    {
+        if (!string.IsNullOrWhiteSpace(item.parentKey) &&
+            parentsByKey.TryGetValue(item.parentKey.Trim(), out Transform parent) && parent != null)
+            return parent;
+        GameLogger.LogError($"[오브젝트 풀] {item.poolName}의 부모 키 '{item.parentKey}'를 Parent Bindings에 연결해 주세요", this);
+        return null;
+    }
+
     //풀 이름과 에셋 참조 및 부모 검증 후 공통 등록
-    private bool RegisterPool(ObjectPoolItem item, Transform parent)
+    private bool RegisterPool(PoolDefinition item, Transform parent)
     {
         if (string.IsNullOrWhiteSpace(item.poolName)) return false;
-        if (item.addressablePrefab == null || !item.addressablePrefab.RuntimeKeyIsValid() || parent == null)
+        if (parent == null) return false;
+        if (item.addressablePrefab == null || !item.addressablePrefab.RuntimeKeyIsValid())
         {
             GameLogger.LogError($"[오브젝트 풀] {item.poolName}의 Addressable Prefab과 부모를 연결해 주세요", this);
             return false;
@@ -98,11 +127,21 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         return true;
     }
 
+    //현재 씬에 없는 풀 요청을 이름별 한 번 보고
+    private bool IsRegistered(string poolName)
+    {
+        if (string.IsNullOrWhiteSpace(poolName)) return false;
+        if (pools.ContainsKey(poolName)) return true;
+        if (reportedMissingPools.Add(poolName))
+            GameLogger.LogError($"[오브젝트 풀] {poolName} 미등록: {scenescope} 범위와 데이터 및 부모 연결 확인", this);
+        return false;
+    }
+
     //풀 최초 로드와 동시 요청의 로딩 작업 공유
     public Task<bool> EnsurePoolReadyAsync(string poolName)
     {
         InitializePools();
-        if (shuttingDown || !pools.ContainsKey(poolName)) return Task.FromResult(false);
+        if (shuttingDown || !IsRegistered(poolName)) return Task.FromResult(false);
         if (prefabDict.ContainsKey(poolName)) return Task.FromResult(true);
         if (loadingTasks.TryGetValue(poolName, out var task))
         {
@@ -116,7 +155,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     }
 
     //프리팹 로드 성공 시 풀 준비와 실패 핸들 해제
-    private async Task<bool> LoadPoolAsync(ObjectPoolItem item)
+    private async Task<bool> LoadPoolAsync(PoolDefinition item)
     {
         var handle = Addressables.LoadAssetAsync<GameObject>(item.addressablePrefab.RuntimeKey);
         loadHandles[item.poolName] = handle;
@@ -162,7 +201,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     public GameObject GetObject(string poolName)
     {
         InitializePools();
-        if (shuttingDown || !pools.ContainsKey(poolName))
+        if (shuttingDown || !IsRegistered(poolName))
         {
             return null;
         }
@@ -253,6 +292,8 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         availableObjects.Clear();
         pools.Clear();
         poolParents.Clear();
+        parentsByKey.Clear();
+        reportedMissingPools.Clear();
         prefabDict.Clear();
         base.OnDestroy();
     }
