@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundLibrary
   sounds:
   - id: ButtonClick
-    clip: {fileID: 8300000, guid: 08891976a8de737438b628d5ad2eb5ea, type: 3}
+    clip: {fileID: 8300000, guid: dd946e3cbe5fa5d46b55ab8dd318db71, type: 3}
     category: 1
     loop: 0
-    volume: 0.416
+    volume: 0.35
   sfxPoolSize: 12
   mixer: {fileID: 24100000, guid: 3dc7962b187d4164694b42b6791c2189, type: 2}
   bgmGroup: {fileID: -5525562168995209466, guid: 3dc7962b187d4164694b42b6791c2189, type: 2}
